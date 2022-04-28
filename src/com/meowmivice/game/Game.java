@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 class Game {
     private String name;
-    private Prompter prompter;
+    private int count = 0;
+    private final Prompter prompter;
 
     // CONSTRUCTOR
     Game(Prompter var1) {
@@ -25,13 +26,12 @@ class Game {
 
         while (runGame) {
             play();
-            playAgain();
         }
     }
 
 
     private void welcome() throws IOException {
-        String banner = Files.readString(Path.of("resources/splashbanner.txt"));
+        String banner = Files.readString(Path.of("resources/Text/splashbanner.txt"));
         System.out.println(banner);
     }
     private void createPlayer() {

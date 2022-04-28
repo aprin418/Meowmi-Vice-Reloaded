@@ -1,0 +1,168 @@
+[
+  {
+    "location": "Kitchen",
+    "north": "Backyard",
+    "east": "Living Room",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Backyard",
+    "south": "Kitchen",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Living Room",
+    "down": "Basement",
+    "up": "Hallway",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Basement",
+    "up": "Living Room",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+
+    }
+  },
+  {
+    "location": "Hallway",
+    "down": "Living Room",
+    "east": "Bedroom",
+    "north": "Restroom",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Bedroom",
+    "west": "Hallway",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    },
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Restroom",
+    "south": "Hallway",
+    "east": "Guest Room",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    } ,
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  },
+  {
+    "location": "Guest Room",
+    "west": "Basement",
+    "description": "room description",
+    "npc":
+    {
+      "name": "npc name",
+      "dialogue": "npc dialogue"
+    } ,
+    "item":
+    {
+      "name": "item name",
+      "description": "item description",
+      "clue":
+      {
+        "name": "clue name",
+        "description": "clue description"
+      }
+    }
+  }
+]
