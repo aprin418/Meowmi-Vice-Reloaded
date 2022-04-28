@@ -9,11 +9,11 @@ import java.util.Map;
 //import org.json.simple.JSONObject;
 //import org.json.simple.parser.*;
 
-class textParser {
+class TextParser {
     public static void main(String[] args) {
-        TextParser();
+        textParser();
     }
-    private static void TextParser() {
+    private static void textParser() {
         String currentLocation = "S Forest";
         String input ="";
 
