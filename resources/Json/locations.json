@@ -35,6 +35,7 @@
   "Living Room": {
     "down": "Basement",
     "up": "Hallway",
+    "west": "Kitchen",
     "description": "room description",
     "npc": {
       "name": "npc name",
