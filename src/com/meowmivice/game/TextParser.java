@@ -1,59 +1,58 @@
 package com.meowmivice.game;
+import java.io.IOException;
 import java.util.*;
-
 import java.io.FileReader;
-import java.util.Iterator;
-import java.util.Map;
-
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.*;
+import com.apps.util.Prompter;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 class TextParser {
-    public static void main(String[] args) {
-        textParser();
-    }
-    private static void textParser() {
-        String currentLocation = "S Forest";
-        String input ="";
+    private static Prompter prompter;
 
-        // use the prompter
-        Scanner scan = new Scanner(System.in);
+    TextParser(Prompter var1) {
+        prompter = var1;
+    }
+
+    static JSONObject locations() throws IOException, ParseException {
+
+        Object obj = new JSONParser().parse(new FileReader("resources/Json/locations.json"));
+        // typecasting obj to JSONObject
+        return (JSONObject) obj;
+    }
+    private static void filter(List<String> userInput) {
+        List<String> filterWords = new ArrayList<>(Arrays.asList("the", "to"));
+        for (String item : filterWords) {
+            userInput.remove(item);
+        }
+    }
+
+    static List<String> validGo(){
+        List<String> validGo = new ArrayList<>(Arrays.asList("go", "move", "walk"));
+        return validGo;
+    }
+
+    private static List<String> verbs(){
+        List<String> verbs = new ArrayList<>(Arrays.asList("go", "get", "look", "talk", "move", "walk", "solve", "quit", "help", "commands", "restart","q"));
+        return verbs;
+    }
+
+    static List<String> textParser() {
+        verbs();
 
         List<String> userInput = new ArrayList<>(Arrays.asList(" "));
 
-        // the word list that we will filter out
-        // Maybe get these from a filter out word json or an allowed words json
-        List<String> filterWords = new ArrayList<>(Arrays.asList("the", "to"));
-
-        // Appropriate verbs list
-        List<String> verbs = new ArrayList<>(Arrays.asList("go","get","look","talk"));
-
-        while(!verbs.contains(userInput.get(0)) && userInput.size() != 2){
-            System.out.println("Enter a action");
-            // displayValidCommands();
-            input = scan.nextLine();
+//        while (!(verbs.contains(userInput.get(0)) && (userInput.size() == 2 || "solve".equals(userInput.get(0))))) {
+        while (!(verbs().contains(userInput.get(0)))) {
             // Trim the input for additional spaces and lowercase
-            input = input.trim().toLowerCase();
+            String input = prompter.prompt(">").trim().toLowerCase();
+
             userInput = new ArrayList<>(Arrays.asList(input.split(" ")));
-            // go through the filter - not a good filter
-            for (String item: filterWords) {
-                userInput.remove(item);
-            }
+
+            filter(userInput);
         }
-        if (userInput.get(0).equals("go")){
-            currentLocation = userInput.get(1);
-            System.out.println("You went " + userInput.get(1));
-            System.out.println("You are now at " + currentLocation);
-        }
-        else if (userInput.get(0).equals("get")){
-            System.out.println("You added " + userInput.get(1));
-        }
-        else if (userInput.get(0).equals("look")){
-            System.out.println("description");
-        }
-        else if (userInput.get(0).equals("talk")){
-            System.out.println("You talked to person");
-        }
+
+        return userInput;
     }
+
+
 }

@@ -1,17 +1,15 @@
 package com.meowmivice.game;
-
 import com.apps.util.Prompter;
-
-import java.io.IOException;
 import java.util.Scanner;
 
 class Main {
-    public static void main(String[] args) {
-        Game meowmi = new Game(new Prompter(new Scanner(System.in)));
+    public static void main(String[] args){
+
         try {
+            Game meowmi = new Game(new Prompter(new Scanner(System.in)));
             meowmi.execute();
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    }
+}
