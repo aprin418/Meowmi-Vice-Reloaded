@@ -2,33 +2,35 @@
   "Kitchen": {
     "north": "Backyard",
     "east": "Living Room",
-    "description": "room description",
+    "description": "A bright and sunny kitchen with a dead mouse in the center and an item that was knocked over. Pawficer Fluffenstuff is waiting to give you a summary.",
     "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
+      "name": "Pawficer Fluffenstuff",
+      "dialogue": "Glad you're here, Purrlock Holmes. It appears the victim, Julius Cheeser was poisoned. The residents are throughout the house waiting to be questioned."
     },
     "item": {
-      "name": "item name",
-      "description": "item description",
+      "name": "trash can",
+      "description": "A trash can that was knocked over with a clue inside",
       "clue": {
-        "name": "clue name",
-        "description": "clue description"
+        "isClue": "True",
+        "name": "dog hair",
+        "description": "A tuft of brown dog hair"
       }
     }
   },
   "Backyard": {
     "south": "Kitchen",
-    "description": "room description",
+    "description": "A spacious backyard with Benedict Cumberbark waiting by his dog house",
     "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
+      "name": "Benedict Cumberbark",
+      "dialogue": "I went to get a snack in the trash and then saw the body. I pulled this item out of the trash. "
     },
     "item": {
-      "name": "item name",
-      "description": "item description",
+      "name": "bag",
+      "description": "a plastic bag with a clue inside",
       "clue": {
-        "name": "clue name",
-        "description": "clue description"
+        "isClue": "True",
+        "name": "receipt",
+        "description": "a receipt for poison and a bonsai tree from 'Mr. Meowgi's Trees, Feed, and Seed'"
       }
     }
   },
@@ -36,33 +38,22 @@
     "down": "Basement",
     "up": "Hallway",
     "west": "Kitchen",
-    "description": "room description",
+    "description": "A room decorated with fake plants and Birdie Holly sitting on his perch",
     "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
-    },
-    "item": {
-      "name": "item name",
-      "description": "item description",
-      "clue": {
-        "name": "clue name",
-        "description": "clue description"
-      }
+      "name": "Birdie Holly",
+      "dialogue": "I used to date Julius, but we ended on good terms. I think he started seeing someone else recently."
     }
   },
   "Basement": {
     "up": "Living Room",
-    "description": "room description",
-    "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
-    },
+    "description": "A dark basement with an item in the corner",
     "item": {
-      "name": "item name",
-      "description": "item description",
+      "name": "safe",
+      "description": "An unlocked safe with a clue inside",
       "clue": {
-        "name": "clue name",
-        "description": "clue description"
+        "isClue": "True",
+        "name": "insurance policy",
+        "description": "An insurance policy for the victim with the beneficiary named as Hamione Granger"
       }
     }
   },
@@ -70,66 +61,40 @@
     "down": "Living Room",
     "east": "Bedroom",
     "north": "Restroom",
-    "description": "room description",
-    "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
-    },
-    "item": {
-      "name": "item name",
-      "description": "item description",
-      "clue": {
-        "name": "clue name",
-        "description": "clue description"
-      }
-    }
+    "description": "The hallway to get to the other rooms upstairs"
   },
   "Bedroom": {
     "west": "Hallway",
-    "description": "room description",
-    "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
-    },
+    "description": "A bedroom with an item under the bed",
     "item": {
-      "name": "item name",
-      "description": "item description",
+      "name": "shoe box",
+      "description": "A Jimmy Chew shoe box with a clue inside",
       "clue": {
-        "name": "clue name",
-        "description": "clue description"
+        "isClue": "True",
+        "name": "key",
+        "description": "A key that probably unlocks something"
       }
     }
   },
   "Restroom": {
     "south": "Hallway",
     "east": "Guest Room",
-    "description": "room description",
-    "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
-    },
-    "item": {
-      "name": "item name",
-      "description": "item description",
-      "clue": {
-        "name": "clue name",
-        "description": "clue description"
-      }
-    }
+    "description": "A bathroom that leads to another room"
   },
   "Guest Room": {
-    "west": "Basement",
-    "description": "room description",
+    "west": "Restroom",
+    "description": "A bedroom filled with tubes, tunnels, and bonsai trees, and an item on the nightstand",
     "npc": {
-      "name": "npc name",
-      "dialogue": "npc dialogue"
+      "name": "Hamione Granger",
+      "dialogue": "I've only been on a couple dates with Julius, but he went back to Birdie."
     },
     "item": {
-      "name": "item name",
-      "description": "item description",
+      "name": "envelope",
+      "description": "An envelope with a clue inside",
       "clue": {
-        "name": "clue name",
-        "description": "clue description"
+        "isClue": "True",
+        "name": "loan statement",
+        "description": "A document stating Hamione Granger is in debt"
       }
     }
   }
