@@ -64,7 +64,16 @@ class Game {
             help();
         } else if(restart.contains(textParser.get(0))){
             restart();
+        } else if (textParser.get(0).equals("map")){
+            displayLocation();
         }
+    }
+
+    private void displayLocation() throws Exception{
+        String map = Files.readString(Path.of("resources/Ascii/map.txt"));
+        String colorCoded = "\033[31m" +currentLocation.toUpperCase()+" \033[0m";
+        String newMap = map.replaceFirst(currentLocation.toLowerCase(), colorCoded);
+        System.out.println(newMap);
     }
 
     private void createPlayer() {
