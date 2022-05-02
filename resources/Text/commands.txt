@@ -6,4 +6,4 @@ look [clue]
 talk [npc]
 solve
 restart
-q/quit
+quit

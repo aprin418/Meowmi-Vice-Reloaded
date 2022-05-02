@@ -1,7 +1,10 @@
 {
   "Kitchen": {
     "north": "Backyard",
+    "forward": "Backyard",
+    "straight": "Backyard",
     "east": "Living Room",
+    "right": "Living Room",
     "description": "A bright and sunny kitchen with a dead mouse in the center and an item that was knocked over. Pawficer Fluffenstuff is waiting to give you a summary.",
     "npc": {
       "name": "Pawficer Fluffenstuff",
@@ -36,8 +39,11 @@
   },
   "Living Room": {
     "down": "Basement",
+    "downstairs": "Basement",
     "up": "Hallway",
+    "upstairs": "Hallway",
     "west": "Kitchen",
+    "left": "Kitchen",
     "description": "A room decorated with fake plants and Birdie Holly sitting on his perch",
     "npc": {
       "name": "Birdie Holly",
@@ -46,6 +52,7 @@
   },
   "Basement": {
     "up": "Living Room",
+    "upstairs": "Living Room",
     "description": "A dark basement with an item in the corner",
     "item": {
       "name": "safe",
@@ -59,12 +66,17 @@
   },
   "Hallway": {
     "down": "Living Room",
+    "downstairs": "Living Room",
     "east": "Bedroom",
+    "right": "Bedroom",
     "north": "Restroom",
+    "forward": "Restroom",
+    "straight": "Restroom",
     "description": "The hallway to get to the other rooms upstairs"
   },
   "Bedroom": {
     "west": "Hallway",
+    "left": "Hallway",
     "description": "A bedroom with an item under the bed",
     "item": {
       "name": "shoe box",
@@ -79,10 +91,12 @@
   "Restroom": {
     "south": "Hallway",
     "east": "Guest Room",
+    "left": "Guest Room",
     "description": "A bathroom that leads to another room"
   },
   "Guest Room": {
     "west": "Restroom",
+    "left": "Restroom",
     "description": "A bedroom filled with tubes, tunnels, and bonsai trees, and an item on the nightstand",
     "npc": {
       "name": "Hamione Granger",
