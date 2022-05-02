@@ -12,6 +12,7 @@ class Game {
     private static Prompter prompter;
     private static int count = 0;
     private static String currentLocation = "Kitchen";
+    private static String prev = "Kitchen";
     private List<String> inventory = new ArrayList<>();
     private JSONObject locations = TextParser.locations();
     private Map directions = ((Map) locations.get(currentLocation));
@@ -74,13 +75,30 @@ class Game {
         System.out.println();
     }
 
+    private void ascii(String currentLocation) {
+        try {
+            System.out.println(String.join("",currentLocation).toLowerCase() );
+            String art = Files.readString(Path.of("resources/Ascii/" + currentLocation.toLowerCase() + ".txt"));
+            System.out.println(art);
+        }
+        catch (Exception e){
+            System.out.println("There is no art");
+        }
+    }
+
     private void go(Map area, List<String> input) {
-        if (area.containsKey(input.get(1))) {
+        if (input.get(1).equals("back")){
+            String temp = currentLocation;
+            currentLocation = prev;
+            prev = temp;
+        }
+        else if (area.containsKey(input.get(1))) {
+            prev = currentLocation;
             currentLocation = area.get(input.get(1)).toString();
-            directions = ((Map) locations.get(currentLocation));
         }else {
             System.out.println("That is an invalid input!");
         }
+        directions = ((Map) locations.get(currentLocation));
     }
 
     private void get(Map area, List<String> input){
@@ -182,6 +200,7 @@ class Game {
     }
 
     private void showStatus(){
+        ascii(currentLocation);
         System.out.println("===========================");
         System.out.println("You are in the " + currentLocation);
         System.out.println(directions.get("description"));
@@ -191,31 +210,83 @@ class Game {
     }
 
     private void solve() throws Exception {
-        if (inventory.size() > 1){
-            System.out.println("Who do you think is guilty?");
-            String solve = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
-            if ("hamione granger".equals(solve)) {
-                System.out.println("Congratulations! You have solved the mystery!");
-                playAgain();
-            } else {
-                count++;
-                if (count > 1) {
-                    System.out.println("You Lost. The culprit got away!");
-                    System.out.println("Exiting the game...");
-                    TimeUnit.SECONDS.sleep(2);
-                    System.exit(0);
-                }
-                System.out.println("Sorry please collect more clues or try again.");
-            }
-        } else {
-            int remaining = 2-inventory.size();
-            if (remaining == 1){
-                System.out.println("Please collect " + remaining + " more clue to try to solve.");
-            } else{
-                System.out.println("Please collect " + remaining + " more clues to try to solve.");
-            }
 
+        System.out.println("Who do you think it is?");
+        // Hard coded culprit, subject to change
+        String culprit = prompter.prompt(">").strip().toLowerCase();
+
+        System.out.println("What evidence do you have to support it?");
+        Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
+        // Hard coded required evidence, subject to change
+        Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
+        // If both cases are true, you win
+        if(culprit.equals("hamione granger") && evidence.equals(requiredEvidence)){
+            System.out.println("Congratulations you win");
+            playAgain();
         }
+        else {
+            count++;
+            if (count > 2) {
+                System.out.println("You Lost. The culprit got away!");
+                System.out.println("Exiting the game...");
+                TimeUnit.SECONDS.sleep(2);
+                System.exit(0);
+            }
+            System.out.println("Sorry please collect more clues or try again.");
+        }
+    }
+
+    // Method to return evidence Set for solving
+    private ArrayList<String> getEvidence() {
+        ArrayList<String> evidence = new ArrayList<>();
+        boolean isDone = false;
+        // As long as they don't specify to quit, loop continues
+        while(!isDone){
+            System.out.println("Current Collected Evidence: ");
+            int i = 1;
+            for (String item: inventory) {
+                System.out.println(i + " " + item);
+                i++;
+            }
+            System.out.println("Evidence to provide: " + evidence.toString());
+
+            System.out.println("What would you like to do?");
+            System.out.println("Add, Remove, Quit");
+
+            String choice = prompter.prompt(">").strip().toLowerCase();
+
+            // Add to the evidence
+            if (choice.equals("a") || choice.equals("add")){
+                try{
+                    System.out.println("What index item would you like to add?");
+                    String input = prompter.prompt(">").strip().toLowerCase();
+                    int index = Integer.parseInt(input) - 1;
+                    if(!evidence.contains(inventory.get(index))){
+                        evidence.add(inventory.get(index));
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("Invalid input");
+                }
+            }
+            // Remove evidence
+            else if (choice.equals("r") || choice.equals("remove")){
+                try {
+
+                    System.out.println("What item do you want to remove?");
+                    String input = prompter.prompt(">").strip().toLowerCase();
+                    evidence.remove(input);
+                }
+                catch (Exception e){
+                    System.out.println("Cant remove that");
+                }
+            }
+            // Exit loop
+            else if (choice.equals("q") || choice.equals("quit")){
+                isDone = true;
+            }
+        }
+        return evidence;
     }
 
     private void talk(Map area){
