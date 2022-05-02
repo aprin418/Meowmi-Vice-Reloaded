@@ -2,6 +2,8 @@ package com.meowmivice.game;
 import com.apps.util.Console;
 import com.apps.util.Prompter;
 import org.json.simple.JSONObject;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +27,7 @@ class Game {
     private List<String> look = TextParser.validLook();
     private List<String> talk = TextParser.validTalk();
     private List<String> restart = TextParser.validRestart();
+    private List<String> map = TextParser.validMap();
 
     // CONSTRUCTOR
     Game(Prompter var1) throws Exception {
@@ -33,6 +36,7 @@ class Game {
 
     void execute() throws Exception {
         boolean runGame = true;
+        Audio.audio();
         welcome();
         createPlayer();
         promptToPlay();
@@ -64,8 +68,28 @@ class Game {
             help();
         } else if(restart.contains(textParser.get(0))){
             restart();
-        } else if (textParser.get(0).equals("map")){
+        } else if (map.contains(textParser.get(0))){
             displayLocation();
+        } else if(audio.contains(textParser.get(0))){
+            audio(textParser.get(0));
+        }
+    }
+
+    private void ascii(String currentLocation) {
+        try {
+            String art = Files.readString(Path.of("resources/Ascii/" + currentLocation.toLowerCase() + ".txt"));
+            System.out.println(art);
+        }
+        catch (Exception e){
+            System.out.println("There is no art");
+        }
+    }
+
+    private void audio(String input) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        if ("stop".equals(input) || "pause".equals(input)){
+            Audio.pauseAudio();
+        } else if("play".equals(input) || "unpause".equals(input)) {
+            Audio.resumeAudio();
         }
     }
 
@@ -82,17 +106,6 @@ class Game {
         System.out.println();
         System.out.println("Welcome to Meowmi Vice " +  name);
         System.out.println();
-    }
-
-    private void ascii(String currentLocation) {
-        try {
-            System.out.println(String.join("",currentLocation).toLowerCase() );
-            String art = Files.readString(Path.of("resources/Ascii/" + currentLocation.toLowerCase() + ".txt"));
-            System.out.println(art);
-        }
-        catch (Exception e){
-            System.out.println("There is no art");
-        }
     }
 
     private void go(Map area, List<String> input) {
