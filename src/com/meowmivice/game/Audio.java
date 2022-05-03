@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 class Audio {
-    static Long currentFrame;
     static private Clip clip;
     static private AudioInputStream audioStream;
-    static private File file = new File("resources/Audio/mystery.wav");
+    static private File file = new File("resources/Audio/main.wav");
     static private String currentStatus;
 
     static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
@@ -23,33 +22,20 @@ class Audio {
         currentStatus = "playing";
     }
 
-    static void resumeAudio() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-//        if ("playing".equals(currentStatus)) {
-//            clip.stop();
-//            clip.close();
-//            resetAudio();
-//            clip.setMicrosecondPosition(0);
-//            playAudio();
-//            return;
-//        }
-//        clip.close();
-//        resetAudio();
-//        clip.setMicrosecondPosition(currentFrame);
-//        clip.start();
+    static void startAudio() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
             clip.stop();
             clip.close();
             resetAudio();
-            currentFrame =0L;
             playAudio();
 
     }
-    public static void pauseAudio() {
-        if("paused".equals(currentStatus))   {
-            System.out.println("Audio is already paused.");
+    public static void stopAudio() {
+        if("stopped".equals(currentStatus))   {
+            System.out.println("Audio is already stopped.");
         }
         clip.stop();
         clip.close();
-        currentStatus = "paused";
+        currentStatus = "stopped";
     }
 
     public static void resetAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
