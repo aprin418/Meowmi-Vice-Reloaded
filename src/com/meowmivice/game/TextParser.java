@@ -81,6 +81,7 @@ class TextParser {
         }
 
         if(!(verbs.contains(userInput.get(0)))) {
+            //TODO it appears at the top of the ascii, not at the bottom
             System.out.println("That is an invalid input!");
         }
         return userInput;
