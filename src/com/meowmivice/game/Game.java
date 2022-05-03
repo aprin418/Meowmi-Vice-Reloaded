@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -329,9 +330,12 @@ class Game {
     }
 
     private void talk(Map area){
+
         if (area.containsKey("npc")) {
             Map npc = ((Map) area.get("npc"));
-            System.out.println(npc.get("name") + ": " + npc.get("dialogue"));
+            ArrayList<String> randDialogueList = (ArrayList<String>) npc.get("randdialogue"); // list from obj value
+            int rand = new Random().nextInt(randDialogueList.size()); // make random int from size of list
+            System.out.println(npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand));
         } else {
             System.out.println("There is no one to talk to");
         }
