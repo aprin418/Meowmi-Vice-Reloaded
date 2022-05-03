@@ -36,21 +36,17 @@ class Audio {
 //        resetAudio();
 //        clip.setMicrosecondPosition(currentFrame);
 //        clip.start();
-
             clip.stop();
             clip.close();
             resetAudio();
             currentFrame =0L;
-            clip.setMicrosecondPosition(currentFrame);
             playAudio();
-            return;
 
     }
     public static void pauseAudio() {
         if("paused".equals(currentStatus))   {
             System.out.println("Audio is already paused.");
         }
-        currentFrame = clip.getMicrosecondPosition();
         clip.stop();
         clip.close();
         currentStatus = "paused";

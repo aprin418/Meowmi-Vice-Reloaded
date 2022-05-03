@@ -32,6 +32,13 @@ class Game {
 
     private CommandsLoader commandsLoader = new CommandsLoader();
     private List<String> go = commandsLoader.verbsObj().get("go");
+    private List<String> north = commandsLoader.directionsObj().get("north");
+    private List<String> east = commandsLoader.directionsObj().get("east");
+    private List<String> south = commandsLoader.directionsObj().get("south");
+    private List<String> west = commandsLoader.directionsObj().get("west");
+    private List<String> upstairs = commandsLoader.directionsObj().get("upstairs");
+    private List<String> downstairs = commandsLoader.directionsObj().get("downstairs");
+    private List<String> allDirections = commandsLoader.allDirections();
     private List<String> get = commandsLoader.verbsObj().get("get");
     private List<String> help = commandsLoader.verbsObj().get("help");
     private List<String> quit = commandsLoader.verbsObj().get("quit");
@@ -60,7 +67,7 @@ class Game {
         promptToPlay();
         instructions();
         while (runGame) {
-            showStatus();
+            showStatus(directions);
             logic(directions);
         }
     }
@@ -70,7 +77,7 @@ class Game {
         Console.clear();
         List<String> textParser = TextParser.textParser(input);
 
-        if (go.contains(textParser.get(0))) {
+        if (textParser.size()>=2 && go.contains(textParser.get(0))) {
             go(area, textParser);
         } else if (get.contains(textParser.get(0))) {
             get(area, textParser);
@@ -112,10 +119,13 @@ class Game {
     }
 
     private void displayLocation() throws Exception{
+        Console.clear();
         String map = Files.readString(Path.of("resources/Ascii/map.txt"));
         String colorCoded = "\033[31m" +currentLocation.toUpperCase()+" \033[0m";
         String newMap = map.replaceFirst(currentLocation.toLowerCase(), colorCoded);
         System.out.println(newMap);
+        prompter.prompt("Press enter to continue\n");
+        Console.clear();
     }
 
     private void createPlayer() {
@@ -127,18 +137,32 @@ class Game {
     }
 
     private void go(Map area, List<String> input) {
+        String direction = getDirection(input);
+
         if (input.get(1).equals("back")){
             String temp = currentLocation;
             currentLocation = prev;
             prev = temp;
         }
-        else if (area.containsKey(input.get(1))) {
+
+        else if (area.containsKey(direction)) {
             prev = currentLocation;
-            currentLocation = area.get(input.get(1)).toString();
+            currentLocation = area.get(direction).toString();
         }else {
-            System.out.println("That is an invalid input!");
+            System.out.println("That is an invalid direction to go!");
         }
         directions = ((Map) locations.get(currentLocation));
+    }
+
+    private String getDirection(List<String> input) {
+        String direction = "null";
+        if(north.contains(input.get(1))) direction = "north";
+        else if(east.contains(input.get(1))) direction = "east";
+        else if(south.contains(input.get(1))) direction = "south";
+        else if(west.contains(input.get(1))) direction = "west";
+        else if(upstairs.contains(input.get(1))) direction = "upstairs";
+        else if(downstairs.contains(input.get(1))) direction = "downstairs";
+        return direction;
     }
 
     private void get(Map area, List<String> input){
@@ -181,11 +205,13 @@ class Game {
         } else if (area.containsKey(input.get(1))){
             Map itemInput = ((Map) area.get(input.get(1)));
             System.out.println(itemInput.get("description"));
-            showStatus();
+            showStatus(itemInput);
             logic(itemInput);
         }
         else {
             System.out.println("Cant look there");
+            TimeUnit.SECONDS.sleep(2);
+            Console.clear();
         }
     }
 
@@ -239,18 +265,30 @@ class Game {
         }
     }
 
-    private void showStatus(){
+    private void showStatus(Map item){
         ascii(currentLocation);
         System.out.println("===========================");
         System.out.println("You are in the " + currentLocation);
-        System.out.println(directions.get("description"));
+        if(item.containsKey("description")) System.out.println(item.get("description"));
         System.out.println("Inventory:" + inventory);
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
+        System.out.println("Directions you can go: " + showDirections(currentLocation));
+
+    }
+
+    private String showDirections(String currentLocation) {
+        Map<String,String> directionsMap =  (Map) directions.get("directions");
+        return directionsMap.keySet().toString();
     }
 
     private void solve() throws Exception {
-
+        if(inventory.size() == 0){
+            System.out.println("You currently have no clues");
+            prompter.prompt("Press enter to continue");
+            Console.clear();
+            return;
+        }
         System.out.println("Who do you think it is?");
         // Hard coded culprit, subject to change
         String culprit = prompter.prompt(">").strip().toLowerCase();
@@ -291,39 +329,32 @@ class Game {
             System.out.println("Evidence to provide: " + evidence.toString());
 
             System.out.println("What would you like to do?");
-            System.out.println("Add, Remove, Quit");
+            System.out.println("Add, Remove, Solve");
 
             String choice = prompter.prompt(">").strip().toLowerCase();
-
-            // Add to the evidence
-            if (choice.equals("a") || choice.equals("add")){
-                try{
+            try{
+                // Add to the evidence
+                if (choice.equals("a") || choice.equals("add")){
                     System.out.println("What index item would you like to add?");
                     String input = prompter.prompt(">").strip().toLowerCase();
                     int index = Integer.parseInt(input) - 1;
-                    if(!evidence.contains(inventory.get(index))){
+                    if(!evidence.contains(inventory.get(index))) {
                         evidence.add(inventory.get(index));
                     }
                 }
-                catch (Exception e){
-                    System.out.println("Invalid input");
-                }
-            }
-            // Remove evidence
-            else if (choice.equals("r") || choice.equals("remove")){
-                try {
-
+                // Remove evidence
+                else if (choice.equals("r") || choice.equals("remove")){
                     System.out.println("What item do you want to remove?");
                     String input = prompter.prompt(">").strip().toLowerCase();
                     evidence.remove(input);
                 }
-                catch (Exception e){
-                    System.out.println("Cant remove that");
+                // Exit loop
+                else if (choice.equals("s") || choice.equals("solve")){
+                    isDone = true;
                 }
             }
-            // Exit loop
-            else if (choice.equals("q") || choice.equals("quit")){
-                isDone = true;
+            catch (Exception e){
+                System.out.println("Invalid command");
             }
         }
         return evidence;
