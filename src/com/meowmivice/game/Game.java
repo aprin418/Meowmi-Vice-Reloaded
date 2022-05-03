@@ -18,16 +18,31 @@ class Game {
     private List<String> inventory = new ArrayList<>();
     private JSONObject locations = TextParser.locations();
     private Map directions = ((Map) locations.get(currentLocation));
-    private List<String> audio = TextParser.validAudio();
-    private List<String> go = TextParser.validGo();
-    private List<String> get = TextParser.validGet();
-    private List<String> help = TextParser.validHelp();
-    private List<String> quit = TextParser.validQuit();
-    private List<String> solve = TextParser.validSolve();
-    private List<String> look = TextParser.validLook();
-    private List<String> talk = TextParser.validTalk();
-    private List<String> restart = TextParser.validRestart();
-    private List<String> map = TextParser.validMap();
+//    private List<String> audio = TextParser.validAudio();
+//    private List<String> go = TextParser.validGo();
+//    private List<String> get = TextParser.validGet();
+//    private List<String> help = TextParser.validHelp();
+//    private List<String> quit = TextParser.validQuit();
+//    private List<String> solve = TextParser.validSolve();
+//    private List<String> look = TextParser.validLook();
+//    private List<String> talk = TextParser.validTalk();
+//    private List<String> restart = TextParser.validRestart();
+//    private List<String> map = TextParser.validMap();
+
+    private CommandsLoader commandsLoader = new CommandsLoader();
+    private List<String> go = commandsLoader.verbsObj().get("go");
+    private List<String> get = commandsLoader.verbsObj().get("get");
+    private List<String> help = commandsLoader.verbsObj().get("help");
+    private List<String> quit = commandsLoader.verbsObj().get("quit");
+    private List<String> solve = commandsLoader.verbsObj().get("solve");
+    private List<String> look = commandsLoader.verbsObj().get("look");
+    private List<String> talk = commandsLoader.verbsObj().get("talk");
+    private List<String> restart = commandsLoader.verbsObj().get("restart");
+    private List<String> map = commandsLoader.verbsObj().get("map");
+    private List<String> audio = commandsLoader.allAudio();
+    //private List<String> verbs = commandsLoader.allVerbs();
+
+
 
     // CONSTRUCTOR
     Game(Prompter var1) throws Exception {
