@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -19,17 +18,6 @@ class Game {
     private List<String> inventory = new ArrayList<>();
     private JSONObject locations = TextParser.locations();
     private Map directions = ((Map) locations.get(currentLocation));
-//    private List<String> audio = TextParser.validAudio();
-//    private List<String> go = TextParser.validGo();
-//    private List<String> get = TextParser.validGet();
-//    private List<String> help = TextParser.validHelp();
-//    private List<String> quit = TextParser.validQuit();
-//    private List<String> solve = TextParser.validSolve();
-//    private List<String> look = TextParser.validLook();
-//    private List<String> talk = TextParser.validTalk();
-//    private List<String> restart = TextParser.validRestart();
-//    private List<String> map = TextParser.validMap();
-
     private CommandsLoader commandsLoader = new CommandsLoader();
     private List<String> go = commandsLoader.verbsObj().get("go");
     private List<String> north = commandsLoader.directionsObj().get("north");
@@ -50,8 +38,6 @@ class Game {
     private List<String> play = commandsLoader.verbsObj().get("play");
     private List<String> stop = commandsLoader.verbsObj().get("stop");
     private List<String> audio = commandsLoader.allAudio();
-    //private List<String> verbs = commandsLoader.allVerbs();
-
 
 
     // CONSTRUCTOR
@@ -112,9 +98,9 @@ class Game {
 
     private void audio(String input) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         if (stop.contains(input)){
-            Audio.pauseAudio();
+            Audio.stopAudio();
         } else if(play.contains(input)) {
-            Audio.resumeAudio();
+            Audio.startAudio();
         }
     }
 
@@ -274,7 +260,6 @@ class Game {
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
         System.out.println("Directions you can go: " + showDirections(currentLocation));
-
     }
 
     private String showDirections(String currentLocation) {
@@ -289,26 +274,24 @@ class Game {
             Console.clear();
             return;
         }
-        System.out.println("Who do you think it is?");
+        System.out.println("Who do you think is the culprit?");
         // Hard coded culprit, subject to change
         String culprit = prompter.prompt(">").strip().toLowerCase();
 
-        System.out.println("What evidence do you have to support it?");
+        System.out.println("What evidence do you have to support your claim?");
         Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
         // Hard coded required evidence, subject to change
         Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
         // If both cases are true, you win
         if(culprit.equals("hamione granger") && evidence.equals(requiredEvidence)){
-            System.out.println("Congratulations you win");
+            System.out.println("Congratulations you solved the mystery!");
             playAgain();
         }
         else {
             count++;
             if (count > 2) {
                 System.out.println("You Lost. The culprit got away!");
-                System.out.println("Exiting the game...");
-                TimeUnit.SECONDS.sleep(2);
-                System.exit(0);
+                playAgain();
             }
             System.out.println("Sorry please collect more clues or try again.");
         }
