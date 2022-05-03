@@ -9,7 +9,7 @@
     "npc": {
       "name": "Pawficer Fluffenstuff",
       "dialogue": "Glad you're here, Purrlock Holmes. It appears the victim, Julius Cheeser was poisoned. The residents are throughout the house waiting to be questioned. ",
-      "randdialogue": ["Look like this mouse is no longer saying cheese.", "Looks like a deadly game of hide and squeak.", "This dead mouse isn't making music anymore."]
+      "randdialogue": ["Looks like this mouse is no longer saying cheese.", "Looks like a deadly game of hide and squeak.", "This dead mouse isn't making music anymore."]
     },
     "item": {
       "name": "trash can",
