@@ -8,7 +8,7 @@
     "restart": ["restart", "replay", "renew", "redo", "reset", "reboot"],
     "quit": ["q", "quit", "exit", "leave"],
     "help": ["commands", "command", "help", "aid", "assist", "assistance"],
-    "play": ["play", "unpause"],
+    "play": ["play", "unpause", "resume"],
     "stop": ["stop", "pause"],
     "map": ["map","location"]
   },
