@@ -10,7 +10,7 @@
     "help": ["commands", "command", "help", "aid", "assist", "assistance"],
     "play": ["play", "unpause"],
     "stop": ["stop", "pause"],
-    "map": ["location"]
+    "map": ["map","location"]
   },
   "directions": {
     "north": ["north","forward", "straight"],
