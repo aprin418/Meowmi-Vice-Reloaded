@@ -6,7 +6,7 @@ import java.io.IOException;
 class Audio {
     static private Clip clip;
     static private AudioInputStream audioStream;
-    static private File file = new File("resources/Audio/mystery.wav");
+    static private File file = new File("resources/Audio/main.wav");
     static private String currentStatus;
 
     static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
