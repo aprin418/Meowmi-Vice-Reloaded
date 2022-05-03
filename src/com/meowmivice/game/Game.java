@@ -39,6 +39,8 @@ class Game {
     private List<String> talk = commandsLoader.verbsObj().get("talk");
     private List<String> restart = commandsLoader.verbsObj().get("restart");
     private List<String> map = commandsLoader.verbsObj().get("map");
+    private List<String> play = commandsLoader.verbsObj().get("play");
+    private List<String> stop = commandsLoader.verbsObj().get("stop");
     private List<String> audio = commandsLoader.allAudio();
     //private List<String> verbs = commandsLoader.allVerbs();
 
@@ -101,9 +103,9 @@ class Game {
     }
 
     private void audio(String input) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        if ("stop".equals(input) || "pause".equals(input)){
+        if (stop.contains(input)){
             Audio.pauseAudio();
-        } else if("play".equals(input) || "unpause".equals(input)) {
+        } else if(play.contains(input)) {
             Audio.resumeAudio();
         }
     }
