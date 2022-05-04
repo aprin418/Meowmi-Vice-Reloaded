@@ -48,6 +48,7 @@ class Game {
 
     void execute() throws Exception {
         boolean runGame = true;
+
         Audio.audio();
         welcome();
         createPlayer();
@@ -222,7 +223,7 @@ class Game {
             validInput = true;
             if ("P".equals(play) || "p".equals(play)) {
                 Console.clear();
-                execute();
+                restart();
             } else {
                 quit();
             }
@@ -259,6 +260,15 @@ class Game {
         String confirm = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
         if ("yes".equals(confirm) || "y".equals(confirm)){
             System.out.println("Restarting the game...");
+            // reset inventory
+            inventory = new ArrayList<>();
+            // stop the audio if its on
+            Audio.stopAudio();
+            // reset the current location
+            currentLocation = "Kitchen";
+            prev = "Kitchen";
+            // TODO reset the map
+            directions = ((Map) locations.get(currentLocation));
             TimeUnit.SECONDS.sleep(2);
             execute();
         }
@@ -272,10 +282,10 @@ class Game {
         System.out.println("You are in the " + currentLocation);
         System.out.println(directions.get("description"));
 //        if(item.containsKey("description")) System.out.println(item.get("description"));
-        System.out.println("Inventory:" +"\033[0m" + inventory + "\033[1;34m");
+        System.out.println("Inventory:" +"\033[37m" + inventory + "\033[1;34m");
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
-        System.out.println("Directions you can go: " + showDirections(currentLocation) + "\033[0m");
+        System.out.println("Directions you can go: " +"\033[37m" + showDirections(currentLocation) + "\033[0m");
     }
 
     private String showDirections(String currentLocation) {
@@ -311,12 +321,14 @@ class Game {
         if(culprit.equals("hamione granger") && evidence.equals(requiredEvidence)){
             System.out.println("Congratulations you solved the mystery!");
             playAgain();
+            System.exit(0);
         }
         else {
             count++;
             if (count > 2) {
                 System.out.println("You Lost. The culprit got away!");
                 playAgain();
+                System.exit(0);
             }
             System.out.println("Sorry please collect more clues or try again.");
         }
@@ -325,7 +337,7 @@ class Game {
     // Method to return evidence Set for solving
     private ArrayList<String> getEvidence() {
         ArrayList<String> evidence = new ArrayList<>();
-        List<String> copy = List.copyOf(inventory);
+        ArrayList<String> copy = new ArrayList<>(inventory);
         boolean isDone = false;
         // As long as they don't specify to quit, loop continues
         while(!isDone){
@@ -348,9 +360,9 @@ class Game {
                     System.out.println("What index item would you like to add?");
                     String input = prompter.prompt(">").strip().toLowerCase();
                     int index = Integer.parseInt(input) - 1;
-                    if(!evidence.contains(inventory.get(index))) {
-                        evidence.add(inventory.get(index));
-                        copy.remove(inventory.get(index));
+                    if(!evidence.contains(copy.get(index))) {
+                        evidence.add(copy.get(index));
+                        copy.remove(copy.get(index));
                     }
                 }
                 // Remove evidence
