@@ -90,7 +90,7 @@ class Game {
     private void ascii(String currentLocation) {
         try {
             String art = Files.readString(Path.of("resources/Ascii/" + currentLocation.toLowerCase() + ".txt"));
-            System.out.println(art);
+            System.out.println("\033[37m" + art + "\033[0m");
         }
         catch (Exception e){
             System.out.println("There is no art");
@@ -175,7 +175,9 @@ class Game {
 
     private void instructions() throws IOException {
         String banner = Files.readString(Path.of("resources/Text/instructions.txt"));
+        Console.clear();
         System.out.println(banner);
+        prompter.prompt("Press enter to continue");
     }
 
     private void look(Map area, List<String> input) throws Exception {
@@ -199,8 +201,8 @@ class Game {
         } else if (area.containsKey(input.get(1))){
             Map itemInput = ((Map) area.get(input.get(1)));
 //            System.out.println(itemInput.get("description"));
-//            showStatus(itemInput);
             plug = itemInput.get("description").toString();
+            showStatus();
             logic(itemInput);
         }
         else {
@@ -265,14 +267,14 @@ class Game {
         ascii(currentLocation);
         System.out.println(plug);
         plug = "";
-        System.out.println("===========================");
+        System.out.println("\033[34m ===========================");
         System.out.println("You are in the " + currentLocation);
         System.out.println(directions.get("description"));
 //        if(item.containsKey("description")) System.out.println(item.get("description"));
         System.out.println("Inventory:" + inventory);
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
-        System.out.println("Directions you can go: " + showDirections(currentLocation));
+        System.out.println("Directions you can go: " + showDirections(currentLocation) + "\033[0m");
     }
 
     private String showDirections(String currentLocation) {
@@ -282,17 +284,26 @@ class Game {
 
     private void solve() throws Exception {
         if(inventory.size() == 0){
-            System.out.println("You currently have no clues");
+            String banner = Files.readString(Path.of("resources/Ascii/pdog3.txt"));
+            System.out.println(banner);
             prompter.prompt("Press enter to continue");
             Console.clear();
             return;
         }
-        System.out.println("Who do you think is the culprit?");
+        //print the ascii of the dog
+        String banner = Files.readString(Path.of("resources/Ascii/pdog.txt"));
+        System.out.println(banner);
         // Hard coded culprit, subject to change
         String culprit = prompter.prompt(">").strip().toLowerCase();
-
-        System.out.println("What evidence do you have to support your claim?");
+        Console.clear();
+        banner = Files.readString(Path.of("resources/Ascii/pdog2.txt"));
+        System.out.println(banner);
         Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
+
+        // TODO change the hard coded nature
+        //        list<> suspects
+        //        player can choose the suspect
+        //             in the if() we check supects.get(userinput) to see if their is culprit is true
         // Hard coded required evidence, subject to change
         Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
         // If both cases are true, you win
@@ -313,16 +324,18 @@ class Game {
     // Method to return evidence Set for solving
     private ArrayList<String> getEvidence() {
         ArrayList<String> evidence = new ArrayList<>();
+        List<String> copy = inventory;
         boolean isDone = false;
         // As long as they don't specify to quit, loop continues
         while(!isDone){
             System.out.println("Current Collected Evidence: ");
             int i = 1;
-            for (String item: inventory) {
+            for (String item: copy) {
                 System.out.println(i + " " + item);
                 i++;
             }
-            System.out.println("Evidence to provide: " + evidence.toString());
+
+            System.out.println("\nEvidence to provide: " + evidence.toString());
 
             System.out.println("What would you like to do?");
             System.out.println("Add, Remove, Solve");
@@ -336,13 +349,17 @@ class Game {
                     int index = Integer.parseInt(input) - 1;
                     if(!evidence.contains(inventory.get(index))) {
                         evidence.add(inventory.get(index));
+                        copy.remove(inventory.get(index));
                     }
                 }
                 // Remove evidence
                 else if (choice.equals("r") || choice.equals("remove")){
                     System.out.println("What item do you want to remove?");
                     String input = prompter.prompt(">").strip().toLowerCase();
-                    evidence.remove(input);
+                    if (evidence.contains(input)){
+                        copy.add(input);
+                        evidence.remove(input);
+                    }
                 }
                 // Exit loop
                 else if (choice.equals("s") || choice.equals("solve")){
@@ -352,12 +369,16 @@ class Game {
             catch (Exception e){
                 System.out.println("Invalid command");
             }
+            finally {
+                Console.clear();
+            }
         }
         return evidence;
     }
 
     private void talk(Map area, List<String> input){
         //weird logic, fix later
+        // TODO npc synonym list
         if (area.containsKey("npc") && input.size()>=2 && input.get(1).equals("npc")) {
             Map npc = ((Map) area.get("npc"));
             ArrayList<String> randDialogueList = (ArrayList<String>) npc.get("randdialogue"); // list from obj value
@@ -376,6 +397,8 @@ class Game {
 
     private void welcome() throws IOException {
         String banner = Files.readString(Path.of("resources/Text/splashbanner.txt"));
-        System.out.println(banner);
+        System.out.println("\033[36m" + banner + "\033[0m");
+        banner = Files.readString(Path.of("resources/Text/splashbanner2.txt"));
+        System.out.println("\033[01;31m" + banner + "\033[0m");
     }
 }
