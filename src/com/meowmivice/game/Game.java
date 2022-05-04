@@ -178,6 +178,7 @@ class Game {
         Console.clear();
         System.out.println(banner);
         prompter.prompt("Press enter to continue");
+        Console.clear();
     }
 
     private void look(Map area, List<String> input) throws Exception {
@@ -267,11 +268,11 @@ class Game {
         ascii(currentLocation);
         System.out.println(plug);
         plug = "";
-        System.out.println("\033[34m ===========================");
+        System.out.println("\033[1;34m ===========================");
         System.out.println("You are in the " + currentLocation);
         System.out.println(directions.get("description"));
 //        if(item.containsKey("description")) System.out.println(item.get("description"));
-        System.out.println("Inventory:" + inventory);
+        System.out.println("Inventory:" +"\033[0m" + inventory + "\033[1;34m");
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
         System.out.println("Directions you can go: " + showDirections(currentLocation) + "\033[0m");
@@ -324,7 +325,7 @@ class Game {
     // Method to return evidence Set for solving
     private ArrayList<String> getEvidence() {
         ArrayList<String> evidence = new ArrayList<>();
-        List<String> copy = inventory;
+        List<String> copy = List.copyOf(inventory);
         boolean isDone = false;
         // As long as they don't specify to quit, loop continues
         while(!isDone){
@@ -397,8 +398,8 @@ class Game {
 
     private void welcome() throws IOException {
         String banner = Files.readString(Path.of("resources/Text/splashbanner.txt"));
-        System.out.println("\033[36m" + banner + "\033[0m");
+        System.out.println( banner );
         banner = Files.readString(Path.of("resources/Text/splashbanner2.txt"));
-        System.out.println("\033[01;31m" + banner + "\033[0m");
+        System.out.println( banner );
     }
 }
