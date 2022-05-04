@@ -15,6 +15,7 @@ class Game {
     private static int count = 0;
     private static String currentLocation = "Kitchen";
     private static String prev = "Kitchen";
+    private static String plug = "";
     private List<String> inventory = new ArrayList<>();
     private JSONObject locations = TextParser.locations();
     private Map directions = ((Map) locations.get(currentLocation));
@@ -53,7 +54,7 @@ class Game {
         promptToPlay();
         instructions();
         while (runGame) {
-            showStatus(directions);
+            showStatus();
             logic(directions);
         }
     }
@@ -70,7 +71,7 @@ class Game {
         } else if (look.contains(textParser.get(0))) {
             look(area,textParser);
         } else if (talk.contains(textParser.get(0))) {
-            talk(area);
+            talk(area,textParser);
         } else if(solve.contains(textParser.get(0))) {
             solve();
         } else if (quit.contains(textParser.get(0))) {
@@ -154,12 +155,15 @@ class Game {
     private void get(Map area, List<String> input){
         if (area.containsKey("isClue")) {
             inventory.add(area.get("name").toString());
+            plug = area.get("name").toString();
             directions.remove("item");
-            System.out.println("You added " + input.get(1));
+//            System.out.println("You added " + input.get(1));
 
         } else if (!(area.containsKey("isClue"))){
-            System.out.println("There is no clue here");
+//            System.out.println("There is no clue here");
+            plug = "There is no clue here";
         } else{
+            // statement never reached
             System.out.println("One must look at the item first to find the clue");
         }
     }
@@ -179,25 +183,31 @@ class Game {
         Map npc = ((Map) directions.get("npc"));
         if (input.size() == 1){
             if (area.containsKey("npc") && area.containsKey("item")) {
-                System.out.println(npc.get("name") + " and a " + item.get("name") + " are at this location.");
+//                System.out.println(npc.get("name") + " and a " + item.get("name") + " are at this location.");
+                plug = npc.get("name") + " and a " + item.get("name") + " are at this location.";
             } else if (area.containsKey("npc") && !(area.containsKey("item"))){
-                System.out.println(npc.get("name") + " is at this location.");
+//                System.out.println(npc.get("name") + " is at this location.");
+                plug = npc.get("name") + " is at this location.";
             } else if(area.containsKey("item") && !(area.containsKey("npc"))){
-                System.out.println("There is a " + item.get("name") + " in this location.");
+//                System.out.println("There is a " + item.get("name") + " in this location.");
+                plug = "There is a " + item.get("name") + " in this location.";
             } else {
-                System.out.println("There is nothing in this location to look at.");
+//                System.out.println("There is nothing in this location to look at.");
+                plug = "There is nothing in this location to look at.";
             }
             // if user looks at an item, recall the logic so that user can interact with it
         } else if (area.containsKey(input.get(1))){
             Map itemInput = ((Map) area.get(input.get(1)));
-            System.out.println(itemInput.get("description"));
-            showStatus(itemInput);
+//            System.out.println(itemInput.get("description"));
+//            showStatus(itemInput);
+            plug = itemInput.get("description").toString();
             logic(itemInput);
         }
         else {
-            System.out.println("Cant look there");
-            TimeUnit.SECONDS.sleep(2);
-            Console.clear();
+//            System.out.println("Cant look there");
+//            TimeUnit.SECONDS.sleep(2);
+//            Console.clear();
+            plug = "Can't look there";
         }
     }
 
@@ -251,11 +261,14 @@ class Game {
         }
     }
 
-    private void showStatus(Map item){
+    private void showStatus(){
         ascii(currentLocation);
+        System.out.println(plug);
+        plug = "";
         System.out.println("===========================");
         System.out.println("You are in the " + currentLocation);
-        if(item.containsKey("description")) System.out.println(item.get("description"));
+        System.out.println(directions.get("description"));
+//        if(item.containsKey("description")) System.out.println(item.get("description"));
         System.out.println("Inventory:" + inventory);
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
@@ -343,15 +356,21 @@ class Game {
         return evidence;
     }
 
-    private void talk(Map area){
-
-        if (area.containsKey("npc")) {
+    private void talk(Map area, List<String> input){
+        //weird logic, fix later
+        if (area.containsKey("npc") && input.size()>=2 && input.get(1).equals("npc")) {
             Map npc = ((Map) area.get("npc"));
             ArrayList<String> randDialogueList = (ArrayList<String>) npc.get("randdialogue"); // list from obj value
             int rand = new Random().nextInt(randDialogueList.size()); // make random int from size of list
-            System.out.println(npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand));
-        } else {
-            System.out.println("There is no one to talk to");
+//            System.out.println(npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand));
+            plug = npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand);
+        }
+        else if (area.containsKey("npc")){
+            plug = "Talk to who?";
+        }
+        else {
+//            System.out.println("There is no one to talk to");
+            plug = "There is no one to talk to";
         }
     }
 
