@@ -1,5 +1,6 @@
 package com.meowmivice.game;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.io.FileReader;
 import org.json.simple.JSONObject;
@@ -8,7 +9,9 @@ import org.json.simple.parser.*;
 class TextParser {
     static JSONObject locations() throws IOException, ParseException {
 
-        Object obj = new JSONParser().parse(new FileReader("resources/Json/locations.json"));
+        Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/locations.json"))));
+
+//        new FileReader("resources/Json/locations.json"));
         // typecasting obj to JSONObject
         return (JSONObject) obj;
     }
@@ -19,50 +22,6 @@ class TextParser {
             userInput.remove(item);
         }
     }
-
-//    static List<String> validGo(){
-//        return new ArrayList<>(Arrays.asList("go", "move", "walk", "run"));
-//    }
-//
-//    static List<String> validGet(){
-//        return new ArrayList<>(Arrays.asList("get", "grab", "obtain", "acquire", "take", "pick up"));
-//    }
-//
-//    static List<String> validLook(){
-//        return new ArrayList<>(Arrays.asList("look", "inspect", "examine", "view", "review", "search", "study", "canvass"));
-//    }
-//
-//    static List<String> validQuit(){
-//        return new ArrayList<>(Arrays.asList("q", "quit", "exit", "leave"));
-//    }
-//
-//    static List<String> validHelp(){
-//        return new ArrayList<>(Arrays.asList("commands", "command", "help", "aid", "assist", "assistance"));
-//    }
-//
-//    static List<String> validRestart(){
-//        return new ArrayList<>(Arrays.asList("restart", "replay", "renew", "redo", "reset", "reboot"));
-//    }
-//
-//    static List<String> validSolve(){
-//        return new ArrayList<>(Arrays.asList("solve", "answer", "resolve", "decipher", "decode", "guess"));
-//    }
-//
-//    static List<String> validTalk(){
-//        return new ArrayList<>(Arrays.asList("talk", "speak", "communicate", "chat", "interact", "gossip"));
-//    }
-//
-//    static List<String> validAudio(){
-//        return new ArrayList<>(Arrays.asList("stop", "play", "pause", "unpause"));
-//    }
-//
-//    static List<String> validMap(){
-//        return new ArrayList<>(Arrays.asList("map", "location"));
-//    }
-//
-//    private static List<String> verbs(){
-//        return new ArrayList<>(Arrays.asList("go", "map", "location", "stop", "play","pause", "unpause", "pick up", "take", "get", "grab", "obtain", "acquire", "look", "talk", "move", "run", "walk", "solve", "quit", "command", "help", "aid", "assist", "assistance", "commands", "restart", "q", "exit", "leave", "answer", "resolve", "decipher", "decode", "guess", "inspect", "examine", "view", "review", "search", "study", "canvass", "speak", "communicate", "chat", "interact", "gossip", "replay", "renew", "redo", "reset", "reboot"));
-//    }
 
     static List<String> textParser(String input) throws IOException, ParseException {
         // verbs();

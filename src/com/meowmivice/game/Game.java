@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -88,32 +89,44 @@ class Game {
         }
     }
 
-    private void ascii(String currentLocation) {
+    private void ascii(String currentLocation) throws IOException {
         try {
-            String art = Files.readString(Path.of("resources/Ascii/" + currentLocation.toLowerCase() + ".txt"));
-            System.out.println("\033[37m" + art + "\033[0m");
+            FileReader.fileReaderWhite("/Ascii/"+ currentLocation.toLowerCase() + ".txt");
+
         }
         catch (Exception e){
             System.out.println("There is no art");
         }
+
     }
 
     private void audio(String input) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         if (stop.contains(input)){
             Audio.stopAudio();
         } else if(play.contains(input)) {
-            Audio.startAudio();
+            Audio.audio();
         }
     }
 
     private void displayLocation() throws Exception{
-        Console.clear();
-        String map = Files.readString(Path.of("resources/Ascii/map.txt"));
-        String colorCoded = "\033[31m" +currentLocation.toUpperCase()+" \033[0m";
-        String newMap = map.replaceFirst(currentLocation.toLowerCase(), colorCoded);
-        System.out.println(newMap);
+        mapFileReader("/Ascii/map.txt");
         prompter.prompt("Press enter to continue\n");
         Console.clear();
+    }
+
+    static String mapFileReader(String filename) throws IOException {
+        try (var in = Game.class.getResourceAsStream(filename)) {
+            Scanner scanner = new Scanner(in, StandardCharsets.UTF_8);
+            while ( scanner.hasNextLine() ){
+                String coloredMap = "\033[37m" + scanner.nextLine() +"\033[0m";
+                String colorCoded = "\033[31m" +currentLocation.toUpperCase()+"\033[37m";
+                System.out.println(coloredMap.replaceFirst(currentLocation.toLowerCase(), colorCoded));
+                System.out.print("\033[0m");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Uncaught", e);
+        }
+        return filename;
     }
 
     private void createPlayer() {
@@ -170,14 +183,12 @@ class Game {
     }
 
     private void help() throws IOException {
-        String help = Files.readString(Path.of("resources/Text/commands.txt"));
-        System.out.println(help);
+        FileReader.fileReaderWhite("/Text/commands.txt");
     }
 
     private void instructions() throws IOException {
-        String banner = Files.readString(Path.of("resources/Text/instructions.txt"));
         Console.clear();
-        System.out.println(banner);
+        FileReader.fileReaderWhite("/Text/instructions.txt");
         prompter.prompt("Press enter to continue");
         Console.clear();
     }
@@ -234,7 +245,6 @@ class Game {
         boolean validInput = false;
         while (!validInput) {
             String play = prompter.prompt("Please enter [S] to start the game or [Q] to exit the game: ","s|q|S|Q","\nThat is not a valid input!\n");
-            Console.clear();
             validInput = true;
             if ("S".equals(play) || "s".equals(play)) {
                 continue;
@@ -274,15 +284,15 @@ class Game {
         }
     }
 
-    private void showStatus(){
+    private void showStatus() throws IOException {
         ascii(currentLocation);
         System.out.println(plug);
         plug = "";
-        System.out.println("\033[1;34m ===========================");
+        System.out.println("\033[1;36m===========================");
         System.out.println("You are in the " + currentLocation);
         System.out.println(directions.get("description"));
 //        if(item.containsKey("description")) System.out.println(item.get("description"));
-        System.out.println("Inventory:" +"\033[37m" + inventory + "\033[1;34m");
+        System.out.println("Inventory:" +"\033[37m" + inventory + "\033[1;36m");
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
         System.out.println("Directions you can go: " +"\033[37m" + showDirections(currentLocation) + "\033[0m");
@@ -295,20 +305,17 @@ class Game {
 
     private void solve() throws Exception {
         if(inventory.size() == 0){
-            String banner = Files.readString(Path.of("resources/Ascii/pdog3.txt"));
-            System.out.println(banner);
+            FileReader.fileReaderWhite("/Ascii/pdog3.txt");
             prompter.prompt("Press enter to continue");
             Console.clear();
             return;
         }
         //print the ascii of the dog
-        String banner = Files.readString(Path.of("resources/Ascii/pdog.txt"));
-        System.out.println(banner);
+        FileReader.fileReaderWhite("/Ascii/pdog.txt");
         // Hard coded culprit, subject to change
         String culprit = prompter.prompt(">").strip().toLowerCase();
         Console.clear();
-        banner = Files.readString(Path.of("resources/Ascii/pdog2.txt"));
-        System.out.println(banner);
+        FileReader.fileReaderWhite("/Ascii/pdog2.txt");
         Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
 
         // TODO change the hard coded nature
@@ -409,9 +416,8 @@ class Game {
     }
 
     private void welcome() throws IOException {
-        String banner = Files.readString(Path.of("resources/Text/splashbanner.txt"));
-        System.out.println( banner );
-        banner = Files.readString(Path.of("resources/Text/splashbanner2.txt"));
-        System.out.println( banner );
+        FileReader.fileReader("/Text/splashbanner.txt");
     }
+
+
 }

@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class CommandsLoader {
     private JSONParser jsonParser;
@@ -21,10 +22,11 @@ public class CommandsLoader {
     private List<String> directions = new ArrayList<>();
 
     public CommandsLoader() throws IOException, ParseException {
-        jsonParser = new JSONParser();
-        commReader = new FileReader("resources/Json/Commands.json");
-        // Object commObj = jsonParser.parse(commReader); // or
-        commObj = (JSONObject) jsonParser.parse(commReader);
+//        jsonParser = new JSONParser();
+//        commReader = new FileReader("resources/Json/Commands.json");
+//        // Object commObj = jsonParser.parse(commReader); // or
+//        commObj = (JSONObject) jsonParser.parse(commReader);
+        commObj = (JSONObject) new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/Commands.json"))));
     }
 
     // parse out verbs obj from Commands JSON
