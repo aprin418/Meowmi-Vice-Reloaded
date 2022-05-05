@@ -1,0 +1,27 @@
+{
+  "verbs": {
+    "go": ["go", "move", "walk", "run"],
+    "look": ["look", "inspect", "examine", "view", "review", "search", "study", "canvass"],
+    "get": ["get", "grab", "obtain", "acquire", "take", "pick up"],
+    "talk": ["talk", "speak", "communicate", "chat", "interact", "gossip"],
+    "solve": ["solve", "answer", "resolve", "decipher", "decode", "guess"],
+    "restart": ["restart", "replay", "renew", "redo", "reset", "reboot"],
+    "quit": ["q", "quit", "exit", "leave"],
+    "help": ["commands", "command", "help", "aid", "assist", "assistance"],
+    "play": ["play", "unpause", "resume"],
+    "stop": ["stop", "pause"],
+    "map": ["map","location"]
+  },
+  "directions": {
+    "north": ["north","forward", "straight"],
+    "south": ["south", "backward"],
+    "east": ["east","right"],
+    "west": ["west","left"],
+    "upstairs": ["upstairs","up"],
+    "downstairs": ["downstairs","down"]
+  },
+  "audio": {
+    "play": ["play", "unpause", "resume"],
+    "stop": ["stop", "pause"]
+  }
+}
