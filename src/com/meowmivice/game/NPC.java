@@ -33,7 +33,7 @@ public class NPC {
         return randDialogue;
     }
 
-    public void setRandDialogue(ArrayList<String> randDialogue) {
+    public void setRandDialogue(ArrayList randDialogue) {
         this.randDialogue = randDialogue;
     }
 }
