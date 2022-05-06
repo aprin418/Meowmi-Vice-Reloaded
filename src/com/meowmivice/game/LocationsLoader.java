@@ -12,7 +12,6 @@ import java.util.*;
 public class LocationsLoader {
     private JSONArray locArr;
 
-
     public LocationsLoader() throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
         // read the file
@@ -77,4 +76,5 @@ public class LocationsLoader {
         }
         return result;
     }
+
 }
