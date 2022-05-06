@@ -25,7 +25,7 @@ class CulpritLoader {
     }
 
     public Culprit load() {
-        String name = (String) culpritObj.get("name");
+        String name = (String) culpritObj.get("name ");
         ArrayList<String> evidence = (ArrayList<String>) culpritObj.get("evidence");
         Culprit culprit = new Culprit(name, evidence);
         return culprit;
