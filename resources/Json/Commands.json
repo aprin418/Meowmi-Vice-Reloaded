@@ -11,7 +11,9 @@
     "play": ["play", "unpause", "resume"],
     "stop": ["stop", "pause"],
     "map": ["map","location"],
-    "suspects": ["suspects"]
+    "suspects": ["suspects"],
+    "save": ["save", "store", "reserve"],
+    "load": ["load", "continue"]
   },
   "directions": {
     "north": ["north","forward", "straight"],
