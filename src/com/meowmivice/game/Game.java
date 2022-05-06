@@ -3,6 +3,7 @@ import com.apps.util.Console;
 import com.apps.util.Prompter;
 import org.json.simple.JSONObject;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -10,23 +11,33 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 class Game {
+    LocationsLoader locLoader  = new LocationsLoader();
+    Map<String, Location> mapLocations = locLoader.load();
+
     private static Prompter prompter;
     private static int count = 0;
+    private static boolean checkCounter = false;
+
     private static String currentLocation = "Kitchen";
     private static String prev = "Kitchen";
+    private Location currentSpot = mapLocations.get(currentLocation);
+
     private static String plug = "";
     private List<String> inventory = new ArrayList<>();
+    private Map<String, String> suspectDialogue = new HashMap<>();
     private JSONObject locations = TextParser.locations();
-    private Map directions = ((Map) locations.get(currentLocation));
+//    private Map directions = ((Map) locations.get(currentLocation));
     private CommandsLoader commandsLoader = new CommandsLoader();
+
     private List<String> go = commandsLoader.verbsObj().get("go");
     private List<String> north = commandsLoader.directionsObj().get("north");
     private List<String> east = commandsLoader.directionsObj().get("east");
     private List<String> south = commandsLoader.directionsObj().get("south");
     private List<String> west = commandsLoader.directionsObj().get("west");
+    private List<String> allDirections = commandsLoader.allDirections();
+
     private List<String> upstairs = commandsLoader.directionsObj().get("upstairs");
     private List<String> downstairs = commandsLoader.directionsObj().get("downstairs");
-    private List<String> allDirections = commandsLoader.allDirections();
     private List<String> get = commandsLoader.verbsObj().get("get");
     private List<String> help = commandsLoader.verbsObj().get("help");
     private List<String> quit = commandsLoader.verbsObj().get("quit");
@@ -46,6 +57,7 @@ class Game {
     }
 
     void execute() throws Exception {
+
         boolean runGame = true;
 
         Audio.audio();
@@ -55,23 +67,24 @@ class Game {
         instructions();
         while (runGame) {
             showStatus();
-            logic(directions);
+            logic();
         }
+
     }
 
-    private void logic(Map area) throws Exception {
+    private void logic() throws Exception {
         String input = prompter.prompt(">").trim().toLowerCase();
         Console.clear();
         List<String> textParser = TextParser.textParser(input);
 
         if (textParser.size()>=2 && go.contains(textParser.get(0))) {
-            go(area, textParser);
-        } else if (get.contains(textParser.get(0))) {
-            get(area, textParser);
-        } else if (look.contains(textParser.get(0))) {
-            look(area,textParser);
+            String direction = getDirection(textParser);
+            go(textParser, direction);
+        }
+        else if (look.contains(textParser.get(0))) {
+            look(textParser);
         } else if (talk.contains(textParser.get(0))) {
-            talk(area,textParser);
+            talk(textParser);
         } else if(solve.contains(textParser.get(0))) {
             solve();
         } else if (quit.contains(textParser.get(0))) {
@@ -84,6 +97,8 @@ class Game {
             displayLocation();
         } else if(audio.contains(textParser.get(0))){
             audio(textParser.get(0));
+        } else if(textParser.get(0).equals("suspects")){
+            showSuspects();
         }
     }
 
@@ -135,22 +150,24 @@ class Game {
         System.out.println();
     }
 
-    private void go(Map area, List<String> input) {
-        String direction = getDirection(input);
+    private void go(List<String> input, String direction) {
 
         if (input.get(1).equals("back")){
             String temp = currentLocation;
             currentLocation = prev;
             prev = temp;
+            checkCounter = false;
         }
 
-        else if (area.containsKey(direction)) {
+        else if (currentSpot.getDirections().containsKey(direction)) {
             prev = currentLocation;
-            currentLocation = area.get(direction).toString();
+            currentLocation = currentSpot.getDirections().get(direction);
+            checkCounter = false;
         }else {
-            System.out.println("That is an invalid direction to go!");
+            plug = "That is an invalid direction to go!";
         }
-        directions = ((Map) locations.get(currentLocation));
+        currentSpot = mapLocations.get(currentLocation);
+        checkCounter = false;
     }
 
     private String getDirection(List<String> input) {
@@ -164,8 +181,10 @@ class Game {
         return direction;
     }
 
+    /*
     private void get(Map area, List<String> input){
-        if (area.containsKey("isClue")) {
+        // check if the current location.item.clue
+        if (area.containsKey("isClue")) { //area.containsKey("isClue"
             inventory.add(area.get("name").toString());
             plug = area.get("name").toString();
             directions.remove("item");
@@ -177,6 +196,30 @@ class Game {
         } else{
             // statement never reached
             System.out.println("One must look at the item first to find the clue");
+        }
+    }
+    */
+
+    private void get(Item currentItem)throws Exception{
+
+        Clue clue = currentItem.getClue();
+        System.out.println(currentItem.getDescription());
+        System.out.println("What do you want to do?");
+
+        String input = prompter.prompt("> ").toLowerCase().trim();
+        List<String> textParser = TextParser.textParser(input);
+
+        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
+            inventory.add(currentItem.getClue().getName());
+            mapLocations.get(currentLocation).setItem(null);
+            checkCounter = false;
+        }
+        else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
+            plug = currentItem.getClue().getDescription();
+            checkCounter = true;
+        }
+        else {
+            plug = "Don't recognize that command";
         }
     }
 
@@ -191,35 +234,24 @@ class Game {
         Console.clear();
     }
 
-    private void look(Map area, List<String> input) throws Exception {
-        Map item = ((Map) directions.get("item"));
-        Map npc = ((Map) directions.get("npc"));
+    private void look(List<String> input) throws Exception {
+        NPC currentNpc = currentSpot.getNpc();
+        Item currentItem = currentSpot.getItem();
         if (input.size() == 1){
-            if (area.containsKey("npc") && area.containsKey("item")) {
-//                System.out.println(npc.get("name") + " and a " + item.get("name") + " are at this location.");
-                plug = npc.get("name") + " and a " + item.get("name") + " are at this location.";
-            } else if (area.containsKey("npc") && !(area.containsKey("item"))){
-//                System.out.println(npc.get("name") + " is at this location.");
-                plug = npc.get("name") + " is at this location.";
-            } else if(area.containsKey("item") && !(area.containsKey("npc"))){
-//                System.out.println("There is a " + item.get("name") + " in this location.");
-                plug = "There is a " + item.get("name") + " in this location.";
+            if (currentNpc!=null && currentItem != null) { //area.containsKey("npc") && area.containsKey("item")
+                plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
+            } else if (currentNpc!=null && currentItem==null){
+                plug = currentNpc.getName() + " is at this location.";
+            } else if(currentNpc==null && currentItem!=null){
+                plug = "There is a " + currentItem.getName() + " in this location.";
             } else {
-//                System.out.println("There is nothing in this location to look at.");
                 plug = "There is nothing in this location to look at.";
             }
             // if user looks at an item, recall the logic so that user can interact with it
-        } else if (area.containsKey(input.get(1))){
-            Map itemInput = ((Map) area.get(input.get(1)));
-//            System.out.println(itemInput.get("description"));
-            plug = itemInput.get("description").toString();
-            showStatus();
-            logic(itemInput);
+        } else if (input.get(1).equals("item") && currentItem!=null){
+            get(currentItem);
         }
         else {
-//            System.out.println("Cant look there");
-//            TimeUnit.SECONDS.sleep(2);
-//            Console.clear();
             plug = "Can't look there";
         }
     }
@@ -275,10 +307,10 @@ class Game {
             // reset the current location
             currentLocation = "Kitchen";
             prev = "Kitchen";
-            // TODO reset the map
-            directions = ((Map) locations.get(currentLocation));
+
             TimeUnit.SECONDS.sleep(2);
-            execute();
+            Game game2 = new Game(new Prompter(new Scanner(System.in)));
+            game2.execute();
         }
     }
 
@@ -288,7 +320,7 @@ class Game {
         plug = "";
         System.out.println("\033[1;36m===========================");
         System.out.println("You are in the " + currentLocation);
-        System.out.println(directions.get("description"));
+        System.out.println(currentSpot.getDescription());
 //        if(item.containsKey("description")) System.out.println(item.get("description"));
         System.out.println("Inventory:" +"\033[37m" + inventory + "\033[1;36m");
         System.out.println("Enter help to see a list of available commands");
@@ -297,7 +329,7 @@ class Game {
     }
 
     private String showDirections(String currentLocation) {
-        Map<String,String> directionsMap =  (Map) directions.get("directions");
+        Map<String,String> directionsMap =  currentSpot.getDirections();
         return directionsMap.keySet().toString();
     }
 
@@ -394,22 +426,40 @@ class Game {
         return evidence;
     }
 
-    private void talk(Map area, List<String> input){
+    private void talk(List<String> input){
         //weird logic, fix later
         // TODO npc synonym list
-        if (area.containsKey("npc") && input.size()>=2 && input.get(1).equals("npc")) {
-            Map npc = ((Map) area.get("npc"));
-            ArrayList<String> randDialogueList = (ArrayList<String>) npc.get("randdialogue"); // list from obj value
+        NPC npc = currentSpot.getNpc();
+        if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //area.containsKey("npc") && input.size()>=2 && input.get(1).equals("npc")
+            ArrayList<String> randDialogueList = npc.getRandDialogue(); // list from obj value
             int rand = new Random().nextInt(randDialogueList.size()); // make random int from size of list
-//            System.out.println(npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand));
-            plug = npc.get("name") + ": " + npc.get("dialogue") + randDialogueList.get(rand);
+            String randDiag = randDialogueList.get(rand);
+            plug = npc.getName() + ": " + randDiag;
+            addDialogue(npc.getName(),randDiag);
         }
-        else if (area.containsKey("npc")){
+        else if (npc!=null){
             plug = "Talk to who?";
         }
         else {
-//            System.out.println("There is no one to talk to");
             plug = "There is no one to talk to";
+        }
+    }
+
+    private void addDialogue(String name, String dialogue) {
+        if(!suspectDialogue.containsKey(name)){
+            suspectDialogue.put(name,dialogue);
+        }
+    }
+
+    private void showSuspects(){
+        if(suspectDialogue.size() == 0){
+            plug = "No suspects at this time";
+        }
+        else{
+            System.out.println("Who do you want to talk to?");
+            System.out.println(suspectDialogue.keySet().toString());
+            String input = prompter.prompt(">").trim();
+            plug = suspectDialogue.getOrDefault(input, "Don't know who that is");
         }
     }
 
