@@ -25,8 +25,9 @@ class Game {
     private static String plug = "";
     private List<String> inventory = new ArrayList<>();
     private Map<String, String> suspectDialogue = new HashMap<>();
+    private Map<String, String> cluesList = new HashMap<>();
+
     private JSONObject locations = TextParser.locations();
-//    private Map directions = ((Map) locations.get(currentLocation));
     private CommandsLoader commandsLoader = new CommandsLoader();
 
     private List<String> go = commandsLoader.verbsObj().get("go");
@@ -99,6 +100,20 @@ class Game {
             audio(textParser.get(0));
         } else if(textParser.get(0).equals("suspects")){
             showSuspects();
+        } else if(textParser.get(0).equals("inventory")){
+            showInventory();
+        }
+    }
+
+    private void showInventory() {
+        if(cluesList.size() == 0){
+            plug = "Currently no clues collected";
+        }
+        else {
+            System.out.println("What clue would you like to review?");
+            System.out.println(cluesList.keySet());
+            String input = prompter.prompt("> ").trim();
+            plug = cluesList.getOrDefault(input, "Invalid clue");
         }
     }
 
@@ -181,27 +196,7 @@ class Game {
         return direction;
     }
 
-    /*
-    private void get(Map area, List<String> input){
-        // check if the current location.item.clue
-        if (area.containsKey("isClue")) { //area.containsKey("isClue"
-            inventory.add(area.get("name").toString());
-            plug = area.get("name").toString();
-            directions.remove("item");
-//            System.out.println("You added " + input.get(1));
-
-        } else if (!(area.containsKey("isClue"))){
-//            System.out.println("There is no clue here");
-            plug = "There is no clue here";
-        } else{
-            // statement never reached
-            System.out.println("One must look at the item first to find the clue");
-        }
-    }
-    */
-
     private void get(Item currentItem)throws Exception{
-
         Clue clue = currentItem.getClue();
         System.out.println(currentItem.getDescription());
         System.out.println("What do you want to do?");
@@ -212,14 +207,21 @@ class Game {
         if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
             inventory.add(currentItem.getClue().getName());
             mapLocations.get(currentLocation).setItem(null);
+
+            cluesList.put(clue.getName(),
+                    "Name: " + clue.getName() +
+                    "\nDescription: " + clue.getDescription() +
+                    "\nObtained from: " + currentItem.getName() +
+                    "\nFound in: " + currentLocation);
             checkCounter = false;
         }
         else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
             plug = currentItem.getClue().getDescription();
             checkCounter = true;
+            get(currentItem);
         }
         else {
-            plug = "Don't recognize that command";
+            plug = "Invalid command";
         }
     }
 
@@ -388,7 +390,7 @@ class Game {
             System.out.println("\nEvidence to provide: " + evidence.toString());
 
             System.out.println("What would you like to do?");
-            System.out.println("Add, Remove, Solve");
+            System.out.println("Add, Remove, Solve, Inventory");
 
             String choice = prompter.prompt(">").strip().toLowerCase();
             try{
@@ -411,6 +413,9 @@ class Game {
                         evidence.remove(input);
                     }
                 }
+                else if (choice.equals("i") || choice.equals(("inventory"))){
+                    showInventory();
+                }
                 // Exit loop
                 else if (choice.equals("s") || choice.equals("solve")){
                     isDone = true;
@@ -421,6 +426,7 @@ class Game {
             }
             finally {
                 Console.clear();
+                System.out.println(plug+"\n");
             }
         }
         return evidence;
