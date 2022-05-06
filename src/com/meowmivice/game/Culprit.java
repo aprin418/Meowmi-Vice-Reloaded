@@ -1,14 +1,16 @@
 package com.meowmivice.game;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Culprit {
 
     private String name;
-    private ArrayList<String> evidence;
+    private Set<String> evidence;
 
-    Culprit(String name, ArrayList<String> evidence) {
+    Culprit(String name, Set<String> evidence) {
         setName(name);
         setEvidence(evidence);
     }
@@ -21,11 +23,11 @@ public class Culprit {
         this.name = name;
     }
 
-    public ArrayList<String> getEvidence() {
+    public Set<String> getEvidence() {
         return evidence;
     }
 
-    public void setEvidence(ArrayList<String> evidence) {
+    public void setEvidence(Set<String> evidence) {
         this.evidence = evidence;
     }
 

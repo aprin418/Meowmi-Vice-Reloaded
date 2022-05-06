@@ -354,10 +354,12 @@ class Game {
         //        list<> suspects
         //        player can choose the suspect
         //             in the if() we check supects.get(userinput) to see if their is culprit is true
-        // Hard coded required evidence, subject to change
-        Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
+
+        CulpritLoader culpLoader = new CulpritLoader();
+        Culprit reqCulprit = culpLoader.load();
+        // Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
         // If both cases are true, you win
-        if(culprit.equals("hamione granger") && evidence.equals(requiredEvidence)){
+        if(culprit.equals(reqCulprit.getName()) && evidence.equals(reqCulprit.getEvidence())){
             System.out.println("Congratulations you solved the mystery!");
             playAgain();
             System.exit(0);

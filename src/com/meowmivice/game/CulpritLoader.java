@@ -7,10 +7,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 class CulpritLoader {
     private JSONObject culpritObj;
@@ -26,7 +23,8 @@ class CulpritLoader {
 
     public Culprit load() {
         String name = (String) culpritObj.get("name");
-        ArrayList<String> evidence = (ArrayList<String>) culpritObj.get("evidence");
+        ArrayList<String> ev = (ArrayList<String>) culpritObj.get("evidence");
+        Set<String> evidence = new HashSet<>(ev);
         Culprit culprit = new Culprit(name, evidence);
         return culprit;
     }
