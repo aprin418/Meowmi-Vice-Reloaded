@@ -1,18 +1,14 @@
 package com.meowmivice.game;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Item {
-
+public class Clue {
     private String name;
     private String description;
-    private Clue clue;
+    private String isClue;
 
-    Item(String name, String description, Clue clue) {
+    Clue(String name, String description, String isClue) {
         setName(name);
         setDescription(description);
-        setClue(clue);
+        setIsClue(isClue);
     }
 
     public String getName() {
@@ -31,18 +27,17 @@ public class Item {
         this.description = description;
     }
 
-    public Clue getClue() {
-        return clue;
+    public String getIsClue() {
+        return isClue;
     }
 
-    public void setClue(Clue clue) {
-        this.clue = clue;
+    public void setIsClue(String isClue) {
+        this.isClue = isClue;
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + ": name= " + getName()
-                + ", description= " + getDescription()
-                + ", clue= " + getClue().toString();
+                + ", description= " + getDescription();
     }
 }

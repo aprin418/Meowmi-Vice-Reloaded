@@ -70,4 +70,12 @@ public class Location {
     public void setItem(Item item) {
         this.item = item;
     }
+
+    @Override
+    // TODO: Can I have different toStrings()
+    public String toString() {
+        return getClass().getSimpleName() + ": name= " + getName()
+                + ", description= " + getDescription()
+                + ", directions= " + getDirections().toString();
+    }
 }
