@@ -32,6 +32,6 @@ public class Culprit {
     @Override
     public String toString() {
         return getClass().getSimpleName() + ": name= " + getName()
-                + ", description = " + getEvidence();
+                + ", description= " + getEvidence();
     }
 }

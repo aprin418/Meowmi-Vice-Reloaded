@@ -15,7 +15,7 @@ public class CulpritLoaderTest {
         CulpritLoader culpLoader = new CulpritLoader();
         Culprit culprit = culpLoader.load();
 
-        assertEquals("Hamione Granger ", culprit.getName());
+        assertEquals("Hamione Granger", culprit.getName());
         // TODO: array test for evidence
     }
 }
