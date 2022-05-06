@@ -2,9 +2,6 @@ package com.meowmivice.game;
 import com.apps.util.Console;
 import com.apps.util.Prompter;
 import org.json.simple.JSONObject;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -49,6 +46,8 @@ class Game {
     private List<String> map = commandsLoader.verbsObj().get("map");
     private List<String> play = commandsLoader.verbsObj().get("play");
     private List<String> stop = commandsLoader.verbsObj().get("stop");
+    private List<String> load = commandsLoader.verbsObj().get("load");
+    private List<String> save = commandsLoader.verbsObj().get("save");
     private List<String> audio = commandsLoader.allAudio();
 
 
@@ -58,12 +57,10 @@ class Game {
     }
 
     void execute() throws Exception {
-
         boolean runGame = true;
 
         Audio.audio();
         welcome();
-        createPlayer();
         promptToPlay();
         instructions();
         while (runGame) {
@@ -96,8 +93,14 @@ class Game {
             restart();
         } else if (map.contains(textParser.get(0))){
             displayLocation();
-        } else if(audio.contains(textParser.get(0))){
-            audio(textParser.get(0));
+        } else if (save.contains(textParser.get(0))){
+            SaveAndLoad.save();
+        } else if (load.contains(textParser.get(0))){
+            SaveAndLoad.load();
+        }else if (play.contains(textParser.get(0))){
+            Audio.audio();
+        } else if (stop.contains(textParser.get(0))){
+            Audio.stopAudio();
         } else if(textParser.get(0).equals("suspects")){
             showSuspects();
         } else if(textParser.get(0).equals("inventory")){
@@ -120,19 +123,9 @@ class Game {
     private void ascii(String currentLocation) throws IOException {
         try {
             FileReader.fileReaderWhite("/Ascii/"+ currentLocation.toLowerCase() + ".txt");
-
         }
         catch (Exception e){
             System.out.println("There is no art");
-        }
-
-    }
-
-    private void audio(String input) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        if (stop.contains(input)){
-            Audio.stopAudio();
-        } else if(play.contains(input)) {
-            Audio.audio();
         }
     }
 
@@ -155,14 +148,6 @@ class Game {
             throw new RuntimeException("Uncaught", e);
         }
         return filename;
-    }
-
-    private void createPlayer() {
-        System.out.println();
-        String name = prompter.prompt("Please enter player's name: ").toUpperCase(Locale.ROOT);
-        System.out.println();
-        System.out.println("Welcome to Meowmi Vice " +  name);
-        System.out.println();
     }
 
     private void go(List<String> input, String direction) {
@@ -471,9 +456,11 @@ class Game {
         }
     }
 
-    private void welcome() throws IOException {
+    private void welcome() throws IOException, InterruptedException {
         FileReader.fileReader("/Text/splashbanner.txt");
+        System.out.println();
+        TimeUnit.SECONDS.sleep(2);
+        System.out.println("Welcome to Meowmi Vice!");
     }
-
 
 }
