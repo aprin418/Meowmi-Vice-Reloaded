@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="hamcrest-core-1.311">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.3111.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

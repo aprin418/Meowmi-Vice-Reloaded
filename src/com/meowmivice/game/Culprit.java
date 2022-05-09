@@ -10,6 +10,8 @@ public class Culprit {
     private String name;
     private Set<String> evidence;
 
+    // a culprit has name and evidence
+    // could just be static from loader
     Culprit(String name, Set<String> evidence) {
         setName(name);
         setEvidence(evidence);

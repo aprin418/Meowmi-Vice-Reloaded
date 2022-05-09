@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+// could possibly just be static
 class CulpritLoader {
     private JSONObject culpritObj;
 

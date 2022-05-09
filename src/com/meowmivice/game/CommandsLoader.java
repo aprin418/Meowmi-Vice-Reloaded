@@ -21,11 +21,15 @@ public class CommandsLoader {
     private List<String> audio = new ArrayList<>();
     private List<String> directions = new ArrayList<>();
 
+    // Planned to make static
+
     public CommandsLoader() throws IOException, ParseException {
 //        jsonParser = new JSONParser();
 //        commReader = new FileReader("resources/Json/Commands.json");
 //        // Object commObj = jsonParser.parse(commReader); // or
 //        commObj = (JSONObject) jsonParser.parse(commReader);
+
+        // refactored to below so resources folder could read for jar file
         commObj = (JSONObject) new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/Commands.json"))));
     }
 
