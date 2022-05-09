@@ -1,10 +1,10 @@
-package com.meowmivice.game.cast.client.logic;
+package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import com.meowmivice.game.cast.cast.Player;
-import com.meowmivice.game.cast.client.controller.Game;
-import com.meowmivice.game.cast.reader.FileReader;
+import com.meowmivice.game.cast.Player;
+import com.meowmivice.game.controller.Game;
+import com.meowmivice.game.reader.FileReader;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

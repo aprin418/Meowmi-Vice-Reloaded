@@ -1,6 +1,6 @@
-package com.meowmivice.game.cast.reader;
+package com.meowmivice.game.reader;
 
-import com.meowmivice.game.cast.client.controller.Game;
+import com.meowmivice.game.controller.Game;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
