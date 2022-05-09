@@ -1,6 +1,5 @@
 package com.meowmivice.game.cast;
 
-import com.meowmivice.game.cast.cast.CommandsLoaderStatic;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 

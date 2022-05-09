@@ -1,4 +1,4 @@
-package com.meowmivice.game.cast.cast;
+package com.meowmivice.game.cast;
 
 import java.util.ArrayList;
 import java.util.List;

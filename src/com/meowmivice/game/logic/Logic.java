@@ -1,13 +1,13 @@
-package com.meowmivice.game.cast.client.logic;
+package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import com.meowmivice.game.cast.cast.*;
-import com.meowmivice.game.cast.client.controller.Game;
-import com.meowmivice.game.cast.reader.Audio;
-import com.meowmivice.game.cast.reader.FileReader;
-import com.meowmivice.game.cast.reader.SaveAndLoad;
-import com.meowmivice.game.cast.reader.TextParser;
+import com.meowmivice.game.cast.*;
+import com.meowmivice.game.controller.Game;
+import com.meowmivice.game.reader.Audio;
+import com.meowmivice.game.reader.FileReader;
+import com.meowmivice.game.reader.SaveAndLoad;
+import com.meowmivice.game.reader.TextParser;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;

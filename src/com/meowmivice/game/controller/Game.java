@@ -1,8 +1,8 @@
-package com.meowmivice.game.cast.client.controller;
+package com.meowmivice.game.controller;
 
-import com.meowmivice.game.cast.reader.Audio;
-import com.meowmivice.game.cast.reader.FileReader;
-import com.meowmivice.game.cast.client.logic.Logic;
+import com.meowmivice.game.reader.Audio;
+import com.meowmivice.game.reader.FileReader;
+import com.meowmivice.game.logic.Logic;
 import com.apps.util.Console;
 import com.apps.util.Prompter;
 
@@ -21,6 +21,7 @@ public class Game {
 
     public void execute() throws Exception {
         boolean runGame = true;
+        Console.clear();
         Audio.audio();
         welcome();
         promptToPlay();

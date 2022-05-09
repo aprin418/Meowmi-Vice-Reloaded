@@ -1,7 +1,7 @@
 package com.meowmivice.game.client;
 import com.apps.util.Prompter;
-import com.meowmivice.game.cast.cast.Player;
-import com.meowmivice.game.cast.client.controller.Game;
+import com.meowmivice.game.cast.Player;
+import com.meowmivice.game.controller.Game;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package com.meowmivice.game.cast.reader;
+package com.meowmivice.game.reader;
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
