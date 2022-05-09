@@ -1,6 +1,6 @@
-package com.meowmivice.game.cast.cast;
+package com.meowmivice.game.cast;
 
-import com.meowmivice.game.cast.reader.FileReader;
+import com.meowmivice.game.reader.FileReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

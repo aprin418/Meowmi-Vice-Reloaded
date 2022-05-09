@@ -1,6 +1,6 @@
-package com.meowmivice.game.cast.reader;
+package com.meowmivice.game.reader;
 
-import com.meowmivice.game.cast.cast.Player;
+import com.meowmivice.game.cast.Player;
 
 import java.io.*;
 

@@ -1,4 +1,4 @@
-package com.meowmivice.game.cast.cast;
+package com.meowmivice.game.cast;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
