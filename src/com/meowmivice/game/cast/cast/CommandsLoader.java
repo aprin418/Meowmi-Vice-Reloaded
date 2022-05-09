@@ -1,12 +1,11 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
-import org.json.simple.JSONArray;
+import com.meowmivice.game.cast.reader.FileReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

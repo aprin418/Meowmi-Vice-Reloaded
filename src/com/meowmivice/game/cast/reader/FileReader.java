@@ -1,20 +1,19 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.reader;
 
-import org.json.simple.JSONObject;
+import com.meowmivice.game.cast.client.controller.Game;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Scanner;
 
 
-class FileReader {
+public class FileReader {
 
     FileReader() throws IOException, ParseException {
     }
 
-    static void fileReader(String filename) throws IOException {
+    public static void fileReader(String filename) throws IOException {
         try (var in = Game.class.getResourceAsStream(filename)) {
             Scanner scanner = new Scanner(in, StandardCharsets.UTF_8);
             while ( scanner.hasNextLine() ){
@@ -26,7 +25,7 @@ class FileReader {
     }
 
 
-    static void fileReaderWhite(String filename) throws IOException {
+    public static void fileReaderWhite(String filename) throws IOException {
         try (var in = Game.class.getResourceAsStream(filename)) {
             Scanner scanner = new Scanner(in, StandardCharsets.UTF_8);
             while ( scanner.hasNextLine() ){

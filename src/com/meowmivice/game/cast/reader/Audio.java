@@ -1,14 +1,14 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.reader;
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-class Audio {
+public class Audio {
     static private Clip clip;
     static private AudioInputStream audioStream;
 
-    static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    public static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         InputStream is = Audio.class.getResourceAsStream("/Audio/main.wav");
         audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
         clip = AudioSystem.getClip();

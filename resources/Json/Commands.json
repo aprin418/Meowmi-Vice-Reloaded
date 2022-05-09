@@ -8,9 +8,13 @@
     "restart": ["restart", "replay", "renew", "redo", "reset", "reboot"],
     "quit": ["q", "quit", "exit", "leave"],
     "help": ["commands", "command", "help", "aid", "assist", "assistance"],
-    "play": ["play", "unpause", "resume"],
-    "stop": ["stop", "pause"],
-    "map": ["map","location"]
+    "play": ["play", "unpause", "resume","unmute"],
+    "stop": ["stop", "pause","mute"],
+    "map": ["map","location"],
+    "suspects": ["suspects"],
+    "save": ["save", "store", "reserve"],
+    "load": ["load", "continue"],
+    "inventory": ["inventory","bag"]
   },
   "directions": {
     "north": ["north","forward", "straight"],
@@ -21,7 +25,7 @@
     "downstairs": ["downstairs","down"]
   },
   "audio": {
-    "play": ["play", "unpause", "resume"],
-    "stop": ["stop", "pause"]
+    "play": ["play", "unpause", "resume","unmute"],
+    "stop": ["stop", "pause","mute"]
   }
 }
