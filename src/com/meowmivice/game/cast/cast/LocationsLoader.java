@@ -1,4 +1,4 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +15,7 @@ public class LocationsLoader {
     public LocationsLoader() throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
         // read the file
+        // private BufferedReader in;
         InputStreamReader locReader = new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/Locations2.json")));
         // create the array to drill into
         locArr = (JSONArray) jsonParser.parse(locReader);
@@ -29,7 +30,6 @@ public class LocationsLoader {
         // for each object in the JSON Array, define variables
         for (Object o : locArr) {
             JSONObject obj = (JSONObject) o;
-
             String name = (String) obj.get("name");
             String description = (String) obj.get("description");
             JSONObject directions = (JSONObject) obj.get("directions");
@@ -37,7 +37,6 @@ public class LocationsLoader {
             // if the object contains an npc, define these variables
             if (obj.containsKey("npc")) {
                 JSONObject npcObj = (JSONObject) obj.get("npc");
-
                 String npcName = (String) npcObj.get("name");
                 String npcDialogue = (String) npcObj.get("dialogue");
                 JSONArray npcRandDialogue = (JSONArray) npcObj.get("randDialogue");
@@ -48,20 +47,14 @@ public class LocationsLoader {
             // if the object contains an item, define these variables
             if (obj.containsKey("item")) {
                 JSONObject itemObj = (JSONObject) obj.get("item");
-
                 String itemName = (String) itemObj.get("name");
                 String itemDescription = (String) itemObj.get("description");
-
-                // define clue which is within item
                 JSONObject clueObj = (JSONObject) itemObj.get("clue");
-
+                // make new Item object with Item class
                 String clueName = (String) clueObj.get("name");
                 String clueDescription = (String) clueObj.get("description");
                 String isClue = (String) clueObj.get("isClue");
-
-                // make new Clue object with Clue class
                 Clue clue = new Clue(clueName, clueDescription, isClue);
-                // make new Item object with Item class
                 item = new Item(itemName, itemDescription, clue);
             }
             // depending on if the object has an npc or item, both, or none

@@ -1,4 +1,4 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

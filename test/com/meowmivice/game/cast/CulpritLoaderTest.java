@@ -1,10 +1,10 @@
-package com.meowmivice.game;
-
+package com.meowmivice.game.cast;
+import com.meowmivice.game.cast.cast.Culprit;
+import com.meowmivice.game.cast.cast.CulpritLoader;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.Assert.*;

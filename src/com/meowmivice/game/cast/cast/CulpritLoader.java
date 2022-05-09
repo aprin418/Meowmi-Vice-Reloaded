@@ -1,6 +1,5 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-// could possibly just be static
-class CulpritLoader {
+public class CulpritLoader {
     private JSONObject culpritObj;
 
     public CulpritLoader() throws IOException, ParseException {

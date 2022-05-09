@@ -1,11 +1,13 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.reader;
+
+import com.meowmivice.game.cast.cast.Player;
 
 import java.io.*;
 
-class SaveAndLoad {
+public class SaveAndLoad {
     static Player player;
 
-    static void save(){
+    public static void save(){
         try {
             FileOutputStream fos = new FileOutputStream("SavedGame");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
