@@ -5,6 +5,7 @@ public class Clue {
     private String description;
     private String isClue;
 
+    // A clue inside "item" has name, description, and isClue which is no longer used
     Clue(String name, String description, String isClue) {
         setName(name);
         setDescription(description);
@@ -27,6 +28,8 @@ public class Clue {
         this.description = description;
     }
 
+    // I don't believe this is used anymore after refactoring
+    // TODO Check to see if still used and remove if not used
     public String getIsClue() {
         return isClue;
     }

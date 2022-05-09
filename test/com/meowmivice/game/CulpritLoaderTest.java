@@ -16,7 +16,7 @@ public class CulpritLoaderTest {
         CulpritLoader culpLoader = new CulpritLoader();
         Culprit culprit = culpLoader.load();
 
-        assertEquals("Hamione Granger", culprit.getName());
+        assertEquals("hamione granger", culprit.getName());
         Set<String> requiredEv = culprit.getEvidence();
         // same order
         Set<String> input = new HashSet<>(Arrays.asList("insurance policy", "receipt", "loan statement"));
