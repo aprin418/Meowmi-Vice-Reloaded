@@ -1,28 +1,31 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.client.logic;
+
 import com.apps.util.Console;
 import com.apps.util.Prompter;
+import com.meowmivice.game.cast.cast.*;
+import com.meowmivice.game.cast.client.controller.Game;
+import com.meowmivice.game.cast.reader.Audio;
+import com.meowmivice.game.cast.reader.FileReader;
+import com.meowmivice.game.cast.reader.SaveAndLoad;
+import com.meowmivice.game.cast.reader.TextParser;
 import org.json.simple.JSONObject;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
-class Game {
+import java.io.IOException;
+import java.util.*;
+
+public class Logic {
     LocationsLoader locLoader  = new LocationsLoader();
     Map<String, Location> mapLocations = locLoader.load();
 
+    private Ascii art = new Ascii();
+    private Player player = new Player();
     private static Prompter prompter;
     private static int count = 0;
     private static boolean checkCounter = false;
 
-    private static String currentLocation = "Kitchen";
-    private static String prev = "Kitchen";
-    private Location currentSpot = mapLocations.get(currentLocation);
+    private Location currentSpot = mapLocations.get(player.getCurrentLocation());
 
     private static String plug = "";
-    private List<String> inventory = new ArrayList<>();
-    private Map<String, String> suspectDialogue = new HashMap<>();
-    private Map<String, String> cluesList = new HashMap<>();
 
     private JSONObject locations = TextParser.locations();
     private CommandsLoader commandsLoader = new CommandsLoader();
@@ -32,8 +35,8 @@ class Game {
     private List<String> east = commandsLoader.directionsObj().get("east");
     private List<String> south = commandsLoader.directionsObj().get("south");
     private List<String> west = commandsLoader.directionsObj().get("west");
-    private List<String> allDirections = commandsLoader.allDirections();
 
+    // Synonym List
     private List<String> upstairs = commandsLoader.directionsObj().get("upstairs");
     private List<String> downstairs = commandsLoader.directionsObj().get("downstairs");
     private List<String> get = commandsLoader.verbsObj().get("get");
@@ -48,29 +51,14 @@ class Game {
     private List<String> stop = commandsLoader.verbsObj().get("stop");
     private List<String> load = commandsLoader.verbsObj().get("load");
     private List<String> save = commandsLoader.verbsObj().get("save");
-    private List<String> audio = commandsLoader.allAudio();
 
 
-    // CONSTRUCTOR
-    Game(Prompter var1) throws Exception {
+    public Logic(Prompter var1) throws Exception {
         prompter = var1;
+        this.player = player;
     }
 
-    void execute() throws Exception {
-        boolean runGame = true;
-
-        Audio.audio();
-        welcome();
-        promptToPlay();
-        instructions();
-        while (runGame) {
-            showStatus();
-            logic();
-        }
-
-    }
-
-    private void logic() throws Exception {
+    public void logic() throws Exception {
         String input = prompter.prompt(">").trim().toLowerCase();
         Console.clear();
         List<String> textParser = TextParser.textParser(input);
@@ -86,13 +74,13 @@ class Game {
         } else if(solve.contains(textParser.get(0))) {
             solve();
         } else if (quit.contains(textParser.get(0))) {
-            quit();
+            Game.quit();
         } else if(help.contains(textParser.get(0))){
-            help();
+            Game.help();
         } else if(restart.contains(textParser.get(0))){
-            restart();
+            Game.restart();
         } else if (map.contains(textParser.get(0))){
-            displayLocation();
+            art.displayLocation(prompter, player);
         } else if (save.contains(textParser.get(0))){
             SaveAndLoad.save();
         } else if (load.contains(textParser.get(0))){
@@ -108,65 +96,23 @@ class Game {
         }
     }
 
-    private void showInventory() {
-        if(cluesList.size() == 0){
-            plug = "Currently no clues collected";
-        }
-        else {
-            System.out.println("What clue would you like to review?");
-            System.out.println(cluesList.keySet());
-            String input = prompter.prompt("> ").trim();
-            plug = cluesList.getOrDefault(input, "Invalid clue");
-        }
-    }
-
-    private void ascii(String currentLocation) throws IOException {
-        try {
-            FileReader.fileReaderWhite("/Ascii/"+ currentLocation.toLowerCase() + ".txt");
-        }
-        catch (Exception e){
-            System.out.println("There is no art");
-        }
-    }
-
-    private void displayLocation() throws Exception{
-        mapFileReader("/Ascii/map.txt");
-        prompter.prompt("Press enter to continue\n");
-        Console.clear();
-    }
-
-    static String mapFileReader(String filename) throws IOException {
-        try (var in = Game.class.getResourceAsStream(filename)) {
-            Scanner scanner = new Scanner(in, StandardCharsets.UTF_8);
-            while ( scanner.hasNextLine() ){
-                String coloredMap = "\033[37m" + scanner.nextLine() +"\033[0m";
-                String colorCoded = "\033[31m" +currentLocation.toUpperCase()+"\033[37m";
-                System.out.println(coloredMap.replaceFirst(currentLocation.toLowerCase(), colorCoded));
-                System.out.print("\033[0m");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Uncaught", e);
-        }
-        return filename;
-    }
-
     private void go(List<String> input, String direction) {
 
         if (input.get(1).equals("back")){
-            String temp = currentLocation;
-            currentLocation = prev;
-            prev = temp;
+            String temp = player.getCurrentLocation();
+            player.setCurrentLocation(player.getPreviousLocation());
+            player.setPreviousLocation(temp);
             checkCounter = false;
         }
 
         else if (currentSpot.getDirections().containsKey(direction)) {
-            prev = currentLocation;
-            currentLocation = currentSpot.getDirections().get(direction);
+            player.setPreviousLocation(player.getCurrentLocation());
+            player.setCurrentLocation(currentSpot.getDirections().get(direction));
             checkCounter = false;
         }else {
             plug = "That is an invalid direction to go!";
         }
-        currentSpot = mapLocations.get(currentLocation);
+        currentSpot = mapLocations.get(player.getCurrentLocation());
         checkCounter = false;
     }
 
@@ -190,14 +136,14 @@ class Game {
         List<String> textParser = TextParser.textParser(input);
 
         if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
-            inventory.add(currentItem.getClue().getName());
-            mapLocations.get(currentLocation).setItem(null);
+            player.getInventory().add(currentItem.getClue().getName());
+            mapLocations.get(player.getCurrentLocation()).setItem(null);
 
-            cluesList.put(clue.getName(),
+            player.getClues().put(clue.getName(),
                     "Name: " + clue.getName() +
-                    "\nDescription: " + clue.getDescription() +
-                    "\nObtained from: " + currentItem.getName() +
-                    "\nFound in: " + currentLocation);
+                            "\nDescription: " + clue.getDescription() +
+                            "\nObtained from: " + currentItem.getName() +
+                            "\nFound in: " + player.getCurrentLocation());
             checkCounter = false;
         }
         else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){
@@ -208,17 +154,6 @@ class Game {
         else {
             plug = "Invalid command";
         }
-    }
-
-    private void help() throws IOException {
-        FileReader.fileReaderWhite("/Text/commands.txt");
-    }
-
-    private void instructions() throws IOException {
-        Console.clear();
-        FileReader.fileReaderWhite("/Text/instructions.txt");
-        prompter.prompt("Press enter to continue");
-        Console.clear();
     }
 
     private void look(List<String> input) throws Exception {
@@ -234,7 +169,7 @@ class Game {
             } else {
                 plug = "There is nothing in this location to look at.";
             }
-            // if user looks at an item, recall the logic so that user can interact with it
+            // if user looks at an item, recall the Logic so that user can interact with it
         } else if (input.get(1).equals("item") && currentItem!=null){
             get(currentItem);
         }
@@ -243,76 +178,18 @@ class Game {
         }
     }
 
-    private void playAgain() throws Exception {
-        boolean validInput = false;
-        while (!validInput) {
-            String play = prompter.prompt("Please enter [P] to play again or [Q] to exit the game: ","p|q|P|Q","\nThat is not a valid input!\n");
-            System.out.println();
-            validInput = true;
-            if ("P".equals(play) || "p".equals(play)) {
-                Console.clear();
-                restart();
-            } else {
-                quit();
-            }
-        }
-    }
-
-    private void promptToPlay() throws InterruptedException {
-        boolean validInput = false;
-        while (!validInput) {
-            String play = prompter.prompt("Please enter [S] to start the game or [Q] to exit the game: ","s|q|S|Q","\nThat is not a valid input!\n");
-            validInput = true;
-            if ("S".equals(play) || "s".equals(play)) {
-                continue;
-
-            } else {
-                quit();
-            }
-        }
-    }
-
-    private void quit() throws InterruptedException {
-        System.out.println("Are you you sure you want to quit? (Y|N)");
-        String confirm = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
-        if ("yes".equals(confirm) || "y".equals(confirm)){
-            System.out.println("Exiting the game...");
-            TimeUnit.SECONDS.sleep(2);
-            System.exit(0);
-        }
-    }
-
-    private void restart() throws Exception {
-        System.out.println("Are you you sure you want to restart? (Y|N)");
-        String confirm = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
-        if ("yes".equals(confirm) || "y".equals(confirm)){
-            System.out.println("Restarting the game...");
-            // reset inventory
-            inventory = new ArrayList<>();
-            // stop the audio if its on
-            Audio.stopAudio();
-            // reset the current location
-            currentLocation = "Kitchen";
-            prev = "Kitchen";
-
-            TimeUnit.SECONDS.sleep(2);
-            Game game2 = new Game(new Prompter(new Scanner(System.in)));
-            game2.execute();
-        }
-    }
-
-    private void showStatus() throws IOException {
-        ascii(currentLocation);
+    public void showStatus() throws IOException {
+        art.ascii(player.getCurrentLocation());
         System.out.println(plug);
         plug = "";
         System.out.println("\033[1;36m===========================");
-        System.out.println("You are in the " + currentLocation);
+        System.out.println("You are in the " + player.getCurrentLocation());
         System.out.println(currentSpot.getDescription());
-//        if(item.containsKey("description")) System.out.println(item.get("description"));
-        System.out.println("Inventory:" +"\033[37m" + inventory + "\033[1;36m");
+        System.out.println("Inventory:" +"\033[37m" + player.getInventory() + "\033[1;36m");
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
-        System.out.println("Directions you can go: " +"\033[37m" + showDirections(currentLocation) + "\033[0m");
+        System.out.println("Directions you can go: " +"\033[37m" +
+                showDirections(player.getCurrentLocation()) + "\033[0m");
     }
 
     private String showDirections(String currentLocation) {
@@ -321,7 +198,7 @@ class Game {
     }
 
     private void solve() throws Exception {
-        if(inventory.size() == 0){
+        if(player.getInventory().size() == 0){
             FileReader.fileReaderWhite("/Ascii/pdog3.txt");
             prompter.prompt("Press enter to continue");
             Console.clear();
@@ -335,25 +212,20 @@ class Game {
         FileReader.fileReaderWhite("/Ascii/pdog2.txt");
         Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
 
-        // TODO change the hard coded nature
-        //        list<> suspects
-        //        player can choose the suspect
-        //             in the if() we check supects.get(userinput) to see if their is culprit is true
-
         CulpritLoader culpLoader = new CulpritLoader();
         Culprit reqCulprit = culpLoader.load();
         // Set<String> requiredEvidence = new HashSet<>(Arrays.asList("dog hair", "receipt", "insurance policy"));
         // If both cases are true, you win
         if(culprit.equals(reqCulprit.getName()) && evidence.equals(reqCulprit.getEvidence())){
             System.out.println("Congratulations you solved the mystery!");
-            playAgain();
+            Game.playAgain();
             System.exit(0);
         }
         else {
             count++;
             if (count > 2) {
                 System.out.println("You Lost. The culprit got away!");
-                playAgain();
+                Game.playAgain();
                 System.exit(0);
             }
             System.out.println("Sorry please collect more clues or try again.");
@@ -363,7 +235,7 @@ class Game {
     // Method to return evidence Set for solving
     private ArrayList<String> getEvidence() {
         ArrayList<String> evidence = new ArrayList<>();
-        ArrayList<String> copy = new ArrayList<>(inventory);
+        ArrayList<String> copy = new ArrayList<>(player.getInventory());
         boolean isDone = false;
         // As long as they don't specify to quit, loop continues
         while(!isDone){
@@ -420,8 +292,7 @@ class Game {
     }
 
     private void talk(List<String> input){
-        //weird logic, fix later
-        // TODO npc synonym list
+
         NPC npc = currentSpot.getNpc();
         if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //area.containsKey("npc") && input.size()>=2 && input.get(1).equals("npc")
             ArrayList<String> randDialogueList = npc.getRandDialogue(); // list from obj value
@@ -439,28 +310,34 @@ class Game {
     }
 
     private void addDialogue(String name, String dialogue) {
-        if(!suspectDialogue.containsKey(name)){
-            suspectDialogue.put(name,dialogue);
+        if(!player.getSuspects().containsKey(name)){
+            player.getSuspects().put(name,dialogue);
         }
     }
 
     private void showSuspects(){
-        if(suspectDialogue.size() == 0){
+        if(player.getSuspects().size() == 0){
             plug = "No suspects at this time";
         }
         else{
             System.out.println("Who do you want to talk to?");
-            System.out.println(suspectDialogue.keySet().toString());
+            System.out.println(player.getSuspects().keySet().toString());
             String input = prompter.prompt(">").trim();
-            plug = suspectDialogue.getOrDefault(input, "Don't know who that is");
+            plug =  player.getSuspects().getOrDefault(input, "Don't know who that is");
         }
     }
 
-    private void welcome() throws IOException, InterruptedException {
-        FileReader.fileReader("/Text/splashbanner.txt");
-        System.out.println();
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Welcome to Meowmi Vice!");
+    private String showInventory() {
+        String plug;
+        if(player.getClues().size() == 0){
+            plug = "Currently no clues collected";
+        }
+        else {
+            System.out.println("What clue would you like to review?");
+            System.out.println(player.getClues().keySet());
+            String input = prompter.prompt("> ").trim();
+            plug = player.getClues().getOrDefault(input, "Invalid clue");
+        }
+        return plug;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,6 @@ public class NPC {
     private String dialogue;
     private ArrayList<String> randDialogue;
 
-    // NPC in location has name, dialogue, and list of random dialogue
     NPC(String name, String dialogue, ArrayList<String> randDialogue) {
         setName(name);
         setDialogue(dialogue);

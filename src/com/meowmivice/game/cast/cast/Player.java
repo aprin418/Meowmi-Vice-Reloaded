@@ -1,11 +1,11 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.cast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class Player {
+public class Player {
     private static Player player = null;
 
     private String currentLocation = "Kitchen";
@@ -52,4 +52,5 @@ class Player {
     public void setPreviousLocation(String previousLocation) {
         this.previousLocation = previousLocation;
     }
+
 }

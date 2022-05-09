@@ -1,13 +1,14 @@
-package com.meowmivice.game;
+package com.meowmivice.game.cast.reader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import com.meowmivice.game.cast.cast.CommandsLoader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
-class TextParser {
-    static JSONObject locations() throws IOException, ParseException {
+public class TextParser {
+    public static JSONObject locations() throws IOException, ParseException {
 
         Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/locations.json"))));
 
@@ -23,7 +24,7 @@ class TextParser {
         }
     }
 
-    static List<String> textParser(String input) throws IOException, ParseException {
+    public static List<String> textParser(String input) throws IOException, ParseException {
         // verbs();
         // pulls the list of all valid verbs from CommandsLoader
         CommandsLoader commandsLoader = new CommandsLoader();

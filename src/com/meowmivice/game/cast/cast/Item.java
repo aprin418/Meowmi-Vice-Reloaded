@@ -1,7 +1,4 @@
-package com.meowmivice.game;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.meowmivice.game.cast.cast;
 
 public class Item {
 
@@ -9,7 +6,6 @@ public class Item {
     private String description;
     private Clue clue;
 
-    // item in "location" has name, description, and clue (Clue class)
     Item(String name, String description, Clue clue) {
         setName(name);
         setDescription(description);
