@@ -8,14 +8,15 @@ import java.util.Map;
 public class Player {
     private static Player player = null;
 
-    private String currentLocation = "Kitchen";
-    private List<String> inventory = new ArrayList<>();
-    private Map<String, String> clues = new HashMap<>();
-    private Map<String, String> suspects = new HashMap<>();
-    private String previousLocation = "Kitchen";
+    // fields needed for player
+    private String currentLocation = "Kitchen"; //sets starting location to kitchen
+    private List<String> inventory = new ArrayList<>(); //creates inventory for player
+    private Map<String, String> clues = new HashMap<>(); // needed to add clues and then review clue descriptions
+    private Map<String, String> suspects = new HashMap<>(); // adds suspect and their dialogue to map after they have been interacted with to later review
+    private String previousLocation = "Kitchen"; // sets previous location, so you can enter "go back" and it takes you to the previous room
 
     //TODO
-    //logic for player
+    //logic for player if needed
 
 
     public static Player getInstance() {
