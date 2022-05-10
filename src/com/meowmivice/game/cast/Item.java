@@ -1,11 +1,16 @@
 package com.meowmivice.game.cast;
 
+// author mm
+// Item object
+// item is within location in locations2.json
+
 public class Item {
 
     private String name;
     private String description;
     private Clue clue;
 
+    // an item has a name, description and a Clue object
     Item(String name, String description, Clue clue) {
         setName(name);
         setDescription(description);

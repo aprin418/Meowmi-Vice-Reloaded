@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+// author mm
+// static version available
+// for use with Commands.json file to identify synonyms
+
 public class CommandsLoader {
     private JSONParser jsonParser;
     // private BufferedReader in;
@@ -25,6 +29,9 @@ public class CommandsLoader {
 //        commReader = new FileReader("resources/Json/Commands.json");
 //        // Object commObj = jsonParser.parse(commReader); // or
 //        commObj = (JSONObject) jsonParser.parse(commReader);
+
+        // new reader so resource files are read in jar
+        // read the file and create the object to drill into
         commObj = (JSONObject) new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/Commands.json"))));
     }
 

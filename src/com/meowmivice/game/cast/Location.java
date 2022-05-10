@@ -2,6 +2,11 @@ package com.meowmivice.game.cast;
 
 import java.util.Map;
 
+// author mm
+// Location object
+// each object in array of objects in Locations2.json is a location
+// locations may or may not have an item, npc, or both
+
 public class Location {
     private String name;
     private String description;
@@ -10,22 +15,26 @@ public class Location {
     private Item item;
 
     // Constructor for location without npc or item
+    // has a name, description, and directions
     Location(String name, String description, Map<String,String> directions) {
         setName(name);
         setDescription(description);
         setDirections(directions);
     }
-    // Constructor for location with just npc
+    // Constructor for location with just a npc
+    // has a name, description, directions, and NPC object
     Location(String name, String description, Map<String,String> directions, NPC npc) {
         this(name, description, directions);
         setNpc(npc);
     }
-    // Constructor for location with just item
+    // Constructor for location with just an item
+    // has a name, description, directions, and Item object
     Location(String name, String description, Map<String,String> directions, Item item) {
         this(name, description, directions);
         setItem(item);
     }
     // Constructor for location with npc and item
+    // has a name, description, directions, NPC object, and Item object
     Location(String name, String description, Map<String,String> directions, NPC npc, Item item) {
         this(name, description, directions, npc);
         setItem(item);

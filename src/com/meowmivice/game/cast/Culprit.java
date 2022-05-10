@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// author mm
+// Culprit object
+// may not be needed if CulpritLoader is made static
+
 public class Culprit {
 
     private String name;
     private Set<String> evidence;
 
+    // a culprit has a name and list of evidence
     Culprit(String name, Set<String> evidence) {
         setName(name);
         setEvidence(evidence);
