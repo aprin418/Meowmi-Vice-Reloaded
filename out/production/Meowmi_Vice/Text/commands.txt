@@ -1,0 +1,9 @@
+go [direction]
+get [clue]
+look
+look [item]
+look [clue]
+talk [npc]
+solve
+restart
+quit
