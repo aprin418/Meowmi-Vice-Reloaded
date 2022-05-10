@@ -11,8 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+// author mm
 
-// static version of Commands Loader (not currently being used)
+// static version of Commands Loader
+// this version not in use
+// incomplete test in test dir
+// for use with Commands.json file to identify synonyms
+// method for "inventory" missing
+
 public class CommandsLoaderStatic {
     private static JSONObject commObj;
     private static List<String> verbs;
@@ -20,6 +26,7 @@ public class CommandsLoaderStatic {
     private static List<String> directions;
 
     private static JSONObject getCommObj() throws IOException, ParseException {
+        // read the file and create the object to drill into
         return commObj = (JSONObject) new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/Commands.json"))));
     }
 
@@ -28,6 +35,8 @@ public class CommandsLoaderStatic {
         JSONObject obj = getCommObj();
         return (Map<String, ArrayList>) obj.get("verbs");
     }
+
+    // define each verb list of synonyms
 
     public static List<String> go() throws IOException, ParseException {
         return (List<String>) verbsObj().get("go");
@@ -84,6 +93,8 @@ public class CommandsLoaderStatic {
     public static List<String> load() throws IOException, ParseException {
         return (List<String>) verbsObj().get("load");
     }
+
+    // "inventory" command was added to json, but no associated method
 
     // parse out directions obj from Commands JSON
     public static Map<String, ArrayList> directionsObj() {

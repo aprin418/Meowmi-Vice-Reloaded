@@ -2,11 +2,16 @@ package com.meowmivice.game.cast;
 
 import java.util.ArrayList;
 
+// author mm
+// NPC object
+// NPC is within location in locations2.json
+
 public class NPC {
     private String name;
     private String dialogue;
     private ArrayList<String> randDialogue;
 
+    // a NPC has a name, dialogue, and list of random dialogue
     NPC(String name, String dialogue, ArrayList<String> randDialogue) {
         setName(name);
         setDialogue(dialogue);
