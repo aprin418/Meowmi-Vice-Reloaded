@@ -12,31 +12,36 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
     private static Prompter prompter;
-    private Logic logic = new Logic(new Prompter(new Scanner(System.in)));
+    private Logic logic = new Logic(new Prompter(new Scanner(System.in))); // create a new logic so we can call execute
 
     // CONSTRUCTOR
     public Game(Prompter var1) throws Exception {
         prompter = var1;
     }
 
+    // execute
     public void execute() throws Exception {
         boolean runGame = true;
         Console.clear();
-        Audio.audio();
-        welcome();
+        Audio.audio(); // play audio
+        welcome(); // welcome banner
         promptToPlay();
-        instructions();
-        while (runGame) {
+        instructions(); // instructions banner
+        while (runGame) { // never false
             logic.showStatus();
             logic.logic();
         }
     }
+
+    // welcome
     public static void welcome() throws IOException, InterruptedException {
         FileReader.fileReader("/Text/splashbanner.txt");
         System.out.println();
         TimeUnit.SECONDS.sleep(2);
         System.out.println("Welcome to Meowmi Vice!");
     }
+
+    // prompt play
     public static void promptToPlay() throws InterruptedException {
         boolean validInput = false;
         while (!validInput) {
@@ -50,12 +55,16 @@ public class Game {
             }
         }
     }
+
+    // display instructions
     public static void instructions() throws IOException {
         Console.clear();
         FileReader.fileReaderWhite("/Text/instructions.txt");
         prompter.prompt("Press enter to continue");
         Console.clear();
     }
+
+    // quit game
     public static void quit() throws InterruptedException {
         System.out.println("Are you you sure you want to quit? (Y|N)");
         String confirm = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
@@ -65,6 +74,8 @@ public class Game {
             System.exit(0);
         }
     }
+
+    // restart game
     public static void restart() throws Exception {
         System.out.println("Are you you sure you want to restart? (Y|N)");
         String confirm = prompter.prompt(">").strip().toLowerCase(Locale.ROOT);
@@ -72,10 +83,12 @@ public class Game {
             System.out.println("Restarting the game...");
             Audio.stopAudio();
             TimeUnit.SECONDS.sleep(2);
-            Game game2 = new Game(new Prompter(new Scanner(System.in)));
-            game2.execute();
+            Game game2 = new Game(new Prompter(new Scanner(System.in))); // create a new game
+            game2.execute(); // execute it
         }
     }
+
+    // play again
     public static void playAgain() throws Exception {
         boolean validInput = false;
         while (!validInput) {
@@ -91,6 +104,7 @@ public class Game {
         }
     }
 
+    // display help
     public static void help() throws IOException {
         FileReader.fileReaderWhite("/Text/commands.txt");
     }
