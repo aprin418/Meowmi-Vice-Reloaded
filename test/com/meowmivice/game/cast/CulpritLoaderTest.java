@@ -14,12 +14,14 @@ public class CulpritLoaderTest {
         CulpritLoader culpLoader = new CulpritLoader();
         Culprit culprit = culpLoader.load();
 
+        // name matches
         assertEquals("hamione granger", culprit.getName());
         Set<String> requiredEv = culprit.getEvidence();
-        // same order
+        // evidence in same order
         Set<String> input = new HashSet<>(Arrays.asList("insurance policy", "receipt", "loan statement"));
-        // different order
+        // evidence in different order
         Set<String> input2 = new HashSet<>(Arrays.asList("receipt", "loan statement", "insurance policy"));
+        // check that they match in same or different order
         assertEquals(input, requiredEv);
         assertEquals(input2, requiredEv);
     }

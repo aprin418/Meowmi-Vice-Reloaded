@@ -24,7 +24,7 @@ public class FileReader {
         }
     }
 
-
+    // does the same as file reader but outputs the string in white color
     public static void fileReaderWhite(String filename) throws IOException {
         try (var in = Game.class.getResourceAsStream(filename)) {
             Scanner scanner = new Scanner(in, StandardCharsets.UTF_8);
