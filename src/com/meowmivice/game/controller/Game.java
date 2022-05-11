@@ -1,16 +1,25 @@
 package com.meowmivice.game.controller;
 
+import com.meowmivice.game.FrameMain;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.logic.Logic;
 import com.apps.util.Console;
 import com.apps.util.Prompter;
+import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
+
+    static JPanel title;
+    static JTextArea txt;
+
     private static Prompter prompter;
     private Logic logic = new Logic(new Prompter(new Scanner(System.in))); // create a new logic so we can call execute
 
@@ -24,8 +33,8 @@ public class Game {
         boolean runGame = true;
         Console.clear();
         Audio.audio(); // play audio
-        welcome(); // welcome banner
-        promptToPlay();
+//        welcome(); // welcome banner
+//        promptToPlay();
         instructions(); // instructions banner
         while (runGame) { // never false
             logic.showStatus();
@@ -33,28 +42,28 @@ public class Game {
         }
     }
 
-    // welcome
-    public static void welcome() throws IOException, InterruptedException {
-        FileReader.fileReader("/Text/splashbanner.txt");
-        System.out.println();
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("Welcome to Meowmi Vice!");
-    }
+//    // welcome
+//    public static void welcome() throws IOException, InterruptedException, ParseException {
+//        FileReader.fileReader("/Text/splashbanner.txt");
+//        System.out.println();
+//        TimeUnit.SECONDS.sleep(2);
+//        System.out.println("Welcome to Meowmi Vice!");
+//    }
 
-    // prompt play
-    public static void promptToPlay() throws InterruptedException {
-        boolean validInput = false;
-        while (!validInput) {
-            String play = prompter.prompt("Please enter [S] to start the game or [Q] to exit the game: ","s|q|S|Q","\nThat is not a valid input!\n");
-            validInput = true;
-            if ("S".equals(play) || "s".equals(play)) {
-                continue;
-
-            } else {
-                quit();
-            }
-        }
-    }
+//    // prompt play
+//    public static void promptToPlay() throws InterruptedException {
+//        boolean validInput = false;
+//        while (!validInput) {
+//            String play = prompter.prompt("Please enter [S] to start the game or [Q] to exit the game: ","s|q|S|Q","\nThat is not a valid input!\n");
+//            validInput = true;
+//            if ("S".equals(play) || "s".equals(play)) {
+//                continue;
+//
+//            } else {
+//                quit();
+//            }
+//        }
+//    }
 
     // display instructions
     public static void instructions() throws IOException {

@@ -1,0 +1,4 @@
+You are detective Purrlock Holmes and have been called upon to solve a homicide.
+Collect clues, talk to witnesses, and make your way around the house to solve the mystery.
+When you are ready just enter solve with you think might be the culprit.
+Good luck!
