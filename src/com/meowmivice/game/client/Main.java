@@ -1,16 +1,11 @@
 package com.meowmivice.game.client;
-import com.apps.util.Prompter;
-import com.meowmivice.game.FrameMain;
-import com.meowmivice.game.controller.Game;
-
-import java.util.Scanner;
+import com.meowmivice.game.MainFrame;
 
 class Main {
     public static void main(String[] args){
         try {
-            FrameMain frame = new FrameMain();
-//            Game meowmi = new Game(new Prompter(new Scanner(System.in)));
-//            meowmi.execute();
+            new MainFrame();
+//          Game.getInstance().execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

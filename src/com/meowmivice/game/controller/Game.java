@@ -1,45 +1,56 @@
 package com.meowmivice.game.controller;
 
-import com.meowmivice.game.FrameMain;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.logic.Logic;
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import org.json.simple.parser.ParseException;
+import com.meowmivice.game.reader.TextParser;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Game {
+public class Game extends Panel{
+    private static Game game = null;
+    private JPanel textPanel = new JPanel();
+    private JTextArea textArea = new JTextArea();
 
-    static JPanel title;
-    static JTextArea txt;
-
+    private TextParser parser = new TextParser();
     private static Prompter prompter;
     private Logic logic = new Logic(new Prompter(new Scanner(System.in))); // create a new logic so we can call execute
 
+    public static Game getInstance() throws Exception {
+        if (game == null) {
+            game = new Game(new Prompter(new Scanner(System.in)));
+        }
+        return game;
+    }
+
     // CONSTRUCTOR
-    public Game(Prompter var1) throws Exception {
+    private Game(Prompter var1) throws Exception {
         prompter = var1;
     }
 
     // execute
     public void execute() throws Exception {
-        boolean runGame = true;
-        Console.clear();
-        Audio.audio(); // play audio
-//        welcome(); // welcome banner
-//        promptToPlay();
-        instructions(); // instructions banner
-        while (runGame) { // never false
-            logic.showStatus();
-            logic.logic();
-        }
+        setPreferredSize(new Dimension(1094,  730));
+        textArea.setBounds(100, 100, 600, 250);
+        textArea.setBackground(Color.black);
+
+        add(textArea);
+//        boolean runGame = true;
+//        Console.clear();
+//        Audio.audio(); // play audio
+////        welcome(); // welcome banner
+////        promptToPlay();
+//        instructions(); // instructions banner
+//        while (runGame) { // never false
+//            logic.showStatus();
+//            logic.logic();
+//        }
     }
 
 //    // welcome
@@ -117,5 +128,13 @@ public class Game {
     public static void help() throws IOException {
         FileReader.fileReaderWhite("/Text/commands.txt");
     }
+
+//    public void handleInput(String input){
+//        try {
+//            parser.textParser(input);
+//        } catch (IOException | ParseException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
 }

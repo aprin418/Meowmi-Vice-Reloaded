@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 import com.meowmivice.game.cast.CommandsLoader;
+import com.meowmivice.game.logic.Logic;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
@@ -48,5 +49,6 @@ public class TextParser {
             System.out.println("That is an invalid input!");
         }
         return userInput;
+//        Logic.logic(userInput);
     }
 }
