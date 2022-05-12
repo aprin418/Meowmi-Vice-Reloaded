@@ -1,8 +1,5 @@
 package com.meowmivice.game;
 
-import com.apps.util.Prompter;
-import com.meowmivice.game.controller.Game;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
+
 
 public class Splash extends JPanel implements ActionListener {
     JLabel label;
     JButton startButton;
     Font normalFont = new Font ("Times New Roman", Font.PLAIN, 30);
-    Game game = new Game(new Prompter(new Scanner(System.in)));
 
     public Splash () throws Exception {
         setPreferredSize(new Dimension(1094,  730));
@@ -39,9 +34,7 @@ public class Splash extends JPanel implements ActionListener {
         startButton.setBounds (450, 500, 200, 30);
         startButton.setFont(normalFont);
         startButton.addActionListener(this);
-
         add(startButton);
-        setVisible(true);
     }
 
     @Override
@@ -49,7 +42,7 @@ public class Splash extends JPanel implements ActionListener {
         String command = e.getActionCommand();
         if(command.equalsIgnoreCase("start")){
                 try {
-                    game.execute();
+                    MainFrame.clearContent();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
