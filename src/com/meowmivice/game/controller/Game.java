@@ -15,10 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Game extends Panel{
     private static Game game = null;
-    private JPanel textPanel = new JPanel();
-    private JTextArea textArea = new JTextArea();
-
-    private TextParser parser = new TextParser();
     private static Prompter prompter;
     private Logic logic = new Logic(new Prompter(new Scanner(System.in))); // create a new logic so we can call execute
 
@@ -36,11 +32,7 @@ public class Game extends Panel{
 
     // execute
     public void execute() throws Exception {
-        setPreferredSize(new Dimension(1094,  730));
-        textArea.setBounds(100, 100, 600, 250);
-        textArea.setBackground(Color.black);
 
-        add(textArea);
 //        boolean runGame = true;
 //        Console.clear();
 //        Audio.audio(); // play audio
