@@ -52,7 +52,7 @@ public class Logic {
     }
 
     // Synonym List / prob can refactor the checks somewhere else
-    private static List<String> go = commandsLoader.verbsObj().get("go");
+    public static List<String> go = commandsLoader.verbsObj().get("go");
     private static List<String> north = commandsLoader.directionsObj().get("north");
     private static List<String> east = commandsLoader.directionsObj().get("east");
     private static List<String> south = commandsLoader.directionsObj().get("south");
@@ -77,6 +77,10 @@ public class Logic {
     public Logic(Prompter var1) throws Exception {
         prompter = var1;
         this.player = player; // unnecessary now - remove
+    }
+
+    public Logic() {
+
     }
 
     // BUSINESS LOGIC

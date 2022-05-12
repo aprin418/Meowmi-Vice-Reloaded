@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Objects;
 
 
 public class Splash extends JPanel implements ActionListener {
@@ -18,7 +19,7 @@ public class Splash extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(1094,  730));
         setLayout(null);
         setBackground(Color.black);
-        BufferedImage img = ImageIO.read(new File("resources/Images/splash.jpg"));
+        BufferedImage img = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/splash.jpg")));
         ImageIcon imageIcon = new ImageIcon(img);
         Image image = imageIcon.getImage();
         Image img2 = image.getScaledInstance(1094, 730,  Image.SCALE_DEFAULT);
