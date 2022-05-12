@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Locations extends JPanel  implements ActionListener{
@@ -48,6 +49,8 @@ public class Locations extends JPanel  implements ActionListener{
     private JSeparator bottomDivider;
 
     private JScrollPane scroll;
+
+    private JLabel label;
 
 
     public Locations() throws Exception {
@@ -201,7 +204,7 @@ public class Locations extends JPanel  implements ActionListener{
         volumeUpButton.setBounds(850, 640, 80, 30);
         clues.setBounds(580, 600, 100, 30);
         menu.setBounds(0, 0, 1160, 30);
-//        imageReader().setBounds(100,100,1160, 400);
+//        imageReader().setBounds(100,100,400, 400);
         scroll.setBounds(30, 495, 450, 100);
         commandInput.setBounds(30, 620, 250, 30);
         enterButton.setBounds(250, 620, 100, 30);
@@ -250,7 +253,13 @@ public class Locations extends JPanel  implements ActionListener{
 //        BufferedImage myPicture = ImageIO.read(this.getClass().getResource("/Kitchen.png"));
 //        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 //        picLabel.setBackground(Color.WHITE);
-//        return picLabel;
+//        BufferedImage img = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/kitchen.png")));
+//        ImageIcon imageIcon = new ImageIcon(img);
+//        Image image = imageIcon.getImage();
+//        Image img2 = image.getScaledInstance(400, 400,  Image.SCALE_DEFAULT);
+//        label = new JLabel( new ImageIcon(img2));
+//        label.setBounds(0,0,1094, 730);
+//        return label;
 //    }
 
     @Override

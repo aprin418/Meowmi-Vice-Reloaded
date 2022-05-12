@@ -12,7 +12,7 @@ public class TextParser {
     // gets location from Json/locations.json
     public static JSONObject locations() throws IOException, ParseException {
 
-        Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/locations.json"))));
+        Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/locations.json"))));
         return (JSONObject) obj;
     }
 
