@@ -27,7 +27,7 @@ public class Locations extends JPanel  implements ActionListener{
 
     //constants
     private static final String SMOKE_GREY_LINING = "#848884";
-    private static final String GUNMETAL_GREY_LINING = "#818589";
+    private static final String GUNMETAL_GREY = "#818589";
 
     // directional buttons
     private JButton north;
@@ -54,9 +54,6 @@ public class Locations extends JPanel  implements ActionListener{
 
 
     public Locations() throws IOException, ParseException {
-
-        Font monospacedFont = new Font(Font.MONOSPACED,  Font.PLAIN, 13);
-
         //Help dropdown menu
         JMenu helpMenu = new JMenu ("Help"); //2nd dropdown header
         JMenuItem commandsOption = new JMenuItem ("Commands");
@@ -129,23 +126,21 @@ public class Locations extends JPanel  implements ActionListener{
         enterButton.setBorder(null);
 
         //input command box styling
-        commandInput.setBackground(Color.decode(GUNMETAL_GREY_LINING));
+        commandInput.setBackground(Color.decode(GUNMETAL_GREY));
         commandInput.setForeground(Color.WHITE);
         commandInput.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
         commandInput.setCaretColor(Color.WHITE);
 
         //text display properties
         displayText.setEnabled (false);
-        displayText.setBackground(Color.decode(GUNMETAL_GREY_LINING));
+        displayText.setBackground(Color.decode(GUNMETAL_GREY));
         displayText.setDisabledTextColor(Color.WHITE);
-        displayText.setFont(monospacedFont);
         displayText.setLineWrap(true);
         scroll = new JScrollPane(displayText); //enable scrollable text-box
         scroll.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
 
         // separator at bottom of frame
-        bottomDivider.setForeground(Color.decode(SMOKE_GREY_LINING));//top line color
-        bottomDivider.setBackground(Color.decode(SMOKE_GREY_LINING).brighter()); //bottom line color
+        bottomDivider.setBackground(Color.decode(SMOKE_GREY_LINING)); //bottom line color
 
         //all button listeners
         enterButton.addActionListener(this);
@@ -202,8 +197,7 @@ public class Locations extends JPanel  implements ActionListener{
             remove(inventory);
         }
         inventory = new JList(Player.getInstance().getInventory().toArray());
-        inventory.setBackground(Color.decode(GUNMETAL_GREY_LINING));
-        inventory.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
+        inventory.setBackground(Color.decode(GUNMETAL_GREY));
         inventory.setBounds(550, 495, 150, 100);
         inventory.setForeground(Color.WHITE);
         add(inventory);
@@ -211,7 +205,9 @@ public class Locations extends JPanel  implements ActionListener{
         repaint();
     }
 
-    public void mapLocations(){
+    public void mapLocations() throws IOException, ParseException {
+        //current spot is not changing. only have access to initial east and north directions from
+        //kitchen start point 
         textDisplayer(currentSpot.getDescription());
     }
 
@@ -241,44 +237,52 @@ public class Locations extends JPanel  implements ActionListener{
         String command = e.getActionCommand();
         switch(command){
             case "North":
+                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go north");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                System.out.println(Player.getInstance().getCurrentLocation());
                 break;
             case "South":
+                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go south");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                System.out.println(Player.getInstance().getCurrentLocation());
                 break;
             case "East":
+                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go east");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                System.out.println(Player.getInstance().getCurrentLocation());
                 break;
             case "West":
+                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go west");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                System.out.println(Player.getInstance().getCurrentLocation());
                 break;
             case "Upstairs":
                 try {
                     TextParser.textParser("go upstairs");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
             case "Downstairs":
                 try {
                     TextParser.textParser("go downstairs");
-                } catch (IOException | ParseException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;

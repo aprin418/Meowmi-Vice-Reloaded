@@ -25,7 +25,7 @@ public class TextParser {
     }
 
 
-    public static List<String> textParser(String input) throws IOException, ParseException {
+    public static List<String> textParser(String input) throws Exception {
         // verbs();
         // pulls the list of all valid verbs from CommandsLoader
         CommandsLoader commandsLoader = new CommandsLoader();
@@ -48,7 +48,7 @@ public class TextParser {
             //TODO it appears at the top of the ascii, not at the bottom
             System.out.println("That is an invalid input!");
         }
+        Logic.logic(userInput);
         return userInput;
-//        Logic.logic(userInput);
     }
 }
