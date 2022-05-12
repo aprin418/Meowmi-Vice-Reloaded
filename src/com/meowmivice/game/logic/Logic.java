@@ -9,47 +9,69 @@ import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.reader.SaveAndLoad;
 import com.meowmivice.game.reader.TextParser;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.*;
 
 public class Logic {
-    LocationsLoader locLoader  = new LocationsLoader(); // loads from json
-    Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
+    static LocationsLoader locLoader; // loads from json
 
-    private Ascii art = new Ascii(); // used anytime ascii needs to be loaded
+    static {
+        try {
+            locLoader = new LocationsLoader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
+
+    private static Ascii art = new Ascii(); // used anytime ascii needs to be loaded
     private Player player = new Player(); // new player
     private static Prompter prompter; // prompts the player for input
     private static int count = 0; // counter to check failstate
     private static boolean checkCounter = false; // forces the player to have to check the item,clue before picking up
 
-    private Location currentSpot = mapLocations.get(player.getCurrentLocation()); // the current location of the player
+    private static Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation()); // the current location of the player
 
     private static String plug = ""; // used to dynamically display what the user does
 
-    private CommandsLoader commandsLoader = new CommandsLoader(); // get the commands from the Loaderclass
+    private static CommandsLoader commandsLoader; // get the commands from the Loaderclass
+
+    static {
+        try {
+            commandsLoader = new CommandsLoader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Synonym List / prob can refactor the checks somewhere else
-    private List<String> go = commandsLoader.verbsObj().get("go");
-    private List<String> north = commandsLoader.directionsObj().get("north");
-    private List<String> east = commandsLoader.directionsObj().get("east");
-    private List<String> south = commandsLoader.directionsObj().get("south");
-    private List<String> west = commandsLoader.directionsObj().get("west");
+    public static List<String> go = commandsLoader.verbsObj().get("go");
+    private static List<String> north = commandsLoader.directionsObj().get("north");
+    private static List<String> east = commandsLoader.directionsObj().get("east");
+    private static List<String> south = commandsLoader.directionsObj().get("south");
+    private static List<String> west = commandsLoader.directionsObj().get("west");
 
-    private List<String> upstairs = commandsLoader.directionsObj().get("upstairs");
-    private List<String> downstairs = commandsLoader.directionsObj().get("downstairs");
-    private List<String> get = commandsLoader.verbsObj().get("get");
-    private List<String> help = commandsLoader.verbsObj().get("help");
-    private List<String> quit = commandsLoader.verbsObj().get("quit");
-    private List<String> solve = commandsLoader.verbsObj().get("solve");
-    private List<String> look = commandsLoader.verbsObj().get("look");
-    private List<String> talk = commandsLoader.verbsObj().get("talk");
-    private List<String> restart = commandsLoader.verbsObj().get("restart");
-    private List<String> map = commandsLoader.verbsObj().get("map");
-    private List<String> play = commandsLoader.verbsObj().get("play");
-    private List<String> stop = commandsLoader.verbsObj().get("stop");
-    private List<String> load = commandsLoader.verbsObj().get("load");
-    private List<String> save = commandsLoader.verbsObj().get("save");
+    private static List<String> upstairs = commandsLoader.directionsObj().get("upstairs");
+    private static List<String> downstairs = commandsLoader.directionsObj().get("downstairs");
+    private static List<String> get = commandsLoader.verbsObj().get("get");
+    private static List<String> help = commandsLoader.verbsObj().get("help");
+    private static List<String> quit = commandsLoader.verbsObj().get("quit");
+    private static List<String> solve = commandsLoader.verbsObj().get("solve");
+    private static List<String> look = commandsLoader.verbsObj().get("look");
+    private static List<String> talk = commandsLoader.verbsObj().get("talk");
+    private static List<String> restart = commandsLoader.verbsObj().get("restart");
+    private static List<String> map = commandsLoader.verbsObj().get("map");
+    private static List<String> play = commandsLoader.verbsObj().get("play");
+    private static List<String> stop = commandsLoader.verbsObj().get("stop");
+    private static List<String> load = commandsLoader.verbsObj().get("load");
+    private static List<String> save = commandsLoader.verbsObj().get("save");
 
     // CONSTRUCTOR
     public Logic(Prompter var1) throws Exception {
@@ -57,12 +79,16 @@ public class Logic {
         this.player = player; // unnecessary now - remove
     }
 
+    public Logic() {
+
+    }
+
     // BUSINESS LOGIC
     // basic logic
-    public void logic() throws Exception {
-        String input = prompter.prompt(">").trim().toLowerCase();
-        Console.clear();
-        List<String> textParser = TextParser.textParser(input); // pass the input to the text parser which validates it
+    public static void logic(List<String> textParser) throws Exception {
+//        String input = prompter.prompt(">").trim().toLowerCase();
+//        Console.clear();
+//        List<String> textParser = TextParser.textParser(input); // pass the input to the text parser which validates it
 
         if (textParser.size()>=2 && go.contains(textParser.get(0))) { // checks size and get(0) is in go synonym list
             String direction = getDirection(textParser); // takes the input and passes to function that finds the synonym
@@ -81,7 +107,7 @@ public class Logic {
         } else if(restart.contains(textParser.get(0))){ // checks restart synonym list
             Game.restart();
         } else if (map.contains(textParser.get(0))){ // checks map synonym list
-            art.displayLocation(prompter, player);
+            art.displayLocation(prompter, Player.getInstance());
             //TODO fix save and load
         } else if (save.contains(textParser.get(0))){ // checks save synonym list
             SaveAndLoad.save();
@@ -99,28 +125,28 @@ public class Logic {
     }
 
     // go method
-    private void go(List<String> input, String direction) {
+    private static void go(List<String> input, String direction) {
         // Allows the user to just go back to previous room
         if (input.get(1).equals("back")){
-            String temp = player.getCurrentLocation(); // store the currentlocation to temp
-            player.setCurrentLocation(player.getPreviousLocation()); // set currentlocation to prev
-            player.setPreviousLocation(temp); // store temp into prev
+            String temp = Player.getInstance().getCurrentLocation(); // store the currentlocation to temp
+            Player.getInstance().setCurrentLocation(Player.getInstance().getPreviousLocation()); // set currentlocation to prev
+            Player.getInstance().setPreviousLocation(temp); // store temp into prev
             checkCounter = false; // prob can remove
         }
         // Move rooms
         else if (currentSpot.getDirections().containsKey(direction)) { // checks if the currentroom contains that direction
-            player.setPreviousLocation(player.getCurrentLocation()); // set currentroom to prev
-            player.setCurrentLocation(currentSpot.getDirections().get(direction)); //set currentrooom to new room
+            Player.getInstance().setPreviousLocation(Player.getInstance().getCurrentLocation()); // set currentroom to prev
+            Player.getInstance().setCurrentLocation(currentSpot.getDirections().get(direction)); //set currentrooom to new room
             checkCounter = false; // prob can remove
         }else {
             plug = "That is an invalid direction to go!";
         }
-        currentSpot = mapLocations.get(player.getCurrentLocation()); // get the current spot
+        currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation()); // get the current spot
         checkCounter = false; // check counter is for the get method, just resets it when they move to a new room
     }
 
     // get directions / take that synonym and return the base word
-    private String getDirection(List<String> input) {
+    private static String getDirection(List<String> input) {
         String direction = "null";
         if(north.contains(input.get(1))) direction = "north";
         else if(east.contains(input.get(1))) direction = "east";
@@ -132,7 +158,7 @@ public class Logic {
     }
 
     // get item
-    private void get(Item currentItem)throws Exception{
+    private static void get(Item currentItem)throws Exception{
         Clue clue = currentItem.getClue();
         System.out.println(currentItem.getDescription());
         System.out.println("What do you want to do?");
@@ -142,14 +168,14 @@ public class Logic {
 
         // mini logic
         if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
-            player.getInventory().add(currentItem.getClue().getName()); // add to player inventory
-            mapLocations.get(player.getCurrentLocation()).setItem(null); // remove from the map
+            Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
+            mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
-            player.getClues().put(clue.getName(), // add to player clues
+            Player.getInstance().getClues().put(clue.getName(), // add to player clues
                     "Name: " + clue.getName() +
                             "\nDescription: " + clue.getDescription() +
                             "\nObtained from: " + currentItem.getName() +
-                            "\nFound in: " + player.getCurrentLocation());
+                            "\nFound in: " + Player.getInstance().getCurrentLocation());
             checkCounter = false; // reset checkCounter
         }
         else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ // when they look clue
@@ -163,7 +189,7 @@ public class Logic {
     }
 
     // look
-    private void look(List<String> input) throws Exception {
+    private static void look(List<String> input) throws Exception {
         NPC currentNpc = currentSpot.getNpc(); // get currentNPC
         Item currentItem = currentSpot.getItem(); // get currentItem
 
@@ -207,9 +233,9 @@ public class Logic {
     }
 
     // solve
-    private void solve() throws Exception {
+    private static void solve() throws Exception {
         // So the player needs at least one clue to solve
-        if(player.getInventory().size() == 0){
+        if(Player.getInstance().getInventory().size() == 0){
             FileReader.fileReaderWhite("/Ascii/pdog3.txt");
             prompter.prompt("Press enter to continue");
             Console.clear();
@@ -244,11 +270,11 @@ public class Logic {
     }
 
     // Method to return evidence Set for solving
-    private ArrayList<String> getEvidence() {
+    private static ArrayList<String> getEvidence() {
 
         ArrayList<String> evidence = new ArrayList<>(); // return evidence
         // create a copy to allow us to add, remove, without affecting the actual inventory
-        ArrayList<String> copy = new ArrayList<>(player.getInventory());
+        ArrayList<String> copy = new ArrayList<>(Player.getInstance().getInventory());
 
         boolean isDone = false;
         // As long as they don't specify to quit, loop continues
@@ -307,7 +333,7 @@ public class Logic {
     }
 
     // talk
-    private void talk(List<String> input){
+    private static void talk(List<String> input){
         NPC npc = currentSpot.getNpc();
         if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //if there is an npc and input is "talk npc"
             ArrayList<String> randDialogueList = npc.getRandDialogue(); // list from obj value
@@ -326,38 +352,38 @@ public class Logic {
     }
 
     // add dialogue / suspect
-    private void addDialogue(String name, String dialogue) {
-        if(!player.getSuspects().containsKey(name)){ // if suspectlist doesn't contain the suspect
-            player.getSuspects().put(name,dialogue); // add it
+    private static void addDialogue(String name, String dialogue) {
+        if(!Player.getInstance().getSuspects().containsKey(name)){ // if suspectlist doesn't contain the suspect
+            Player.getInstance().getSuspects().put(name,dialogue); // add it
         }
     }
 
     // show current suspects
-    private void showSuspects(){
-        if(player.getSuspects().size() == 0){
+    private static void showSuspects(){
+        if(Player.getInstance().getSuspects().size() == 0){
             plug = "No suspects at this time";
         }
         else{
             // user specifies suspect to review
             System.out.println("Who do you want to talk to?");
-            System.out.println(player.getSuspects().keySet().toString());
+            System.out.println(Player.getInstance().getSuspects().keySet().toString());
             String input = prompter.prompt(">").trim();
-            plug =  player.getSuspects().getOrDefault(input, "Don't know who that is");
+            plug =  Player.getInstance().getSuspects().getOrDefault(input, "Don't know who that is");
         }
     }
 
     // show current inventory
-    private String showInventory() {
+    private static String showInventory() {
         String plug;
-        if(player.getClues().size() == 0){
+        if(Player.getInstance().getClues().size() == 0){
             plug = "Currently no clues collected";
         }
         else {
             // user specifies what clue to look at
             System.out.println("What clue would you like to review?");
-            System.out.println(player.getClues().keySet());
+            System.out.println(Player.getInstance().getClues().keySet());
             String input = prompter.prompt("> ").trim();
-            plug = player.getClues().getOrDefault(input, "Invalid clue");
+            plug = Player.getInstance().getClues().getOrDefault(input, "Invalid clue");
         }
         return plug;
     }

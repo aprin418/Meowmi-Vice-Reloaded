@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 import com.meowmivice.game.cast.CommandsLoader;
+import com.meowmivice.game.logic.Logic;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
@@ -11,7 +12,7 @@ public class TextParser {
     // gets location from Json/locations.json
     public static JSONObject locations() throws IOException, ParseException {
 
-        Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/Json/locations.json"))));
+        Object obj = new JSONParser().parse(new InputStreamReader(Objects.requireNonNull(JSONParser.class.getResourceAsStream("/locations.json"))));
         return (JSONObject) obj;
     }
 
@@ -24,7 +25,7 @@ public class TextParser {
     }
 
 
-    public static List<String> textParser(String input) throws IOException, ParseException {
+    public static List<String> textParser(String input) throws Exception {
         // verbs();
         // pulls the list of all valid verbs from CommandsLoader
         CommandsLoader commandsLoader = new CommandsLoader();
@@ -47,6 +48,7 @@ public class TextParser {
             //TODO it appears at the top of the ascii, not at the bottom
             System.out.println("That is an invalid input!");
         }
+        Logic.logic(userInput);
         return userInput;
     }
 }
