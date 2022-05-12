@@ -205,20 +205,20 @@ public class Locations extends JPanel  implements ActionListener{
         repaint();
     }
 
-    public void mapLocations() throws IOException, ParseException {
+    public void mapLocations() {
         //current spot is not changing. only have access to initial east and north directions from
-        //kitchen start point 
+        //kitchen start point
         textDisplayer(currentSpot.getDescription());
     }
 
-    //parses text input in GUI
+    //parses text input
     public static void textParser() throws Exception {
         text = commandInput.getText();
         TextParser.textParser(text);
         commandInput.setText("");
     }
 
-    //prints text to GUI Text-Box
+    //prints text to scroll box
     public static void textDisplayer(String displayText){
         Locations.displayText.setText("");
         Locations.displayText.setText(displayText);
@@ -296,7 +296,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "Quit":
                 System.exit(0);
                 break;
-            default://Do nothing
+            default:
         }
     }
 
