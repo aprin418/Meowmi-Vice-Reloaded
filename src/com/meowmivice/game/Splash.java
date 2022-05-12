@@ -26,11 +26,12 @@ public class Splash extends JPanel implements ActionListener {
         label.setBounds(0,0,1094, 730);
         add(label);
 
+        // INSTANTIATE START BUTTON
         startButton = new JButton("START");
-        startButton.setOpaque(true);
-        startButton.setForeground(Color.MAGENTA);
-        startButton.setFocusPainted(false);
-        startButton.setBorderPainted(false);
+        startButton.setOpaque(true); // ALLOWS US TO SEE BUTTON
+        startButton.setForeground(Color.MAGENTA); // SET COLOR ON THE BUTTON
+        startButton.setFocusPainted(false); // PREVENTS THE BUTTON OUTLINE FROM BEING PAINTED
+        startButton.setBorderPainted(false); // PREVENTS PAINTED BORDER ON BUTTON
         startButton.setBounds (450, 500, 200, 30);
         startButton.setFont(normalFont);
         startButton.addActionListener(this);

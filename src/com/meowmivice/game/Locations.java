@@ -19,7 +19,7 @@ import java.util.Map;
 public class Locations extends JPanel  implements ActionListener{
     private LocationsLoader locLoader  = new LocationsLoader(); // loads from json
     private Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
-    private Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+    Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
 
     private static JTextArea displayText;
     private static JTextField commandInput;
@@ -237,40 +237,40 @@ public class Locations extends JPanel  implements ActionListener{
         String command = e.getActionCommand();
         switch(command){
             case "North":
-                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go north");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                System.out.println(Player.getInstance().getCurrentLocation());
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "South":
-                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go south");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                System.out.println(Player.getInstance().getCurrentLocation());
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "East":
-                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go east");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                System.out.println(Player.getInstance().getCurrentLocation());
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "West":
-                System.out.println(Player.getInstance().getCurrentLocation());
                 try {
                     TextParser.textParser("go west");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                System.out.println(Player.getInstance().getCurrentLocation());
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "Upstairs":
                 try {
@@ -278,6 +278,8 @@ public class Locations extends JPanel  implements ActionListener{
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "Downstairs":
                 try {
@@ -285,6 +287,8 @@ public class Locations extends JPanel  implements ActionListener{
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+                textDisplayer(currentSpot.getDescription());
                 break;
             case "ENTER":
                 try {
