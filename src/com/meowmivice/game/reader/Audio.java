@@ -12,7 +12,7 @@ public class Audio {
 
     //reads the file, gets the audio, opens the audio, sets it to loop, and starts playing it
     public static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
-        InputStream is = Audio.class.getResourceAsStream("/Audio/main.wav");
+        InputStream is = Audio.class.getResourceAsStream("/main.wav");
         audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
         clip = AudioSystem.getClip();
         clip.open(audioStream);
