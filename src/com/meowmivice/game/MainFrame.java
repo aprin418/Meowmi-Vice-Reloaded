@@ -20,6 +20,8 @@ public class MainFrame {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         try {
             game = Game.getInstance();

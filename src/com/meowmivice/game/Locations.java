@@ -3,15 +3,17 @@ package com.meowmivice.game;
 import com.meowmivice.game.cast.Location;
 import com.meowmivice.game.cast.LocationsLoader;
 import com.meowmivice.game.cast.Player;
+import com.meowmivice.game.logic.Logic;
 import com.meowmivice.game.reader.TextParser;
-import org.json.simple.parser.ParseException;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public class Locations extends JPanel  implements ActionListener{
     private Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
     Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
 
+
     private static JTextArea displayText;
     private static JTextField commandInput;
     private static String text;
@@ -29,14 +32,8 @@ public class Locations extends JPanel  implements ActionListener{
     private static final String SMOKE_GREY_LINING = "#848884";
     private static final String GUNMETAL_GREY = "#818589";
 
-    // directional buttons
-    private JButton north;
-    private JButton south;
-    private JButton east;
-    private JButton west;
-    private JButton upstairs;
-    private JButton downstairs;
-    private JButton clues;
+    // directional and volume control buttons
+    private JButton north, south, east, west, upstairs, downstairs, clues, volumeUpButton, volumeDownButton;
 
     //left-hand drop down menu
     private JMenuBar menu;
@@ -53,7 +50,7 @@ public class Locations extends JPanel  implements ActionListener{
     private JScrollPane scroll;
 
 
-    public Locations() throws IOException, ParseException {
+    public Locations() throws Exception {
         //Help dropdown menu
         JMenu helpMenu = new JMenu ("Help"); //2nd dropdown header
         JMenuItem commandsOption = new JMenuItem ("Commands");
@@ -75,6 +72,8 @@ public class Locations extends JPanel  implements ActionListener{
         downstairs = new JButton("Downstairs");
         clues = new JButton("Clues");
         enterButton = new JButton ("ENTER");
+        volumeUpButton = new JButton("Volume Up");
+        volumeDownButton = new JButton("Volume Down");
         bottomDivider = new JSeparator();
         commandInput = new JTextField ();
         displayText = new JTextArea (10, 5);
@@ -119,6 +118,20 @@ public class Locations extends JPanel  implements ActionListener{
         upstairs.setFocusPainted(false);
         upstairs.setBorder(null);
 
+        //Volume button styling
+        volumeUpButton.setBackground(Color.WHITE);
+        volumeDownButton.setBackground(Color.WHITE);
+
+        volumeUpButton.setForeground(Color.MAGENTA);
+        volumeDownButton.setForeground(Color.MAGENTA);
+
+        volumeUpButton.setFocusPainted(false);
+        volumeDownButton.setFocusPainted(false);
+
+        volumeUpButton.setBorder(null);
+        volumeDownButton.setBorder(null);
+
+
         // enter button styling
         enterButton.setBackground(Color.WHITE);
         enterButton.setForeground(Color.MAGENTA);
@@ -151,6 +164,8 @@ public class Locations extends JPanel  implements ActionListener{
         upstairs.addActionListener(this);
         downstairs.addActionListener(this);
         commandInput.addActionListener(this);
+        volumeUpButton.addActionListener(this);
+        volumeDownButton.addActionListener(this);
         soundsOption.addActionListener(this);
         quitOption.addActionListener(this);
 
@@ -159,6 +174,7 @@ public class Locations extends JPanel  implements ActionListener{
         setBackground(Color.black);
 
         //add menu components to frame
+//        add(imageReader());
         add(menu);
         add(north);
         add(south);
@@ -167,6 +183,8 @@ public class Locations extends JPanel  implements ActionListener{
         add(upstairs);
         add(downstairs);
         add(clues);
+        add(volumeUpButton);
+        add(volumeDownButton);
         add(enterButton);
         add(commandInput);
         add(bottomDivider);
@@ -179,8 +197,11 @@ public class Locations extends JPanel  implements ActionListener{
         west.setBounds(870, 530, 60, 30);
         upstairs.setBounds(950, 500, 70, 30);
         downstairs.setBounds(950, 560, 70, 30);
+        volumeDownButton.setBounds(750, 640, 80, 30);
+        volumeUpButton.setBounds(850, 640, 80, 30);
         clues.setBounds(580, 600, 100, 30);
         menu.setBounds(0, 0, 1160, 30);
+//        imageReader().setBounds(100,100,1160, 400);
         scroll.setBounds(30, 495, 450, 100);
         commandInput.setBounds(30, 620, 250, 30);
         enterButton.setBounds(250, 620, 100, 30);
@@ -224,11 +245,20 @@ public class Locations extends JPanel  implements ActionListener{
         Locations.displayText.setText(displayText);
     }
 
+    //displays images
+//    public JLabel imageReader() throws IOException {
+//        BufferedImage myPicture = ImageIO.read(this.getClass().getResource("/Kitchen.png"));
+//        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+//        picLabel.setBackground(Color.WHITE);
+//        return picLabel;
+//    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == commandInput) {
             try {
                 textParser();
+                textDisplayer(currentSpot.getDescription());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -239,6 +269,8 @@ public class Locations extends JPanel  implements ActionListener{
             case "North":
                 try {
                     TextParser.textParser("go north");
+
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -248,6 +280,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "South":
                 try {
                     TextParser.textParser("go south");
+                    displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -257,6 +290,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "East":
                 try {
                     TextParser.textParser("go east");
+                    displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -266,6 +300,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "West":
                 try {
                     TextParser.textParser("go west");
+                    displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -275,6 +310,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "Upstairs":
                 try {
                     TextParser.textParser("go upstairs");
+                    displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -284,6 +320,7 @@ public class Locations extends JPanel  implements ActionListener{
             case "Downstairs":
                 try {
                     TextParser.textParser("go downstairs");
+                    displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
