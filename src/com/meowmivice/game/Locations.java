@@ -5,6 +5,7 @@ import com.meowmivice.game.cast.LocationsLoader;
 import com.meowmivice.game.cast.Player;
 import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.logic.Logic;
+import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.TextParser;
 
 
@@ -67,7 +68,7 @@ public class Locations extends JPanel  implements ActionListener{
         //Help dropdown menu
         JMenu helpMenu = new JMenu ("Help"); //2nd dropdown header
         JMenuItem commandsOption = new JMenuItem ("Commands");
-        JMenuItem soundsOption = new JMenuItem ("Sound");
+        JMenuItem soundsOption = new JMenuItem ("Toggle Sound");
         JMenuItem aboutOption = new JMenuItem ("Game Info");
         JMenuItem quitOption = new JMenuItem ("Quit");
         helpMenu.add(commandsOption);
@@ -378,6 +379,27 @@ public class Locations extends JPanel  implements ActionListener{
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(imageIcon());
+                break;
+            case "Volume Up":
+                try {
+                    Audio.increaseSoundVolume();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "Volume Down":
+                try {
+                    Audio.lowerSoundVolume();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "Toggle Sound":
+                try {
+                    Audio.toggleSound();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 break;
             case "ENTER":
                 try {
