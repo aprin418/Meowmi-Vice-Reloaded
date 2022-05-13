@@ -54,6 +54,13 @@ public class Locations extends JPanel  implements ActionListener{
 
     private JScrollPane scroll;
 
+    private JPanel imgPanel;
+
+    private  JLabel imgLabel;
+
+    //room image icon
+    private ImageIcon image;
+
 
 
     public Locations() throws Exception {
@@ -83,6 +90,9 @@ public class Locations extends JPanel  implements ActionListener{
         bottomDivider = new JSeparator();
         commandInput = new JTextField ();
         displayText = new JTextArea (10, 5);
+        imgPanel = new JPanel();
+        imgLabel = new JLabel();
+        image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
 
         // add file and help to menus
         menu.add(helpMenu);
@@ -92,6 +102,12 @@ public class Locations extends JPanel  implements ActionListener{
         clues.setForeground(Color.MAGENTA);
         clues.setFocusPainted(false);
         clues.setBorder(null);
+
+        //label image styling
+        imgLabel.setIcon(image);
+
+        //img panel styling
+        imgPanel.setBackground(Color.black);
 
         // directional button styling
         north.setBackground(Color.WHITE);
@@ -178,6 +194,9 @@ public class Locations extends JPanel  implements ActionListener{
         setLayout(null);
         setBackground(Color.black);
 
+        //add label to img panel
+        imgPanel.add(imgLabel);
+
         //add menu components to frame
         add(menu);
         add(north);
@@ -193,6 +212,7 @@ public class Locations extends JPanel  implements ActionListener{
         add(commandInput);
         add(bottomDivider);
         add(scroll);
+        add(imgPanel);
 
         // set all component bounds
         north.setBounds(810, 500, 60, 30);
@@ -209,6 +229,7 @@ public class Locations extends JPanel  implements ActionListener{
         commandInput.setBounds(30, 620, 250, 30);
         enterButton.setBounds(250, 620, 100, 30);
         bottomDivider.setBounds(0, 450, 1100, 5);
+        imgPanel.setBounds(300,30,400,400);
 
         //player info
         mapLocations();
@@ -274,6 +295,11 @@ public class Locations extends JPanel  implements ActionListener{
         JOptionPane.showMessageDialog(MainFrame.frame, plug);
     }
 
+    public ImageIcon imageIcon() {
+        image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
+        return image;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == commandInput) {
@@ -296,6 +322,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "South":
                 try {
@@ -306,6 +333,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "East":
                 try {
@@ -316,6 +344,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "West":
                 try {
@@ -326,6 +355,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "Upstairs":
                 try {
@@ -336,6 +366,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "Downstairs":
                 try {
@@ -346,6 +377,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "ENTER":
                 try {
