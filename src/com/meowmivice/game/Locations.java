@@ -3,6 +3,7 @@ package com.meowmivice.game;
 import com.meowmivice.game.cast.Location;
 import com.meowmivice.game.cast.LocationsLoader;
 import com.meowmivice.game.cast.Player;
+import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.logic.Logic;
 import com.meowmivice.game.reader.TextParser;
 
@@ -15,19 +16,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 
 public class Locations extends JPanel  implements ActionListener{
     private LocationsLoader locLoader  = new LocationsLoader(); // loads from json
     private Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
-    Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
-
+    private Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
 
     private static JTextArea displayText;
     private static JTextField commandInput;
     private static String text;
+    private static JLabel pop;
+    private static JPanel popContainer;
 
     //constants
     private static final String SMOKE_GREY_LINING = "#848884";
@@ -50,7 +54,6 @@ public class Locations extends JPanel  implements ActionListener{
 
     private JScrollPane scroll;
 
-    private JLabel label;
 
 
     public Locations() throws Exception {
@@ -134,7 +137,6 @@ public class Locations extends JPanel  implements ActionListener{
         volumeUpButton.setBorder(null);
         volumeDownButton.setBorder(null);
 
-
         // enter button styling
         enterButton.setBackground(Color.WHITE);
         enterButton.setForeground(Color.MAGENTA);
@@ -177,7 +179,6 @@ public class Locations extends JPanel  implements ActionListener{
         setBackground(Color.black);
 
         //add menu components to frame
-//        add(imageReader());
         add(menu);
         add(north);
         add(south);
@@ -204,7 +205,6 @@ public class Locations extends JPanel  implements ActionListener{
         volumeUpButton.setBounds(850, 640, 80, 30);
         clues.setBounds(580, 600, 100, 30);
         menu.setBounds(0, 0, 1160, 30);
-//        imageReader().setBounds(100,100,400, 400);
         scroll.setBounds(30, 495, 450, 100);
         commandInput.setBounds(30, 620, 250, 30);
         enterButton.setBounds(250, 620, 100, 30);
@@ -213,7 +213,6 @@ public class Locations extends JPanel  implements ActionListener{
         //player info
         mapLocations();
         seeInventory();
-
     }
 
     public void seeInventory(){
@@ -262,12 +261,24 @@ public class Locations extends JPanel  implements ActionListener{
 //        return label;
 //    }
 
+    public static void showPopUp(String plug) throws InterruptedException {
+//        JPanel popContainer = new JPanel();
+//        popContainer.setBackground(Color.MAGENTA);
+//        pop = new JLabel(plug);
+//        pop.setForeground(Color.BLACK);
+//        popContainer.add(pop);
+//        PopupFactory msg = new PopupFactory();
+//        Popup p = msg.getPopup(MainFrame.frame, popContainer, 450, 100);
+//        p.show();
+
+        JOptionPane.showMessageDialog(MainFrame.frame, plug);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == commandInput) {
             try {
                 textParser();
-                textDisplayer(currentSpot.getDescription());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

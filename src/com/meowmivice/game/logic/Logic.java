@@ -2,13 +2,13 @@ package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
+import com.meowmivice.game.Locations;
 import com.meowmivice.game.cast.*;
 import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.reader.SaveAndLoad;
 import com.meowmivice.game.reader.TextParser;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -27,8 +27,7 @@ public class Logic {
         }
     }
 
-    static Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
-
+    private static Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
     private static Ascii art = new Ascii(); // used anytime ascii needs to be loaded
     private Player player = new Player(); // new player
     private static Prompter prompter; // prompts the player for input
@@ -40,7 +39,6 @@ public class Logic {
     private static String plug = ""; // used to dynamically display what the user does
 
     private static CommandsLoader commandsLoader; // get the commands from the Loaderclass
-
     static {
         try {
             commandsLoader = new CommandsLoader();
@@ -196,38 +194,44 @@ public class Logic {
         if (input.size() == 1){ // if they just pass look print out a different statement depending on the contents of the room
             if (currentNpc!=null && currentItem != null) { // if there is an npc and an item
                 plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
+                Locations.showPopUp(plug);
             } else if (currentNpc!=null && currentItem==null){ // npc and no item
                 plug = currentNpc.getName() + " is at this location.";
+                Locations.showPopUp(plug);
             } else if(currentNpc==null && currentItem!=null){ // item and no npc
                 plug = "There is a " + currentItem.getName() + " in this location.";
+                Locations.showPopUp(plug);
             } else {
                 plug = "There is nothing in this location to look at.";
+                Locations.showPopUp(plug);
             }
         } else if (input.get(1).equals("item") && currentItem!=null){ // if user looks item
             get(currentItem);
         }
         else {
             plug = "Can't look there";
+            Locations.showPopUp(plug);
         }
     }
 
     // status
-    public void showStatus() throws IOException {
-        art.ascii(player.getCurrentLocation()); // call ascii to display room ascii of currentlocation
+    public static void showStatus() throws IOException {
+        art.ascii(Player.getInstance().getCurrentLocation()); // call ascii to display room ascii of currentlocation
         System.out.println(plug); // print plug
         plug = "";// resets plug
         System.out.println("\033[1;36m===========================");
-        System.out.println("You are in the " + player.getCurrentLocation()); // currentlocation
+        System.out.println("You are in the " + Player.getInstance().getCurrentLocation()); // currentlocation
         System.out.println(currentSpot.getDescription());// location description
-        System.out.println("Inventory:" +"\033[37m" + player.getInventory() + "\033[1;36m"); // player inventory
+        System.out.println("Inventory:" +"\033[37m" + Player.getInstance().getInventory() + "\033[1;36m"); // player inventory
         System.out.println("Enter help to see a list of available commands");
         System.out.println("===========================");
         System.out.println("Directions you can go: " +"\033[37m" +
-                showDirections(player.getCurrentLocation()) + "\033[0m"); // get directions
+                showDirections(Player.getInstance().getCurrentLocation()) + "\033[0m"); // get directions
     }
 
+
     // show directions
-    private String showDirections(String currentLocation) {
+    private static String showDirections(String currentLocation) {
         Map<String,String> directionsMap =  currentSpot.getDirections(); // create a new map
         return directionsMap.keySet().toString(); // can prob nix this method and display currentSpot.getDirections().toString() in the show status
     }
