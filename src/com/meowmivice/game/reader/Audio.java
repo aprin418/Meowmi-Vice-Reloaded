@@ -7,13 +7,13 @@ import java.text.Format;
 
 public class Audio {
     static private Clip clip;
-    static private AudioInputStream audioStream;
+//    static private AudioInputStream audioStream;
     private static boolean isSound = true;
 
     //reads the file, gets the audio, opens the audio, sets it to loop, and starts playing it
     public static void audio() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         InputStream is = Audio.class.getResourceAsStream("/main.wav");
-        audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
         clip = AudioSystem.getClip();
         clip.open(audioStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -21,7 +21,7 @@ public class Audio {
     }
 
     // pause/unpause audio
-    static void toggleSound() {
+    public static void toggleSound() {
         if (isSound) {
             clip.stop();
             isSound = false;
