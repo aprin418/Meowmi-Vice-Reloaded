@@ -84,9 +84,6 @@ public class Logic {
     // BUSINESS LOGIC
     // basic logic
     public static void logic(List<String> textParser) throws Exception {
-//        String input = prompter.prompt(">").trim().toLowerCase();
-//        Console.clear();
-//        List<String> textParser = TextParser.textParser(input); // pass the input to the text parser which validates it
 
         if (textParser.size()>=2 && go.contains(textParser.get(0))) { // checks size and get(0) is in go synonym list
             String direction = getDirection(textParser); // takes the input and passes to function that finds the synonym

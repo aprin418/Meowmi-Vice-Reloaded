@@ -24,9 +24,11 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Locations extends JPanel  implements ActionListener{
+    // see line 325 for Clickable
     private LocationsLoader locLoader  = new LocationsLoader(); // loads from json
     private Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
     private Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+    private Clickables click = new Clickables();
 
     private static JTextArea displayText;
     private static JTextField commandInput;
@@ -269,20 +271,6 @@ public class Locations extends JPanel  implements ActionListener{
         Locations.displayText.setText(displayText);
     }
 
-    //displays images
-//    public JLabel imageReader() throws IOException {
-//        BufferedImage myPicture = ImageIO.read(this.getClass().getResource("/Kitchen.png"));
-//        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//        picLabel.setBackground(Color.WHITE);
-//        BufferedImage img = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/kitchen.png")));
-//        ImageIcon imageIcon = new ImageIcon(img);
-//        Image image = imageIcon.getImage();
-//        Image img2 = image.getScaledInstance(400, 400,  Image.SCALE_DEFAULT);
-//        label = new JLabel( new ImageIcon(img2));
-//        label.setBounds(0,0,1094, 730);
-//        return label;
-//    }
-
     public static void showPopUp(String plug) throws InterruptedException {
 //        JPanel popContainer = new JPanel();
 //        popContainer.setBackground(Color.MAGENTA);
@@ -335,6 +323,8 @@ public class Locations extends JPanel  implements ActionListener{
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(imageIcon());
+                // Clickable class
+                add(Clickables.showItems(currentSpot));
                 break;
             case "East":
                 try {
