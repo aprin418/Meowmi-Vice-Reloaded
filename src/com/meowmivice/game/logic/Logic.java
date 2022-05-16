@@ -116,6 +116,8 @@ public class Logic {
             showSuspects();
         } else if(textParser.get(0).equals("inventory")){ // checks if get(0) is inventory
             showInventory();
+        } else if(get.contains(textParser.get(0)) && currentSpot.getItem() != null) {
+            get(currentSpot.getItem());
         }
     }
 
@@ -155,32 +157,40 @@ public class Logic {
     // get item
     private static void get(Item currentItem)throws Exception{
         Clue clue = currentItem.getClue();
-        System.out.println(currentItem.getDescription());
-        System.out.println("What do you want to do?");
+        //System.out.println(currentItem.getDescription());
+        //System.out.println("What do you want to do?");
+        //String input = prompter.prompt("> ").toLowerCase().trim();
+        //List<String> textParser = TextParser.textParser(input); // parse the input
 
-        String input = prompter.prompt("> ").toLowerCase().trim();
-        List<String> textParser = TextParser.textParser(input); // parse the input
+        Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
+        mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
-        // mini logic
-        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
-            Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
-            mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
+        Player.getInstance().getClues().put(clue.getName(), // add to player clues
+                "Name: " + clue.getName() +
+                        "\nDescription: " + clue.getDescription() +
+                        "\nObtained from: " + currentItem.getName() +
+                        "\nFound in: " + Player.getInstance().getCurrentLocation());
 
-            Player.getInstance().getClues().put(clue.getName(), // add to player clues
-                    "Name: " + clue.getName() +
-                            "\nDescription: " + clue.getDescription() +
-                            "\nObtained from: " + currentItem.getName() +
-                            "\nFound in: " + Player.getInstance().getCurrentLocation());
-            checkCounter = false; // reset checkCounter
-        }
-        else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ // when they look clue
-            plug = currentItem.getClue().getDescription();
-            checkCounter = true; // set checkCounter to true
-            get(currentItem);
-        }
-        else {
-            plug = "Invalid command";
-        }
+        /** mini logic for command line version 1.3 **/
+//        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
+//            Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
+//            mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
+//
+//            Player.getInstance().getClues().put(clue.getName(), // add to player clues
+//                    "Name: " + clue.getName() +
+//                            "\nDescription: " + clue.getDescription() +
+//                            "\nObtained from: " + currentItem.getName() +
+//                            "\nFound in: " + Player.getInstance().getCurrentLocation());
+//            checkCounter = false; // reset checkCounter
+//        }
+//        else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ // when they look clue
+//            plug = currentItem.getClue().getDescription();
+//            checkCounter = true; // set checkCounter to true
+//            get(currentItem);
+//        }
+//        else {
+//            plug = "Invalid command";
+//        }
     }
 
     // look

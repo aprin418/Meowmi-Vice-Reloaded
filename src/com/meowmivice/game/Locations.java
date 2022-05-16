@@ -1,26 +1,21 @@
 package com.meowmivice.game;
 
+import com.meowmivice.game.cast.Clue;
 import com.meowmivice.game.cast.Location;
 import com.meowmivice.game.cast.LocationsLoader;
 import com.meowmivice.game.cast.Player;
-import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.logic.Logic;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.TextParser;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.sql.Time;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.List;
 
 
 public class Locations extends JPanel  implements ActionListener{
@@ -50,12 +45,13 @@ public class Locations extends JPanel  implements ActionListener{
     private JButton enterButton;
 
     //player inventory
-    private JList inventory;
+    private JTextArea inventoryTextArea;
 
     //separator
     private JSeparator bottomDivider;
 
-    private JScrollPane scroll;
+    private JScrollPane scroll, scroll2;
+
 
     private JPanel imgPanel;
 
@@ -87,6 +83,7 @@ public class Locations extends JPanel  implements ActionListener{
         upstairs = new JButton("Upstairs");
         downstairs = new JButton("Downstairs");
         clues = new JButton("Clues");
+        inventoryTextArea = new JTextArea(10, 5);
         enterButton = new JButton ("ENTER");
         volumeUpButton = new JButton("Volume Up");
         volumeDownButton = new JButton("Volume Down");
@@ -162,6 +159,11 @@ public class Locations extends JPanel  implements ActionListener{
         enterButton.setFocusPainted(false);
         enterButton.setBorder(null);
 
+
+        // inventory text area styling
+        inventoryTextArea.setBackground(Color.decode(GUNMETAL_GREY));
+        inventoryTextArea.setForeground(Color.WHITE);
+
         //input command box styling
         commandInput.setBackground(Color.decode(GUNMETAL_GREY));
         commandInput.setForeground(Color.WHITE);
@@ -174,7 +176,9 @@ public class Locations extends JPanel  implements ActionListener{
         displayText.setDisabledTextColor(Color.WHITE);
         displayText.setLineWrap(true);
         scroll = new JScrollPane(displayText); //enable scrollable text-box
+        scroll2 = new JScrollPane(inventoryTextArea);
         scroll.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
+        scroll2.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
 
         // separator at bottom of frame
         bottomDivider.setBackground(Color.decode(SMOKE_GREY_LINING)); //bottom line color
@@ -187,6 +191,7 @@ public class Locations extends JPanel  implements ActionListener{
         west.addActionListener(this);
         upstairs.addActionListener(this);
         downstairs.addActionListener(this);
+        clues.addActionListener(this);
         commandInput.addActionListener(this);
         volumeUpButton.addActionListener(this);
         volumeDownButton.addActionListener(this);
@@ -209,12 +214,14 @@ public class Locations extends JPanel  implements ActionListener{
         add(upstairs);
         add(downstairs);
         add(clues);
+        //add(inventoryTextArea);
         add(volumeUpButton);
         add(volumeDownButton);
         add(enterButton);
         add(commandInput);
         add(bottomDivider);
         add(scroll);
+        add(scroll2);
         add(imgPanel);
 
         // set all component bounds
@@ -233,24 +240,36 @@ public class Locations extends JPanel  implements ActionListener{
         enterButton.setBounds(250, 620, 100, 30);
         bottomDivider.setBounds(0, 450, 1100, 5);
         imgPanel.setBounds(300,30,400,400);
+        //inventoryTextArea.setBounds(550, 495, 150, 100);
+        scroll2.setBounds(550, 495, 150, 100);
 
         //player info
         mapLocations();
-        seeInventory();
+        //seeInventory();
     }
 
-    public void seeInventory(){
-        if (inventory != null) {
-            remove(inventory);
+//    public void seeInventory(){
+//        if (inventory != null) {
+//            remove(inventory);
+//        }
+//        inventory = new JTextArea(Arrays.toString(Player.getInstance().getInventory().toArray()));
+//       // inventory.setBackground(Color.decode(GUNMETAL_GREY));
+//       // inventory.setBounds(550, 495, 150, 100);
+//        //inventory.setForeground(Color.WHITE);
+////        add(inventory);
+////        revalidate();
+////        repaint();
+//    }
+
+
+    public void seeClues(){
+        inventoryTextArea.setText("");
+        for (String clue: Player.getInstance().getClues().values()) {
+            inventoryTextArea.append(clue + "\n");
         }
-        inventory = new JList(Player.getInstance().getInventory().toArray());
-        inventory.setBackground(Color.decode(GUNMETAL_GREY));
-        inventory.setBounds(550, 495, 150, 100);
-        inventory.setForeground(Color.WHITE);
-        add(inventory);
-        revalidate();
-        repaint();
     }
+
+
 
     public void mapLocations() {
         //current spot is not changing. only have access to initial east and north directions from
@@ -391,6 +410,9 @@ public class Locations extends JPanel  implements ActionListener{
                     ex.printStackTrace();
                 }
                 break;
+            case "Clues":
+                seeClues();
+                break;
             case "ENTER":
                 try {
                     textParser();
@@ -405,4 +427,7 @@ public class Locations extends JPanel  implements ActionListener{
         }
     }
 
+    public static JTextField getCommandInput() {
+        return commandInput;
+    }
 }
