@@ -161,7 +161,7 @@ public class Logic {
         //System.out.println("What do you want to do?");
         //String input = prompter.prompt("> ").toLowerCase().trim();
         //List<String> textParser = TextParser.textParser(input); // parse the input
-
+        Locations.showPopUp(currentItem.getName() + " got!");
         Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
         mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
