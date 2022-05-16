@@ -2,6 +2,7 @@ package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
+import com.meowmivice.game.Clickables;
 import com.meowmivice.game.Locations;
 import com.meowmivice.game.cast.*;
 import com.meowmivice.game.controller.Game;
@@ -204,6 +205,7 @@ public class Logic {
             if (currentNpc!=null && currentItem != null) { // if there is an npc and an item
                 plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
                 Locations.showPopUp(plug);
+                Clickables.showItems(currentSpot);
             } else if (currentNpc!=null && currentItem==null){ // npc and no item
                 plug = currentNpc.getName() + " is at this location.";
                 Locations.showPopUp(plug);
@@ -221,6 +223,7 @@ public class Logic {
             plug = "Can't look there";
             Locations.showPopUp(plug);
         }
+
     }
 
     // status

@@ -94,6 +94,7 @@ public class Locations extends JPanel  implements ActionListener{
         imgLabel = new JLabel();
         image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
 
+
         // add file and help to menus
         menu.add(helpMenu);
 
@@ -214,6 +215,7 @@ public class Locations extends JPanel  implements ActionListener{
         add(upstairs);
         add(downstairs);
         add(clues);
+        add(click);
         //add(inventoryTextArea);
         add(volumeUpButton);
         add(volumeDownButton);
@@ -223,6 +225,7 @@ public class Locations extends JPanel  implements ActionListener{
         add(scroll);
         add(scroll2);
         add(imgPanel);
+//        add(Clickables.showItems(currentSpot));
 
         // set all component bounds
         north.setBounds(810, 500, 60, 30);
@@ -242,6 +245,8 @@ public class Locations extends JPanel  implements ActionListener{
         imgPanel.setBounds(300,30,400,400);
         //inventoryTextArea.setBounds(550, 495, 150, 100);
         scroll2.setBounds(550, 495, 150, 100);
+
+
 
         //player info
         mapLocations();
@@ -266,7 +271,7 @@ public class Locations extends JPanel  implements ActionListener{
     }
 
 
-    public static void seeClues(){
+    private static void seeClues(){
         inventoryTextArea.setText("");
         for (String clue: Player.getInstance().getClues().values()) {
             inventoryTextArea.append(clue + "\n");
@@ -293,6 +298,7 @@ public class Locations extends JPanel  implements ActionListener{
         Locations.displayText.setText("");
         Locations.displayText.setText(displayText);
     }
+
 
     public static void showPopUp(String plug) throws InterruptedException {
 //        JPanel popContainer = new JPanel();
@@ -420,6 +426,8 @@ public class Locations extends JPanel  implements ActionListener{
             case "ENTER":
                 try {
                     textParser();
+                    add(Clickables.showItems(currentSpot));
+                    repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
