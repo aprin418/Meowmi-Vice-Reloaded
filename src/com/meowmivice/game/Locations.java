@@ -45,7 +45,7 @@ public class Locations extends JPanel  implements ActionListener{
     private JButton enterButton;
 
     //player inventory
-    private JTextArea inventoryTextArea;
+    private static JTextArea inventoryTextArea;
 
     //separator
     private JSeparator bottomDivider;
@@ -248,21 +248,25 @@ public class Locations extends JPanel  implements ActionListener{
         //seeInventory();
     }
 
-//    public void seeInventory(){
-//        if (inventory != null) {
-//            remove(inventory);
-//        }
-//        inventory = new JTextArea(Arrays.toString(Player.getInstance().getInventory().toArray()));
-//       // inventory.setBackground(Color.decode(GUNMETAL_GREY));
-//       // inventory.setBounds(550, 495, 150, 100);
-//        //inventory.setForeground(Color.WHITE);
-////        add(inventory);
-////        revalidate();
-////        repaint();
-//    }
+    public static JTextArea getInventoryTextArea() {
+        return inventoryTextArea;
+    }
+
+    public void seeInventory(){
+        if (inventoryTextArea != null) {
+            remove(inventoryTextArea);
+        }
+        inventoryTextArea = new JTextArea(Arrays.toString(Player.getInstance().getInventory().toArray()));
+       // inventory.setBackground(Color.decode(GUNMETAL_GREY));
+       // inventory.setBounds(550, 495, 150, 100);
+        //inventory.setForeground(Color.WHITE);
+//        add(inventory);
+//        revalidate();
+//        repaint();
+    }
 
 
-    public void seeClues(){
+    public static void seeClues(){
         inventoryTextArea.setText("");
         for (String clue: Player.getInstance().getClues().values()) {
             inventoryTextArea.append(clue + "\n");
