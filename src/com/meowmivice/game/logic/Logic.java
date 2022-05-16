@@ -162,7 +162,7 @@ public class Logic {
         //String input = prompter.prompt("> ").toLowerCase().trim();
         //List<String> textParser = TextParser.textParser(input); // parse the input
         Locations.showPopUp(currentItem.getName() + " got!");
-        Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
+        Player.getInstance().getInventory().add(currentItem.getName()); // add to player inventory
         mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
         Player.getInstance().getClues().put(clue.getName(), // add to player clues
@@ -170,6 +170,8 @@ public class Logic {
                         "\nDescription: " + clue.getDescription() +
                         "\nObtained from: " + currentItem.getName() +
                         "\nFound in: " + Player.getInstance().getCurrentLocation());
+
+        Locations.getInventoryTextArea().setText(Player.getInstance().getInventory().toString());
 
         /** mini logic for command line version 1.3 **/
 //        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
