@@ -205,7 +205,7 @@ public class Logic {
             if (currentNpc!=null && currentItem != null) { // if there is an npc and an item
                 plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
                 Locations.showPopUp(plug);
-                Clickables.showItems(currentSpot);
+//                Clickables.showItems(currentSpot);
             } else if (currentNpc!=null && currentItem==null){ // npc and no item
                 plug = currentNpc.getName() + " is at this location.";
                 Locations.showPopUp(plug);
