@@ -425,8 +425,10 @@ public class Locations extends JPanel  implements ActionListener{
                 break;
             case "ENTER":
                 try {
+                    if (commandInput.getText().contains("look")) {
+                        add(Clickables.showItems(currentSpot));
+                    }
                     textParser();
-                    add(Clickables.showItems(currentSpot));
                     repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
