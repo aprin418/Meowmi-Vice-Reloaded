@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-class Clickables extends JPanel{
+public class Clickables extends JPanel{
     static JLabel trash, bag, safe, box, envelope;
 
     Clickables() throws IOException {
@@ -43,7 +43,7 @@ class Clickables extends JPanel{
         if (currentItem.getName().contains("trash")) {
             item = trash;
         }
-        
+
         return item;
     }
 }
