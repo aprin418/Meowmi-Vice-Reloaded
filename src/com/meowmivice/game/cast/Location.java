@@ -40,6 +40,10 @@ public class Location {
         setItem(item);
     }
 
+    public Location() {
+
+    }
+
     public String getName() {
         return name;
     }

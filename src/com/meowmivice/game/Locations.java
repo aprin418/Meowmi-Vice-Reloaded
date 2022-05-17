@@ -198,6 +198,8 @@ public class Locations extends JPanel  implements ActionListener{
         volumeDownButton.addActionListener(this);
         soundsOption.addActionListener(this);
         quitOption.addActionListener(this);
+        Clickables.showItems(currentSpot).addActionListener(this);
+
 
        //override default frame layout and set background
         setLayout(null);
@@ -423,6 +425,12 @@ public class Locations extends JPanel  implements ActionListener{
             case "Clues":
                 seeClues();
                 break;
+            case "trash":
+                try {
+                    showPopUp("tHIS IS THE TRASH");
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             case "ENTER":
                 try {
                     if (commandInput.getText().contains("look")) {
