@@ -14,14 +14,16 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Clickables extends JPanel{
-    static JLabel trash, bag, safe, box, envelope;
+    static JLabel  bag, safe, box, envelope;
+    static JButton trash;
 
     Clickables() throws IOException {
         BufferedImage trashCan = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/index.jpg")));
         ImageIcon trashIcon = new ImageIcon(trashCan);
         Image trashImage = trashIcon.getImage();
         Image trashImageScaled = trashImage.getScaledInstance(100, 730,  Image.SCALE_DEFAULT);
-        trash = new JLabel(new ImageIcon(trashImageScaled));
+        trash = new JButton("trash",new ImageIcon(trashImageScaled));
+        trash.setBackground(Color.BLACK);
         trash.setBounds(100, 150, 200, 100);
     }
 
@@ -35,12 +37,15 @@ public class Clickables extends JPanel{
 //    }
 
 
-    public static Component showItems(Location currentSpot) {
+    public static JButton showItems(Location currentSpot) {
+//        Location currentSpot = new Location();
         NPC currentNpc = currentSpot.getNpc(); // get currentNPC
         Item currentItem = currentSpot.getItem(); // get currentItem
-        JLabel item = null;
+        JButton item = null;
+
 
         if (currentItem.getName().contains("trash")) {
+
             item = trash;
         }
 
