@@ -1,33 +1,35 @@
 package com.meowmivice.game;
 
+import com.meowmivice.game.cast.Clue;
 import com.meowmivice.game.cast.Location;
 import com.meowmivice.game.cast.LocationsLoader;
 import com.meowmivice.game.cast.Player;
 import com.meowmivice.game.logic.Logic;
+import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.TextParser;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 
 
 public class Locations extends JPanel  implements ActionListener{
+    // see line 325 for Clickable
     private LocationsLoader locLoader  = new LocationsLoader(); // loads from json
     private Map<String, Location> mapLocations = locLoader.load(); // creates a map of all the rooms
-    Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
-
+    private Location currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
+    private Clickables click = new Clickables();
 
     private static JTextArea displayText;
     private static JTextField commandInput;
     private static String text;
+    private static JLabel pop;
+    private static JPanel popContainer;
 
     //constants
     private static final String SMOKE_GREY_LINING = "#848884";
@@ -43,21 +45,28 @@ public class Locations extends JPanel  implements ActionListener{
     private JButton enterButton;
 
     //player inventory
-    private JList inventory;
+    private static JTextArea inventoryTextArea;
 
     //separator
     private JSeparator bottomDivider;
 
-    private JScrollPane scroll;
+    private JScrollPane scroll, scroll2;
 
-    private JLabel label;
+
+    private JPanel imgPanel;
+
+    private  JLabel imgLabel;
+
+    //room image icon
+    private ImageIcon image;
+
 
 
     public Locations() throws Exception {
         //Help dropdown menu
         JMenu helpMenu = new JMenu ("Help"); //2nd dropdown header
         JMenuItem commandsOption = new JMenuItem ("Commands");
-        JMenuItem soundsOption = new JMenuItem ("Sound");
+        JMenuItem soundsOption = new JMenuItem ("Toggle Sound");
         JMenuItem aboutOption = new JMenuItem ("Game Info");
         JMenuItem quitOption = new JMenuItem ("Quit");
         helpMenu.add(commandsOption);
@@ -74,12 +83,17 @@ public class Locations extends JPanel  implements ActionListener{
         upstairs = new JButton("Upstairs");
         downstairs = new JButton("Downstairs");
         clues = new JButton("Clues");
+        inventoryTextArea = new JTextArea(10, 5);
         enterButton = new JButton ("ENTER");
         volumeUpButton = new JButton("Volume Up");
         volumeDownButton = new JButton("Volume Down");
         bottomDivider = new JSeparator();
         commandInput = new JTextField ();
         displayText = new JTextArea (10, 5);
+        imgPanel = new JPanel();
+        imgLabel = new JLabel();
+        image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
+
 
         // add file and help to menus
         menu.add(helpMenu);
@@ -89,6 +103,12 @@ public class Locations extends JPanel  implements ActionListener{
         clues.setForeground(Color.MAGENTA);
         clues.setFocusPainted(false);
         clues.setBorder(null);
+
+        //label image styling
+        imgLabel.setIcon(image);
+
+        //img panel styling
+        imgPanel.setBackground(Color.black);
 
         // directional button styling
         north.setBackground(Color.WHITE);
@@ -134,12 +154,16 @@ public class Locations extends JPanel  implements ActionListener{
         volumeUpButton.setBorder(null);
         volumeDownButton.setBorder(null);
 
-
         // enter button styling
         enterButton.setBackground(Color.WHITE);
         enterButton.setForeground(Color.MAGENTA);
         enterButton.setFocusPainted(false);
         enterButton.setBorder(null);
+
+
+        // inventory text area styling
+        inventoryTextArea.setBackground(Color.decode(GUNMETAL_GREY));
+        inventoryTextArea.setForeground(Color.WHITE);
 
         //input command box styling
         commandInput.setBackground(Color.decode(GUNMETAL_GREY));
@@ -153,7 +177,9 @@ public class Locations extends JPanel  implements ActionListener{
         displayText.setDisabledTextColor(Color.WHITE);
         displayText.setLineWrap(true);
         scroll = new JScrollPane(displayText); //enable scrollable text-box
+        scroll2 = new JScrollPane(inventoryTextArea);
         scroll.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
+        scroll2.setBorder(new LineBorder(Color.decode(SMOKE_GREY_LINING)));
 
         // separator at bottom of frame
         bottomDivider.setBackground(Color.decode(SMOKE_GREY_LINING)); //bottom line color
@@ -166,18 +192,23 @@ public class Locations extends JPanel  implements ActionListener{
         west.addActionListener(this);
         upstairs.addActionListener(this);
         downstairs.addActionListener(this);
+        clues.addActionListener(this);
         commandInput.addActionListener(this);
         volumeUpButton.addActionListener(this);
         volumeDownButton.addActionListener(this);
         soundsOption.addActionListener(this);
         quitOption.addActionListener(this);
+        Clickables.showItems(currentSpot).addActionListener(this);
+
 
        //override default frame layout and set background
         setLayout(null);
         setBackground(Color.black);
 
+        //add label to img panel
+        imgPanel.add(imgLabel);
+
         //add menu components to frame
-//        add(imageReader());
         add(menu);
         add(north);
         add(south);
@@ -186,12 +217,17 @@ public class Locations extends JPanel  implements ActionListener{
         add(upstairs);
         add(downstairs);
         add(clues);
+        add(click);
+        //add(inventoryTextArea);
         add(volumeUpButton);
         add(volumeDownButton);
         add(enterButton);
         add(commandInput);
         add(bottomDivider);
         add(scroll);
+        add(scroll2);
+        add(imgPanel);
+//        add(Clickables.showItems(currentSpot));
 
         // set all component bounds
         north.setBounds(810, 500, 60, 30);
@@ -204,30 +240,47 @@ public class Locations extends JPanel  implements ActionListener{
         volumeUpButton.setBounds(850, 640, 80, 30);
         clues.setBounds(580, 600, 100, 30);
         menu.setBounds(0, 0, 1160, 30);
-//        imageReader().setBounds(100,100,400, 400);
         scroll.setBounds(30, 495, 450, 100);
         commandInput.setBounds(30, 620, 250, 30);
         enterButton.setBounds(250, 620, 100, 30);
         bottomDivider.setBounds(0, 450, 1100, 5);
+        imgPanel.setBounds(300,30,400,400);
+        //inventoryTextArea.setBounds(550, 495, 150, 100);
+        scroll2.setBounds(550, 495, 150, 100);
+
+
 
         //player info
         mapLocations();
-        seeInventory();
+        //seeInventory();
+    }
 
+    public static JTextArea getInventoryTextArea() {
+        return inventoryTextArea;
     }
 
     public void seeInventory(){
-        if (inventory != null) {
-            remove(inventory);
+        if (inventoryTextArea != null) {
+            remove(inventoryTextArea);
         }
-        inventory = new JList(Player.getInstance().getInventory().toArray());
-        inventory.setBackground(Color.decode(GUNMETAL_GREY));
-        inventory.setBounds(550, 495, 150, 100);
-        inventory.setForeground(Color.WHITE);
-        add(inventory);
-        revalidate();
-        repaint();
+        inventoryTextArea = new JTextArea(Arrays.toString(Player.getInstance().getInventory().toArray()));
+       // inventory.setBackground(Color.decode(GUNMETAL_GREY));
+       // inventory.setBounds(550, 495, 150, 100);
+        //inventory.setForeground(Color.WHITE);
+//        add(inventory);
+//        revalidate();
+//        repaint();
     }
+
+
+    private static void seeClues(){
+        inventoryTextArea.setText("");
+        for (String clue: Player.getInstance().getClues().values()) {
+            inventoryTextArea.append(clue + "\n");
+        }
+    }
+
+
 
     public void mapLocations() {
         //current spot is not changing. only have access to initial east and north directions from
@@ -248,26 +301,30 @@ public class Locations extends JPanel  implements ActionListener{
         Locations.displayText.setText(displayText);
     }
 
-    //displays images
-//    public JLabel imageReader() throws IOException {
-//        BufferedImage myPicture = ImageIO.read(this.getClass().getResource("/Kitchen.png"));
-//        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//        picLabel.setBackground(Color.WHITE);
-//        BufferedImage img = ImageIO.read(Objects.requireNonNull(this.getClass().getResource("/kitchen.png")));
-//        ImageIcon imageIcon = new ImageIcon(img);
-//        Image image = imageIcon.getImage();
-//        Image img2 = image.getScaledInstance(400, 400,  Image.SCALE_DEFAULT);
-//        label = new JLabel( new ImageIcon(img2));
-//        label.setBounds(0,0,1094, 730);
-//        return label;
-//    }
+
+    public static void showPopUp(String plug) throws InterruptedException {
+//        JPanel popContainer = new JPanel();
+//        popContainer.setBackground(Color.MAGENTA);
+//        pop = new JLabel(plug);
+//        pop.setForeground(Color.BLACK);
+//        popContainer.add(pop);
+//        PopupFactory msg = new PopupFactory();
+//        Popup p = msg.getPopup(MainFrame.frame, popContainer, 450, 100);
+//        p.show();
+
+        JOptionPane.showMessageDialog(MainFrame.frame, plug);
+    }
+
+    public ImageIcon imageIcon() {
+        image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
+        return image;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == commandInput) {
             try {
                 textParser();
-                textDisplayer(currentSpot.getDescription());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -285,6 +342,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "South":
                 try {
@@ -295,6 +353,9 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
+                // Clickable class
+                add(Clickables.showItems(currentSpot));
                 break;
             case "East":
                 try {
@@ -305,6 +366,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "West":
                 try {
@@ -315,6 +377,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "Upstairs":
                 try {
@@ -325,6 +388,7 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
             case "Downstairs":
                 try {
@@ -335,10 +399,45 @@ public class Locations extends JPanel  implements ActionListener{
                 }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
+                imgLabel.setIcon(imageIcon());
                 break;
+            case "Volume Up":
+                try {
+                    Audio.increaseSoundVolume();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "Volume Down":
+                try {
+                    Audio.lowerSoundVolume();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "Toggle Sound":
+                try {
+                    Audio.toggleSound();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "Clues":
+                seeClues();
+                break;
+            case "trash":
+                try {
+                    showPopUp("tHIS IS THE TRASH");
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             case "ENTER":
                 try {
+                    if (commandInput.getText().contains("look")) {
+                        add(Clickables.showItems(currentSpot));
+                    }
                     textParser();
+                    repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -350,4 +449,7 @@ public class Locations extends JPanel  implements ActionListener{
         }
     }
 
+    public static JTextField getCommandInput() {
+        return commandInput;
+    }
 }

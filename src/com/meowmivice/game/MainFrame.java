@@ -1,6 +1,7 @@
 package com.meowmivice.game;
 
 import com.meowmivice.game.controller.Game;
+import com.meowmivice.game.reader.Audio;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
@@ -44,6 +45,7 @@ public class MainFrame {
         frame.getContentPane().add(splash);
         frame.pack();
         frame.setVisible(true);
+        Audio.audio();
     }
 
     public static void clearContent() throws Exception {

@@ -15,6 +15,7 @@ public class Player {
     private Map<String, String> suspects = new HashMap<>(); // adds suspect and their dialogue to map after they have been interacted with to later review
     private String previousLocation = "Kitchen"; // sets previous location, so you can enter "go back" and it takes you to the previous room
 
+
     //TODO
     //logic for player if needed
 
@@ -40,6 +41,14 @@ public class Player {
 
     public Map<String, String> getClues() {
         return clues;
+    }
+
+    public void setClues(Map<String, String> clues) {
+        this.clues = clues;
+    }
+
+    public void setInventory(List<String> inventory) {
+        this.inventory = inventory;
     }
 
     public Map<String, String> getSuspects() {
