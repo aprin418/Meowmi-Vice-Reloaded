@@ -167,7 +167,6 @@ public class Logic {
                         "\nFound in: " + Player.getInstance().getCurrentLocation());
 
         GameScreen.getInventoryTextArea().setText("Inventory: " + Player.getInstance().getInventory().toString());
-        GameScreen.removeImageButton();
     }
 
     // look
@@ -325,6 +324,7 @@ public class Logic {
             // TODO bug / only added rand diag
             String randDiag = randDialogueList.get(rand);
             plug = npc.getName() + ": " + randDiag;
+            GameScreen.showPopUp(plug);
             addDialogue(npc.getName(),randDiag); // adds the dialogue to the suspectsList
         }
         else if (npc!=null){
