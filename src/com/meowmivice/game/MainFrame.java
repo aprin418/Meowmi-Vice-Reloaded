@@ -11,12 +11,12 @@ public class MainFrame {
     public static JFrame frame;
     private static Splash splash;
     public static Game game;
-    private static Locations location;
+    private static GameScreen location;
 
 
     static {
         try {
-            location = new Locations();
+            location = new GameScreen();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
