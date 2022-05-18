@@ -44,7 +44,18 @@ public class GameScreen extends JPanel  implements ActionListener{
     private static final String GUNMETAL_GREY = "#818589";
 
     // directional and volume control buttons
-    private JButton northBtn, southBtn, eastBtn, westBtn, upstairsBtn, downstairsBtn, cluesBtn, volumeUpButton, volumeDownButton, enterButton, imgBtn, lookBtn;
+    private JButton northBtn;
+    private JButton southBtn;
+    private JButton eastBtn;
+    private JButton westBtn;
+    private JButton upstairsBtn;
+    private JButton downstairsBtn;
+    private JButton cluesBtn;
+    private JButton volumeUpButton;
+    private JButton volumeDownButton;
+    private static JButton imgBtn;
+    private JButton lookBtn;
+    private JButton solveBtn;
     //left-hand drop down menu
     private JMenuBar menu;
     //player inventory
@@ -82,8 +93,8 @@ public class GameScreen extends JPanel  implements ActionListener{
         downstairsBtn = new JButton("Downstairs");
         cluesBtn = new JButton("Clues");
         inventoryTextArea = new JTextArea(10, 5);
-        volumeUpButton = new JButton("Volume Up");
-        volumeDownButton = new JButton("Volume Down");
+        volumeUpButton = new JButton("Vol Up");
+        volumeDownButton = new JButton("Vol Down");
         bottomDivider = new JSeparator();
         displayText = new JTextArea (10, 5);
         imgPanel = new JPanel();
@@ -91,6 +102,7 @@ public class GameScreen extends JPanel  implements ActionListener{
         image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
         imgBtn = new JButton("IMAGE");
         lookBtn = new JButton("Look");
+        solveBtn = new JButton("Solve");
 
         // add file and help to menus
         menu.add(helpMenu);
@@ -106,6 +118,11 @@ public class GameScreen extends JPanel  implements ActionListener{
         lookBtn.setForeground(Color.MAGENTA);
         lookBtn.setFocusPainted(false);
         lookBtn.setBorder(null);
+
+        solveBtn.setBackground(Color.WHITE);
+        solveBtn.setForeground(Color.MAGENTA);
+        solveBtn.setFocusPainted(false);
+        solveBtn.setBorder(null);
 
         //label image styling
         imgLabel.setIcon(image);
@@ -192,6 +209,7 @@ public class GameScreen extends JPanel  implements ActionListener{
         quitOption.addActionListener(this);
         imgBtn.addActionListener(this);
         lookBtn.addActionListener(this);
+        solveBtn.addActionListener(this);
 
        //override default frame layout and set background
         setLayout(null);
@@ -218,6 +236,7 @@ public class GameScreen extends JPanel  implements ActionListener{
         add(imgPanel);
         add(imgBtn);
         add(lookBtn);
+        add(solveBtn);
         imgBtn.setVisible(false);
 
         // set all component bounds
@@ -237,12 +256,13 @@ public class GameScreen extends JPanel  implements ActionListener{
         scroll2.setBounds(550, 495, 150, 100);
         imgBtn.setBounds(100, 150, 200, 100);
         lookBtn.setBounds(580, 650, 100, 30);
+        solveBtn.setBounds(480, 650, 100, 30);
 
         //player info
         mapLocations();
-        //seeInventory();
+
     }
-    public void seeInventory() { inventoryTextArea.setText("Inventory: " + Player.getInstance().getInventory().toString()); }
+
 
     public static JTextArea getInventoryTextArea() { return inventoryTextArea; }
 
@@ -253,14 +273,14 @@ public class GameScreen extends JPanel  implements ActionListener{
         }
     }
 
-    public void mapLocations() { textDisplayer(currentSpot.getDescription()); }
+    public static void removeImageButton() {
+        Item currentItem = currentSpot.getItem();
+        if (Player.getInstance().getInventory().contains(currentItem)) {
+            imgBtn.setVisible(false);
+        }
+    }
 
-//    //parses text input
-//    public static void textParser() throws Exception {
-//        text = commandInput.getText();
-//        TextParser.textParser(text);
-//        commandInput.setText("");
-//    }
+    public void mapLocations() { textDisplayer(currentSpot.getDescription()); }
 
     //prints text to scroll box
     public static void textDisplayer(String displayText) {
@@ -365,6 +385,13 @@ public class GameScreen extends JPanel  implements ActionListener{
                     imgBtn.setIcon(itemImageIcon());
                     imgBtn.setVisible(true);
                 } catch (Exception ex) { ex.printStackTrace(); }
+                break;
+            case "Solve":
+                try {
+                    TextParser.textParser("solve");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 break;
             case "IMAGE":
                 try {
