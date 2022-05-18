@@ -2,14 +2,12 @@ package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import com.meowmivice.game.Clickables;
-import com.meowmivice.game.Locations;
+import com.meowmivice.game.GameScreen;
 import com.meowmivice.game.cast.*;
 import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.reader.SaveAndLoad;
-import com.meowmivice.game.reader.TextParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -158,11 +156,7 @@ public class Logic {
     // get item
     private static void get(Item currentItem)throws Exception{
         Clue clue = currentItem.getClue();
-        //System.out.println(currentItem.getDescription());
-        //System.out.println("What do you want to do?");
-        //String input = prompter.prompt("> ").toLowerCase().trim();
-        //List<String> textParser = TextParser.textParser(input); // parse the input
-        Locations.showPopUp(currentItem.getName() + " got!");
+        GameScreen.showPopUp(currentItem.getName() + " got!");
         Player.getInstance().getInventory().add(currentItem.getName()); // add to player inventory
         mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
@@ -172,28 +166,7 @@ public class Logic {
                         "\nObtained from: " + currentItem.getName() +
                         "\nFound in: " + Player.getInstance().getCurrentLocation());
 
-        Locations.getInventoryTextArea().setText(Player.getInstance().getInventory().toString());
-
-        /** mini logic for command line version 1.3 **/
-//        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
-//            Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
-//            mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
-//
-//            Player.getInstance().getClues().put(clue.getName(), // add to player clues
-//                    "Name: " + clue.getName() +
-//                            "\nDescription: " + clue.getDescription() +
-//                            "\nObtained from: " + currentItem.getName() +
-//                            "\nFound in: " + Player.getInstance().getCurrentLocation());
-//            checkCounter = false; // reset checkCounter
-//        }
-//        else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ // when they look clue
-//            plug = currentItem.getClue().getDescription();
-//            checkCounter = true; // set checkCounter to true
-//            get(currentItem);
-//        }
-//        else {
-//            plug = "Invalid command";
-//        }
+        GameScreen.getInventoryTextArea().setText("Inventory: " + Player.getInstance().getInventory().toString());
     }
 
     // look
@@ -204,24 +177,24 @@ public class Logic {
         if (input.size() == 1){ // if they just pass look print out a different statement depending on the contents of the room
             if (currentNpc!=null && currentItem != null) { // if there is an npc and an item
                 plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
 //                Clickables.showItems(currentSpot);
             } else if (currentNpc!=null && currentItem==null){ // npc and no item
                 plug = currentNpc.getName() + " is at this location.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             } else if(currentNpc==null && currentItem!=null){ // item and no npc
                 plug = "There is a " + currentItem.getName() + " in this location.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             } else {
                 plug = "There is nothing in this location to look at.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             }
         } else if (input.get(1).equals("item") && currentItem!=null){ // if user looks item
             get(currentItem);
         }
         else {
             plug = "Can't look there";
-            Locations.showPopUp(plug);
+            GameScreen.showPopUp(plug);
         }
 
     }
