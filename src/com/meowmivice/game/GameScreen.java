@@ -44,18 +44,7 @@ public class GameScreen extends JPanel  implements ActionListener{
     private static final String GUNMETAL_GREY = "#818589";
 
     // directional and volume control buttons
-    private JButton northBtn;
-    private JButton southBtn;
-    private JButton eastBtn;
-    private JButton westBtn;
-    private JButton upstairsBtn;
-    private JButton downstairsBtn;
-    private JButton cluesBtn;
-    private JButton volumeUpButton;
-    private JButton volumeDownButton;
-    private static JButton imgBtn;
-    private JButton lookBtn;
-    private JButton solveBtn;
+    private JButton northBtn,southBtn, eastBtn, westBtn, upstairsBtn, downstairsBtn, cluesBtn, volumeUpButton, volumeDownButton, itemImgBtn, lookBtn, solveBtn, npcImgBtn;
     //left-hand drop down menu
     private JMenuBar menu;
     //player inventory
@@ -100,7 +89,8 @@ public class GameScreen extends JPanel  implements ActionListener{
         imgPanel = new JPanel();
         imgLabel = new JLabel();
         image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
-        imgBtn = new JButton("IMAGE");
+        itemImgBtn = new JButton("IMAGE");
+        npcImgBtn = new JButton("NPC");
         lookBtn = new JButton("Look");
         solveBtn = new JButton("Solve");
 
@@ -162,8 +152,10 @@ public class GameScreen extends JPanel  implements ActionListener{
         upstairsBtn.setBorder(null);
 
         //img button styling
-        imgBtn.setBackground(Color.BLACK);
+        itemImgBtn.setBackground(Color.BLACK);
 
+        //NPC button styling
+        npcImgBtn.setBackground(Color.BLACK);
 
         //Volume button styling
         volumeUpButton.setBackground(Color.WHITE);
@@ -207,7 +199,8 @@ public class GameScreen extends JPanel  implements ActionListener{
         volumeDownButton.addActionListener(this);
         soundsOption.addActionListener(this);
         quitOption.addActionListener(this);
-        imgBtn.addActionListener(this);
+        itemImgBtn.addActionListener(this);
+        npcImgBtn.addActionListener(this);
         lookBtn.addActionListener(this);
         solveBtn.addActionListener(this);
 
@@ -234,10 +227,8 @@ public class GameScreen extends JPanel  implements ActionListener{
         add(scroll);
         add(scroll2);
         add(imgPanel);
-        add(imgBtn);
         add(lookBtn);
         add(solveBtn);
-        imgBtn.setVisible(false);
 
         // set all component bounds
         northBtn.setBounds(810, 500, 60, 30);
@@ -254,15 +245,13 @@ public class GameScreen extends JPanel  implements ActionListener{
         bottomDivider.setBounds(0, 450, 1100, 5);
         imgPanel.setBounds(300,30,400,400);
         scroll2.setBounds(550, 495, 150, 100);
-        imgBtn.setBounds(100, 150, 200, 100);
+        itemImgBtn.setBounds(50, 150, 250, 250);
+        npcImgBtn.setBounds(810, 150, 250, 250);
         lookBtn.setBounds(580, 650, 100, 30);
         solveBtn.setBounds(480, 650, 100, 30);
-
         //player info
         mapLocations();
-
     }
-
 
     public static JTextArea getInventoryTextArea() { return inventoryTextArea; }
 
@@ -270,13 +259,6 @@ public class GameScreen extends JPanel  implements ActionListener{
         inventoryTextArea.setText("");
         for (String clue: Player.getInstance().getClues().values()) {
             inventoryTextArea.append(clue + "\n");
-        }
-    }
-
-    public static void removeImageButton() {
-        Item currentItem = currentSpot.getItem();
-        if (Player.getInstance().getInventory().contains(currentItem)) {
-            imgBtn.setVisible(false);
         }
     }
 
@@ -298,6 +280,31 @@ public class GameScreen extends JPanel  implements ActionListener{
         image = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource(  currentSpot.getItem().getName() + ".png")));
         return image;
     }
+    public ImageIcon npcImageIcon() {
+        NPC currentNPC = currentSpot.getNpc();
+        image = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource(  currentNPC.getName() + ".png")));
+        return image;
+    }
+
+    public void itemAndNPCChecker() {
+        Item currentItem = currentSpot.getItem();
+        NPC currentNPC = currentSpot.getNpc();
+        if (currentItem== null) {
+            remove(itemImgBtn);
+        }else{
+            add(itemImgBtn);
+            itemImgBtn.setIcon(itemImageIcon());
+            itemImgBtn.setVisible(true);
+        }
+
+        if (currentNPC==null){
+            remove(npcImgBtn);
+        }else{
+            add(npcImgBtn);
+            npcImgBtn.setIcon(npcImageIcon());
+            npcImgBtn.setVisible(true);
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -305,7 +312,8 @@ public class GameScreen extends JPanel  implements ActionListener{
         switch(command){
             case "North":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go north");
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                     displayText.setText(currentSpot.getDescription());
@@ -315,7 +323,8 @@ public class GameScreen extends JPanel  implements ActionListener{
                 break;
             case "South":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go south");
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                     displayText.setText(currentSpot.getDescription());
@@ -325,7 +334,8 @@ public class GameScreen extends JPanel  implements ActionListener{
                 break;
             case "East":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go east");
                     displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) { ex.printStackTrace(); }
@@ -335,7 +345,8 @@ public class GameScreen extends JPanel  implements ActionListener{
                 break;
             case "West":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go west");
                     displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) { ex.printStackTrace(); }
@@ -345,7 +356,8 @@ public class GameScreen extends JPanel  implements ActionListener{
                 break;
             case "Upstairs":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go upstairs");
                     displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) { ex.printStackTrace(); }
@@ -355,7 +367,8 @@ public class GameScreen extends JPanel  implements ActionListener{
                 break;
             case "Downstairs":
                 try {
-                    imgBtn.setVisible(false);
+                    itemImgBtn.setVisible(false);
+                    npcImgBtn.setVisible(false);
                     TextParser.textParser("go downstairs");
                     displayText.setText(currentSpot.getDescription());
                 } catch (Exception ex) { ex.printStackTrace(); }
@@ -382,8 +395,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                 try {
                     TextParser.textParser("look");
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
-                    imgBtn.setIcon(itemImageIcon());
-                    imgBtn.setVisible(true);
+                    itemAndNPCChecker();
                 } catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "Solve":
@@ -399,6 +411,13 @@ public class GameScreen extends JPanel  implements ActionListener{
                     TextParser.textParser("get " + currentItem.getName());
                     showPopUp(currentItem.getDescription());
                 } catch (Exception ex) { ex.printStackTrace(); }
+                break;
+            case "NPC":
+                try {
+                    TextParser.textParser("talk npc");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 break;
             case "Quit":
                 System.exit(0);
