@@ -242,53 +242,33 @@ public class GameScreen extends JPanel  implements ActionListener{
         mapLocations();
         //seeInventory();
     }
-    public void seeInventory(){
-//        if (inventoryTextArea != null) {
-//            remove(inventoryTextArea);
-//        }
-//        inventoryTextArea = new JTextArea(Arrays.toString(Player.getInstance().getInventory().toArray()));
-        // inventory.setBackground(Color.decode(GUNMETAL_GREY));
-        // inventory.setBounds(550, 495, 150, 100);
-        //inventory.setForeground(Color.WHITE);
-//        add(inventory);
-//        revalidate();
-//        repaint();
-    inventoryTextArea.setText("Inventory: " + Player.getInstance().getInventory().toString());
-    }
+    public void seeInventory() { inventoryTextArea.setText("Inventory: " + Player.getInstance().getInventory().toString()); }
 
-    public static JTextArea getInventoryTextArea() {
-        return inventoryTextArea;
-    }
+    public static JTextArea getInventoryTextArea() { return inventoryTextArea; }
 
-    private static void seeClues(){
+    private static void seeClues() {
         inventoryTextArea.setText("");
         for (String clue: Player.getInstance().getClues().values()) {
             inventoryTextArea.append(clue + "\n");
         }
     }
 
-    public void mapLocations() {
-        //current spot is not changing. only have access to initial east and north directions from
-        //kitchen start point
-        textDisplayer(currentSpot.getDescription());
-    }
+    public void mapLocations() { textDisplayer(currentSpot.getDescription()); }
 
-    //parses text input
-    public static void textParser() throws Exception {
-        text = commandInput.getText();
-        TextParser.textParser(text);
-        commandInput.setText("");
-    }
+//    //parses text input
+//    public static void textParser() throws Exception {
+//        text = commandInput.getText();
+//        TextParser.textParser(text);
+//        commandInput.setText("");
+//    }
 
     //prints text to scroll box
-    public static void textDisplayer(String displayText){
+    public static void textDisplayer(String displayText) {
         GameScreen.displayText.setText("");
         GameScreen.displayText.setText(displayText);
     }
 
-    public static void showPopUp(String plug) throws InterruptedException {
-        JOptionPane.showMessageDialog(MainFrame.frame, plug);
-    }
+    public static void showPopUp(String plug) { JOptionPane.showMessageDialog(MainFrame.frame, plug); }
 
     public ImageIcon roomImageIcon() {
         image = new ImageIcon(this.getClass().getClassLoader().getResource( currentSpot.getName() + ".png"));
@@ -309,9 +289,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                     TextParser.textParser("go north");
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
                 break;
@@ -321,10 +299,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                     TextParser.textParser("go south");
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
+                } catch (Exception ex) { ex.printStackTrace(); }
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
                 break;
@@ -333,9 +308,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                     imgBtn.setVisible(false);
                     TextParser.textParser("go east");
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
@@ -345,9 +318,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                     imgBtn.setVisible(false);
                     TextParser.textParser("go west");
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
@@ -357,9 +328,7 @@ public class GameScreen extends JPanel  implements ActionListener{
                     imgBtn.setVisible(false);
                     TextParser.textParser("go upstairs");
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
@@ -369,24 +338,22 @@ public class GameScreen extends JPanel  implements ActionListener{
                     imgBtn.setVisible(false);
                     TextParser.textParser("go downstairs");
                     displayText.setText(currentSpot.getDescription());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
                 break;
             case "Volume Up":
-                try {Audio.increaseSoundVolume();}
-                catch (Exception ex) {ex.printStackTrace();}
+                try { Audio.increaseSoundVolume(); }
+                catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "Volume Down":
-                try {Audio.lowerSoundVolume();}
-                catch (Exception ex) {ex.printStackTrace();}
+                try { Audio.lowerSoundVolume(); }
+                catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "Toggle Sound":
-                try {Audio.toggleSound();}
-                catch (Exception ex) {ex.printStackTrace();}
+                try { Audio.toggleSound(); }
+                catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "Clues":
                 seeClues();
@@ -397,20 +364,14 @@ public class GameScreen extends JPanel  implements ActionListener{
                     currentSpot = mapLocations.get(Player.getInstance().getCurrentLocation());
                     imgBtn.setIcon(itemImageIcon());
                     imgBtn.setVisible(true);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "IMAGE":
                 try {
                     Item currentItem = currentSpot.getItem();
                     TextParser.textParser("get " + currentItem.getName());
                     showPopUp(currentItem.getDescription());
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                } catch (Exception ex) { ex.printStackTrace(); }
                 break;
             case "Quit":
                 System.exit(0);
