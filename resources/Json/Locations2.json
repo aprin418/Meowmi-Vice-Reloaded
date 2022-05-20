@@ -8,10 +8,13 @@
     },
     "npc": {
       "name": "Pawficer Fluffenstuff",
-      "dialogue": "Glad you're here, Purrlock Holmes. It appears the victim, Julius Cheeser was poisoned. The residents are throughout the house waiting to be questioned. ",
+      "dialogue": "Glad you're here, Purrlock Holmes. It appears the victim, Julius Cheeser was poisoned here. The residents are throughout the house waiting to be questioned. ",
       "randDialogue": ["Looks like this mouse is no longer saying cheese.",
         "Looks like a deadly game of hide and squeak.",
-        "Looks like this dead mouse isn't making music anymore."]
+        "I thought it was a rumor at first but no it's fur real",
+        "Looks like this dead mouse isn't making music anymore.",
+        "this is cat-astrophic"],
+      "isVisited": false
     },
     "item": {
       "name": "trash can",
@@ -32,9 +35,12 @@
     "npc": {
       "name": "Benedict Cumberbark",
       "dialogue": "I went to get a snack in the trash and then saw the body. I pulled this item out of the trash. ",
-      "randDialogue": ["I'm having a rough a ruff day",
+      "randDialogue": ["I'm having a ruff day.",
         "If you think it was me, you're barking up the wrong tree.",
-        "Quit hounding me!"]
+        "Quit hounding me!",
+        "Dawg. This is crazy!",
+        "If you can't figure it out I'll call Sherlock Bones."],
+      "isVisited": false
     },
     "item": {
       "name": "bag",
@@ -56,10 +62,13 @@
     },
     "npc": {
       "name": "Birdie Holly",
-      "dialogue": "I used to date Julius, but we ended on good terms. I think he started seeing someone else recently.",
+      "dialogue": "I used to date Julius, but we ended on good terms. I think he started seeing someone else recently. Toucan play that game.",
       "randDialogue": ["You're ruffling my feathers.",
         "It was a murder most fowl.",
-        "I'm going to tweet about this."]
+        "I'm going to tweet about this.",
+        "I suspect fowl play.",
+        "I hope none of this flies over your head."],
+      "isVisited": false
     }
   },
   {
@@ -120,7 +129,12 @@
     "npc": {
       "name": "Hamione Granger",
       "dialogue": "I've only been on a couple dates with Julius, but he went back to Birdie.",
-      "randdialogue": ["I guess he just didn't have the wheel to live.", "You're ham-stirring up some drama.", "I can't tell stories because I don't have a tale."]
+      "randDialogue": ["I guess he just didn't have the wheel to live.",
+        "You're ham-stirring up some drama.",
+        "I can't tell stories because I don't have a tale.",
+        "Trust me if I knew who did it I'd squeal.",
+        "I only go to the kitchen if I feel like bacon."],
+      "isVisited": false
     },
     "item": {
       "name": "envelope",

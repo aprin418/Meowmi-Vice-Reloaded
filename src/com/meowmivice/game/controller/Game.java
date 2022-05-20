@@ -1,5 +1,6 @@
 package com.meowmivice.game.controller;
 
+import com.meowmivice.game.GameScreen;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.logic.Logic;
@@ -128,5 +129,24 @@ public class Game extends Panel{
 //            System.out.println(e.getMessage());
 //        }
 //    }
+public static void getCommands() {
+    GameScreen.showPopUp("=======COMMANDS=======\n" +
+            "Click [Look] button: view room descriptions\n" +
+            "Click [Directional] buttons : navigate rooms\n" +
+            "Click [item]: collect items\n" +
+            "Click [NPC]: interrogate NPC\n" +
+            "Click [Clues] button: view clues from collected items\n" +
+            "Click [Vol down] button: decrease sound volume\n" +
+            "Click [Vol up] button: increase sound volume\n" +
+            "======================");
+}
+
+
+    public static void gameInfo() {
+        GameScreen.showPopUp("You are detective Purrlock Holmes and have been called upon to solve a homicide.\n" +
+                "Collect clues, talk to witnesses, and make your way around the house to solve the mystery.\n" +
+                "When you are ready just enter solve with you think might be the culprit.\n" +
+                "Good luck!");
+    }
 
 }

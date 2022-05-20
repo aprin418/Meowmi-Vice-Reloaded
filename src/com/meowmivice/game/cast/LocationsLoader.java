@@ -44,8 +44,9 @@ public class LocationsLoader {
                 String npcName = (String) npcObj.get("name");
                 String npcDialogue = (String) npcObj.get("dialogue");
                 JSONArray npcRandDialogue = (JSONArray) npcObj.get("randDialogue");
+                Boolean isVisited = (Boolean) npcObj.get("isVisited");
                 // make new NPC object with name, dialogue, and random dialogue
-                npc = new NPC(npcName, npcDialogue, npcRandDialogue);
+                npc = new NPC(npcName, npcDialogue, npcRandDialogue, isVisited);
             }
 
             // if the object contains an item, define item name, description

@@ -2,16 +2,15 @@ package com.meowmivice.game.logic;
 
 import com.apps.util.Console;
 import com.apps.util.Prompter;
-import com.meowmivice.game.Clickables;
-import com.meowmivice.game.Locations;
+import com.meowmivice.game.GameScreen;
 import com.meowmivice.game.cast.*;
 import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.FileReader;
 import com.meowmivice.game.reader.SaveAndLoad;
-import com.meowmivice.game.reader.TextParser;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -85,7 +84,6 @@ public class Logic {
     // BUSINESS LOGIC
     // basic logic
     public static void logic(List<String> textParser) throws Exception {
-
         if (textParser.size()>=2 && go.contains(textParser.get(0))) { // checks size and get(0) is in go synonym list
             String direction = getDirection(textParser); // takes the input and passes to function that finds the synonym
             go(textParser, direction);
@@ -158,11 +156,7 @@ public class Logic {
     // get item
     private static void get(Item currentItem)throws Exception{
         Clue clue = currentItem.getClue();
-        //System.out.println(currentItem.getDescription());
-        //System.out.println("What do you want to do?");
-        //String input = prompter.prompt("> ").toLowerCase().trim();
-        //List<String> textParser = TextParser.textParser(input); // parse the input
-        Locations.showPopUp(currentItem.getName() + " got!");
+        GameScreen.showPopUp(currentItem.getName() + " got!");
         Player.getInstance().getInventory().add(currentItem.getName()); // add to player inventory
         mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
 
@@ -172,28 +166,7 @@ public class Logic {
                         "\nObtained from: " + currentItem.getName() +
                         "\nFound in: " + Player.getInstance().getCurrentLocation());
 
-        Locations.getInventoryTextArea().setText(Player.getInstance().getInventory().toString());
-
-        /** mini logic for command line version 1.3 **/
-//        if(checkCounter && get.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ //only when checkCounter is true
-//            Player.getInstance().getInventory().add(currentItem.getClue().getName()); // add to player inventory
-//            mapLocations.get(Player.getInstance().getCurrentLocation()).setItem(null); // remove from the map
-//
-//            Player.getInstance().getClues().put(clue.getName(), // add to player clues
-//                    "Name: " + clue.getName() +
-//                            "\nDescription: " + clue.getDescription() +
-//                            "\nObtained from: " + currentItem.getName() +
-//                            "\nFound in: " + Player.getInstance().getCurrentLocation());
-//            checkCounter = false; // reset checkCounter
-//        }
-//        else if (look.contains(textParser.get(0)) && textParser.get(1).equals("clue")){ // when they look clue
-//            plug = currentItem.getClue().getDescription();
-//            checkCounter = true; // set checkCounter to true
-//            get(currentItem);
-//        }
-//        else {
-//            plug = "Invalid command";
-//        }
+        GameScreen.getInventoryTextArea().setText("Inventory: " + Player.getInstance().getInventory().toString());
     }
 
     // look
@@ -204,24 +177,24 @@ public class Logic {
         if (input.size() == 1){ // if they just pass look print out a different statement depending on the contents of the room
             if (currentNpc!=null && currentItem != null) { // if there is an npc and an item
                 plug = currentNpc.getName() + " and a " + currentItem.getName() + " are at this location";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
 //                Clickables.showItems(currentSpot);
             } else if (currentNpc!=null && currentItem==null){ // npc and no item
                 plug = currentNpc.getName() + " is at this location.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             } else if(currentNpc==null && currentItem!=null){ // item and no npc
                 plug = "There is a " + currentItem.getName() + " in this location.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             } else {
                 plug = "There is nothing in this location to look at.";
-                Locations.showPopUp(plug);
+                GameScreen.showPopUp(plug);
             }
         } else if (input.get(1).equals("item") && currentItem!=null){ // if user looks item
             get(currentItem);
         }
         else {
             plug = "Can't look there";
-            Locations.showPopUp(plug);
+            GameScreen.showPopUp(plug);
         }
 
     }
@@ -252,111 +225,116 @@ public class Logic {
     private static void solve() throws Exception {
         // So the player needs at least one clue to solve
         if(Player.getInstance().getInventory().size() == 0){
-            FileReader.fileReaderWhite("/Ascii/pdog3.txt");
-            prompter.prompt("Press enter to continue");
-            Console.clear();
+            GameScreen.showPopUp("You need at least 1 clue to be even close to solving this mystery!");
             return;
         }
-        //print the ascii of the dog
-        FileReader.fileReaderWhite("/Ascii/pdog.txt"); // who dun it
-
-        String culprit = prompter.prompt(">").strip().toLowerCase(); // choose a culprit, prob create a way to display all suspects
-        Console.clear();
-        FileReader.fileReaderWhite("/Ascii/pdog2.txt"); // whatcha got?
-        Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
-
+        String culprit = JOptionPane.showInputDialog("Who is the culprit?"); // choose a culprit
+        //Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
         CulpritLoader culpLoader = new CulpritLoader(); // loader class for culprit / move to top
         Culprit reqCulprit = culpLoader.load(); // get the culprit / move to top
 
         // If you provided all the correct items and guessed the right suspect
-        if(culprit.equals(reqCulprit.getName()) && evidence.equals(reqCulprit.getEvidence())){
-            System.out.println("Congratulations you solved the mystery!");
-            Game.playAgain();
+        if(culprit.equals(reqCulprit.getName())){
+            GameScreen.showPopUp("Congratulations you solved the mystery!");
+            //Game.playAgain();
             System.exit(0);
         }
         else {
             count++;
             if (count > 2) {
-                System.out.println("You Lost. The culprit got away!");
-                Game.playAgain();
+                GameScreen.showPopUp("You Lost. The culprit got away!");
+                //Game.playAgain();
+                GameScreen.showPopUp("Game Over!");
                 System.exit(0);
             }
-            System.out.println("Sorry please collect more clues or try again.");
+            GameScreen.showPopUp("Sorry please collect more clues or try again.");
+            solve();
         }
     }
 
-    // Method to return evidence Set for solving
-    private static ArrayList<String> getEvidence() {
-
-        ArrayList<String> evidence = new ArrayList<>(); // return evidence
-        // create a copy to allow us to add, remove, without affecting the actual inventory
-        ArrayList<String> copy = new ArrayList<>(Player.getInstance().getInventory());
-
-        boolean isDone = false;
-        // As long as they don't specify to quit, loop continues
-        while(!isDone){
-            System.out.println("Current Collected Evidence: ");
-            int i = 1;
-            for (String item: copy) { // prints out the copy
-                System.out.println(i + " " + item);
-                i++;
-            }
-
-            System.out.println("\nEvidence to provide: " + evidence.toString()); // current evidence
-
-            System.out.println("What would you like to do?");
-            System.out.println("Add, Remove, Solve, Inventory");
-
-            String choice = prompter.prompt(">").strip().toLowerCase();
-            try{
-                // Add to the evidence
-                if (choice.equals("a") || choice.equals("add")){
-                    System.out.println("What index item would you like to add?");
-                    String input = prompter.prompt(">").strip().toLowerCase();
-                    int index = Integer.parseInt(input) - 1;
-                    if(!evidence.contains(copy.get(index))) { // if evidence doesn't contain that item
-                        evidence.add(copy.get(index)); // add the item
-                        copy.remove(copy.get(index)); // remove it from the clues
-                    }
-                }
-                // Remove evidence
-                else if (choice.equals("r") || choice.equals("remove")){
-                    System.out.println("What item do you want to remove?");
-                    String input = prompter.prompt(">").strip().toLowerCase();
-                    if (evidence.contains(input)){ // if evidence contains the input
-                        copy.add(input); // add the input to copy
-                        evidence.remove(input); // remove input from evidence
-                    }
-                }
-                //TODO bug
-                else if (choice.equals("i") || choice.equals(("inventory"))){
-                    showInventory();
-                }
-                // Exit loop
-                else if (choice.equals("s") || choice.equals("solve")){
-                    isDone = true;
-                }
-            }
-            catch (Exception e){
-                System.out.println("Invalid command");
-            }
-            finally {
-                Console.clear();
-                System.out.println(plug+"\n");
-            }
-        }
-        return evidence;
-    }
+//    // Method to return evidence Set for solving
+//    private static ArrayList<String> getEvidence() {
+//
+//        ArrayList<String> evidence = new ArrayList<>(); // return evidence
+//        // create a copy to allow us to add, remove, without affecting the actual inventory
+//        ArrayList<String> copy = new ArrayList<>(Player.getInstance().getInventory());
+//
+//        boolean isDone = false;
+//        // As long as they don't specify to quit, loop continues
+//        while(!isDone){
+//            System.out.println("Current Collected Evidence: ");
+//            int i = 1;
+//            for (String item: copy) { // prints out the copy
+//                System.out.println(i + " " + item);
+//                i++;
+//            }
+//
+//            System.out.println("\nEvidence to provide: " + evidence.toString()); // current evidence
+//
+//            System.out.println("What would you like to do?");
+//            System.out.println("Add, Remove, Solve, Inventory");
+//
+//            String choice = prompter.prompt(">").strip().toLowerCase();
+//            try{
+//                // Add to the evidence
+//                if (choice.equals("a") || choice.equals("add")){
+//                    System.out.println("What index item would you like to add?");
+//                    String input = prompter.prompt(">").strip().toLowerCase();
+//                    int index = Integer.parseInt(input) - 1;
+//                    if(!evidence.contains(copy.get(index))) { // if evidence doesn't contain that item
+//                        evidence.add(copy.get(index)); // add the item
+//                        copy.remove(copy.get(index)); // remove it from the clues
+//                    }
+//                }
+//                // Remove evidence
+//                else if (choice.equals("r") || choice.equals("remove")){
+//                    System.out.println("What item do you want to remove?");
+//                    String input = prompter.prompt(">").strip().toLowerCase();
+//                    if (evidence.contains(input)){ // if evidence contains the input
+//                        copy.add(input); // add the input to copy
+//                        evidence.remove(input); // remove input from evidence
+//                    }
+//                }
+//                //TODO bug
+//                else if (choice.equals("i") || choice.equals(("inventory"))){
+//                    showInventory();
+//                }
+//                // Exit loop
+//                else if (choice.equals("s") || choice.equals("solve")){
+//                    isDone = true;
+//                }
+//            }
+//            catch (Exception e){
+//                System.out.println("Invalid command");
+//            }
+//            finally {
+//                Console.clear();
+//                System.out.println(plug+"\n");
+//            }
+//        }
+//        return evidence;
+//    }
 
     // talk
+// talk
     private static void talk(List<String> input){
         NPC npc = currentSpot.getNpc();
         if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //if there is an npc and input is "talk npc"
+            // if not visited get 1st dialogue of the npc
+            if (!npc.isVisited()) {
+                plug = npc.getName() + ": " + npc.getDialogue();
+                GameScreen.showPopUp(plug);
+                addDialogue(npc.getName(), npc.getDialogue());
+                npc.setVisited(true);
+                return;
+            }
+
             ArrayList<String> randDialogueList = npc.getRandDialogue(); // list from obj value
             int rand = new Random().nextInt(randDialogueList.size()); // make random int from size of list
             // TODO bug / only added rand diag
             String randDiag = randDialogueList.get(rand);
             plug = npc.getName() + ": " + randDiag;
+            GameScreen.showPopUp(plug);
             addDialogue(npc.getName(),randDiag); // adds the dialogue to the suspectsList
         }
         else if (npc!=null){
