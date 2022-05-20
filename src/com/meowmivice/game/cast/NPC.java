@@ -11,11 +11,14 @@ public class NPC {
     private String dialogue;
     private ArrayList<String> randDialogue;
 
+    private boolean isVisited;
+
     // a NPC has a name, dialogue, and list of random dialogue
-    NPC(String name, String dialogue, ArrayList<String> randDialogue) {
+    NPC(String name, String dialogue, ArrayList<String> randDialogue, Boolean isVisited) {
         setName(name);
         setDialogue(dialogue);
         setRandDialogue(randDialogue);
+        setVisited(isVisited);
     }
 
     public String getName() {
@@ -41,4 +44,13 @@ public class NPC {
     public void setRandDialogue(ArrayList randDialogue) {
         this.randDialogue = randDialogue;
     }
+
+    public boolean isVisited() {
+        return isVisited;
+    }
+
+    public void setVisited(boolean visited) {
+        isVisited = visited;
+    }
+
 }

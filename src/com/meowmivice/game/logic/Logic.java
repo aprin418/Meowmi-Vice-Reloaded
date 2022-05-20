@@ -316,9 +316,19 @@ public class Logic {
 //    }
 
     // talk
+// talk
     private static void talk(List<String> input){
         NPC npc = currentSpot.getNpc();
         if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //if there is an npc and input is "talk npc"
+            // if not visited get 1st dialogue of the npc
+            if (!npc.isVisited()) {
+                plug = npc.getName() + ": " + npc.getDialogue();
+                GameScreen.showPopUp(plug);
+                addDialogue(npc.getName(), npc.getDialogue());
+                npc.setVisited(true);
+                return;
+            }
+
             ArrayList<String> randDialogueList = npc.getRandDialogue(); // list from obj value
             int rand = new Random().nextInt(randDialogueList.size()); // make random int from size of list
             // TODO bug / only added rand diag
