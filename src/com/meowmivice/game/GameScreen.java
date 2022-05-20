@@ -91,7 +91,7 @@ public class GameScreen extends JPanel  implements ActionListener{
         displayText = new JTextArea (10, 5);
         imgPanel = new JPanel();
         imgLabel = new JLabel();
-        image = new ImageIcon(Objects.requireNonNull(this.getClass().getResource( "/" + currentSpot.getName()+".png")));
+//        image = new ImageIcon(Objects.requireNonNull(this.getClass().getResource( "/" + currentSpot.getName()+".png")));
         itemImgBtn = new JButton("IMAGE");
         npcImgBtn = new JButton("NPC");
         lookBtn = new JButton("Look");
@@ -206,8 +206,6 @@ public class GameScreen extends JPanel  implements ActionListener{
         lookBtn.addActionListener(this);
         solveBtn.addActionListener(this);
         commandsOption.addActionListener(this);
-        soundsOption.addActionListener(this);
-        quitOption.addActionListener(this);
         aboutOption.addActionListener(this);
 
        //override default frame layout and set background
@@ -303,7 +301,7 @@ public class GameScreen extends JPanel  implements ActionListener{
             add(itemImgBtn);
             itemImgBtn.repaint();
             itemImgBtn.setIcon(itemImageIcon());
-            itemImgBtn.setVisible(true);
+//            itemImgBtn.setVisible(true);
 //            itemImgBtn.repaint();
         }
 
@@ -313,7 +311,7 @@ public class GameScreen extends JPanel  implements ActionListener{
             add(npcImgBtn);
             npcImgBtn.repaint();
             npcImgBtn.setIcon(npcImageIcon());
-            npcImgBtn.setVisible(true);
+//            npcImgBtn.setVisible(true);
 //            npcImgBtn.repaint();
         }
     }
