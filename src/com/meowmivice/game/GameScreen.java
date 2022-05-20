@@ -1,6 +1,7 @@
 package com.meowmivice.game;
 
 import com.meowmivice.game.cast.*;
+import com.meowmivice.game.controller.Game;
 import com.meowmivice.game.reader.Audio;
 import com.meowmivice.game.reader.TextParser;
 import org.json.simple.parser.ParseException;
@@ -204,6 +205,10 @@ public class GameScreen extends JPanel  implements ActionListener{
         npcImgBtn.addActionListener(this);
         lookBtn.addActionListener(this);
         solveBtn.addActionListener(this);
+        commandsOption.addActionListener(this);
+        soundsOption.addActionListener(this);
+        quitOption.addActionListener(this);
+        aboutOption.addActionListener(this);
 
        //override default frame layout and set background
         setLayout(null);
@@ -244,7 +249,7 @@ public class GameScreen extends JPanel  implements ActionListener{
         menu.setBounds(0, 0, 1160, 30);
         scroll.setBounds(15, 545, 400, 100);
         bottomDivider.setBounds(0, 530, 1100, 5);
-        imgPanel.setBounds(0,5,1100,520);
+        imgPanel.setBounds(0,20,1100,510);
         scroll2.setBounds(450, 545, 340, 100);
         itemImgBtn.setBounds(50, 150, 95, 120);
         npcImgBtn.setBounds(810, 150, 95, 120);
@@ -395,11 +400,11 @@ public class GameScreen extends JPanel  implements ActionListener{
                 textDisplayer(currentSpot.getDescription());
                 imgLabel.setIcon(roomImageIcon());
                 break;
-            case "Volume Up":
+            case "Vol Up":
                 try { Audio.increaseSoundVolume(); }
                 catch (Exception ex) { ex.printStackTrace(); }
                 break;
-            case "Volume Down":
+            case "Vol Down":
                 try { Audio.lowerSoundVolume(); }
                 catch (Exception ex) { ex.printStackTrace(); }
                 break;
@@ -437,6 +442,12 @@ public class GameScreen extends JPanel  implements ActionListener{
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                break;
+            case "Commands":
+                Game.getCommands();
+                break;
+            case "Game Info":
+                Game.gameInfo();
                 break;
             case "Quit":
                 System.exit(0);
