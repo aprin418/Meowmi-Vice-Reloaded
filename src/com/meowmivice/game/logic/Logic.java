@@ -221,14 +221,14 @@ public class Logic {
         return directionsMap.keySet().toString(); // can prob nix this method and display currentSpot.getDirections().toString() in the show status
     }
 
-    // solve
+    // solve game mystery
     private static void solve() throws Exception {
         // So the player needs at least one clue to solve
         if(Player.getInstance().getInventory().size() == 0){
             GameScreen.showPopUp("You need at least 1 clue to be even close to solving this mystery!");
             return;
         }
-        String culprit = JOptionPane.showInputDialog("Who is the culprit?"); // choose a culprit
+        String culprit = JOptionPane.showInputDialog("Who is the culprit?").toLowerCase(Locale.ROOT); // choose a culprit
         //Set<String> evidence = new HashSet<>(getEvidence()); // user picks out the evidence to provide
         CulpritLoader culpLoader = new CulpritLoader(); // loader class for culprit / move to top
         Culprit reqCulprit = culpLoader.load(); // get the culprit / move to top
@@ -236,14 +236,12 @@ public class Logic {
         // If you provided all the correct items and guessed the right suspect
         if(culprit.equals(reqCulprit.getName())){
             GameScreen.showPopUp("Congratulations you solved the mystery!");
-            //Game.playAgain();
             System.exit(0);
         }
         else {
             count++;
             if (count > 2) {
                 GameScreen.showPopUp("You Lost. The culprit got away!");
-                //Game.playAgain();
                 GameScreen.showPopUp("Game Over!");
                 System.exit(0);
             }
@@ -252,71 +250,7 @@ public class Logic {
         }
     }
 
-//    // Method to return evidence Set for solving
-//    private static ArrayList<String> getEvidence() {
-//
-//        ArrayList<String> evidence = new ArrayList<>(); // return evidence
-//        // create a copy to allow us to add, remove, without affecting the actual inventory
-//        ArrayList<String> copy = new ArrayList<>(Player.getInstance().getInventory());
-//
-//        boolean isDone = false;
-//        // As long as they don't specify to quit, loop continues
-//        while(!isDone){
-//            System.out.println("Current Collected Evidence: ");
-//            int i = 1;
-//            for (String item: copy) { // prints out the copy
-//                System.out.println(i + " " + item);
-//                i++;
-//            }
-//
-//            System.out.println("\nEvidence to provide: " + evidence.toString()); // current evidence
-//
-//            System.out.println("What would you like to do?");
-//            System.out.println("Add, Remove, Solve, Inventory");
-//
-//            String choice = prompter.prompt(">").strip().toLowerCase();
-//            try{
-//                // Add to the evidence
-//                if (choice.equals("a") || choice.equals("add")){
-//                    System.out.println("What index item would you like to add?");
-//                    String input = prompter.prompt(">").strip().toLowerCase();
-//                    int index = Integer.parseInt(input) - 1;
-//                    if(!evidence.contains(copy.get(index))) { // if evidence doesn't contain that item
-//                        evidence.add(copy.get(index)); // add the item
-//                        copy.remove(copy.get(index)); // remove it from the clues
-//                    }
-//                }
-//                // Remove evidence
-//                else if (choice.equals("r") || choice.equals("remove")){
-//                    System.out.println("What item do you want to remove?");
-//                    String input = prompter.prompt(">").strip().toLowerCase();
-//                    if (evidence.contains(input)){ // if evidence contains the input
-//                        copy.add(input); // add the input to copy
-//                        evidence.remove(input); // remove input from evidence
-//                    }
-//                }
-//                //TODO bug
-//                else if (choice.equals("i") || choice.equals(("inventory"))){
-//                    showInventory();
-//                }
-//                // Exit loop
-//                else if (choice.equals("s") || choice.equals("solve")){
-//                    isDone = true;
-//                }
-//            }
-//            catch (Exception e){
-//                System.out.println("Invalid command");
-//            }
-//            finally {
-//                Console.clear();
-//                System.out.println(plug+"\n");
-//            }
-//        }
-//        return evidence;
-//    }
-
-    // talk
-// talk
+    // talk to NPC
     private static void talk(List<String> input){
         NPC npc = currentSpot.getNpc();
         if (npc!=null && input.size()>=2 && input.get(1).equals("npc")) { //if there is an npc and input is "talk npc"
